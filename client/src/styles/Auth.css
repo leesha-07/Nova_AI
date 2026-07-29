@@ -1,0 +1,13 @@
+.auth-container {
+  height: 100vh; /*to apply the css property on whole page*/
+  display: flex; /*Place the content in the center of page*/
+  justify-content: center; /*Place the item in center horizontally of flex box*/
+  justify-content: center; /*Place the item in center vertically of flex box*/
+  background-color: #0f172a;
+}
+.auth-card {
+  background-color: #1e293b;
+  padding: 60px;
+  border-radius: 20px;
+  width: 400px;
+}
