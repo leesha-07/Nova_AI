@@ -15,27 +15,39 @@ export default function Login() {
         <h1>Nova AI</h1>
         <h2>Welcome Back</h2>
         <p>Sign in to continue</p>
-        <label htmlFor="email">Email: </label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          id="email"
-        ></input>
-        <br></br>
-        <br></br>
-        <label htmlFor="password">Password: </label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          id="password"
-        ></input>
+        <div>
+          {" "}
+          <label htmlFor="email" className="auth-label">
+            Email
+          </label>
+          <input
+            placeholder="Email"
+            className="auth-input"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            id="email"
+          ></input>
+        </div>
+        <div>
+          <label htmlFor="password" className="auth-label">
+            Password{" "}
+          </label>
+          <input
+            placeholder="Password"
+            className="auth-input"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            id="password"
+          ></input>
+        </div>
         <p>
-          <Button text="Login" onClick={handleLogin} />
-          <br></br>
-          <br></br>
-          Don't have an account?<br></br> <Link to="/register">Register</Link>
+          <Button className="auth-button" text="Login" onClick={handleLogin} />
+          <p className="auth-account">Don't have an account? </p>
+          <Link className="auth-link" to="/register">
+            Register
+          </Link>
         </p>
       </div>
     </div>
