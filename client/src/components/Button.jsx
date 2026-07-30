@@ -1,4 +1,8 @@
 import React from "react";
 export default function Button(props) {
-  return <button onClick={props.onClick}>{props.text}</button>;
+  return (
+    <button className="auth-button" onClick={props.onClick}>
+      {props.text}
+    </button>
+  );
 }
