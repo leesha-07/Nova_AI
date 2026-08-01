@@ -1,0 +1,227 @@
+.chat {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Header */
+
+.Header {
+  height: 72px;
+  background: #111827;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0 30px;
+
+  border-bottom: 1px solid #334155;
+
+  flex-shrink: 0;
+}
+
+.Header h1 {
+  font-size: 56px;
+  font-weight: 700;
+}
+
+.Header h3 {
+  font-size: 30px;
+  color: #cbd5e1;
+  font-weight: 600;
+}
+
+.Header button {
+  width: 155px;
+  height: 46px;
+
+  background: #8b5cf6;
+  color: white;
+
+  border: none;
+  border-radius: 10px;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.Header button:hover {
+  background: #7c3aed;
+  transform: translateY(-2px);
+}
+
+/* Layout */
+
+.chatContainer {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Sidebar */
+
+.sidebar {
+  width: 300px;
+
+  background: #1e293b;
+
+  padding: 22px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+
+  border-right: 1px solid #334155;
+
+  overflow-y: auto;
+
+  flex-shrink: 0;
+}
+
+.sidebar h2 {
+  margin-bottom: 12px;
+  font-size: 38px;
+  font-weight: 700;
+}
+
+.chat-item {
+  color: #cbd5e1;
+
+  padding: 16px 18px;
+
+  border: 1px solid #475569;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  transition: 0.25s;
+
+  user-select: none;
+}
+
+.chat-item:hover {
+  background: #334155;
+  color: white;
+}
+
+.active-chat {
+  background: #111827;
+
+  border-left: 5px solid #8b5cf6;
+
+  color: #8b5cf6;
+
+  font-weight: 600;
+}
+
+/* Chat */
+
+.chatsection {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 28px;
+
+  overflow: hidden;
+}
+
+/* Messages */
+
+.messages {
+  flex: 1;
+
+  overflow-y: auto;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 18px;
+
+  padding-right: 10px;
+}
+
+.messages p {
+  border: 1px solid #8b5cf6;
+
+  border-radius: 15px;
+
+  padding: 14px 18px;
+
+  line-height: 1.6;
+
+  max-width: 80%;
+
+  word-break: break-word;
+}
+
+/* Input */
+
+.inputWrapper {
+  display: flex;
+
+  gap: 16px;
+
+  margin-top: 20px;
+
+  flex-shrink: 0;
+}
+
+.input {
+  flex: 1;
+
+  height: 48px;
+
+  background: #111827;
+
+  border: 1px solid #8b5cf6;
+
+  border-radius: 30px;
+
+  color: white;
+
+  padding: 0 20px;
+
+  font-size: 15px;
+
+  outline: none;
+}
+
+.input::placeholder {
+  color: #94a3b8;
+}
+
+.input:focus {
+  border-color: #a78bfa;
+}
+
+.inputWrapper button {
+  width: 120px;
+
+  background: #8b5cf6;
+
+  color: white;
+
+  border: none;
+
+  border-radius: 10px;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.25s;
+}
+
+.inputWrapper button:hover {
+  background: #7c3aed;
+}
