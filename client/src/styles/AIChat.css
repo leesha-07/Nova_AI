@@ -1,14 +1,15 @@
 .chat {
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  background: #0f172a;
+  color: white;
 }
-
-/* Header */
 
 .Header {
   height: 72px;
-  background: #111827;
+  background: #1e293b;
+  border-bottom: 1px solid #334155;
 
   display: flex;
   justify-content: space-between;
@@ -16,25 +17,23 @@
 
   padding: 0 30px;
 
-  border-bottom: 1px solid #334155;
-
   flex-shrink: 0;
 }
 
 .Header h1 {
-  font-size: 56px;
+  font-size: 32px;
   font-weight: 700;
+  color: white;
 }
 
 .Header h3 {
-  font-size: 30px;
+  font-size: 20px;
   color: #cbd5e1;
   font-weight: 600;
 }
 
 .Header button {
-  width: 155px;
-  height: 46px;
+  padding: 12px 22px;
 
   background: #8b5cf6;
   color: white;
@@ -42,11 +41,11 @@
   border: none;
   border-radius: 10px;
 
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
 
   cursor: pointer;
-  transition: 0.25s;
+  transition: 0.3s;
 }
 
 .Header button:hover {
@@ -54,55 +53,50 @@
   transform: translateY(-2px);
 }
 
-/* Layout */
+/* ---------- Layout ---------- */
 
 .chatContainer {
-  display: flex;
   flex: 1;
+  display: flex;
   overflow: hidden;
 }
 
-/* Sidebar */
+/* ---------- Sidebar ---------- */
 
 .sidebar {
-  width: 300px;
+  width: 280px;
 
   background: #1e293b;
 
-  padding: 22px;
+  padding: 24px;
 
   display: flex;
   flex-direction: column;
 
-  gap: 14px;
+  gap: 15px;
 
   border-right: 1px solid #334155;
 
   overflow-y: auto;
-
-  flex-shrink: 0;
 }
 
 .sidebar h2 {
-  margin-bottom: 12px;
-  font-size: 38px;
-  font-weight: 700;
+  font-size: 22px;
+  margin-bottom: 10px;
 }
 
 .chat-item {
+  padding: 14px 18px;
+
+  border-radius: 12px;
+
+  border: 1px solid #334155;
+
   color: #cbd5e1;
-
-  padding: 16px 18px;
-
-  border: 1px solid #475569;
-
-  border-radius: 10px;
 
   cursor: pointer;
 
-  transition: 0.25s;
-
-  user-select: none;
+  transition: 0.3s;
 }
 
 .chat-item:hover {
@@ -113,14 +107,14 @@
 .active-chat {
   background: #111827;
 
-  border-left: 5px solid #8b5cf6;
+  border-left: 4px solid #8b5cf6;
 
   color: #8b5cf6;
 
   font-weight: 600;
 }
 
-/* Chat */
+/* ---------- Chat Area ---------- */
 
 .chatsection {
   flex: 1;
@@ -132,8 +126,6 @@
 
   overflow: hidden;
 }
-
-/* Messages */
 
 .messages {
   flex: 1;
@@ -149,29 +141,47 @@
 }
 
 .messages p {
-  border: 1px solid #8b5cf6;
+  width: fit-content;
 
-  border-radius: 15px;
+  max-width: 75%;
 
   padding: 14px 18px;
 
+  border-radius: 16px;
+
   line-height: 1.6;
 
-  max-width: 80%;
-
-  word-break: break-word;
+  font-size: 15px;
 }
 
-/* Input */
+/* AI Message */
+
+.messages p:nth-child(odd) {
+  background: #1e293b;
+
+  border: 1px solid #334155;
+
+  align-self: flex-start;
+}
+
+/* User Message */
+
+.messages p:nth-child(even) {
+  background: #8b5cf6;
+
+  color: white;
+
+  align-self: flex-end;
+}
+
+/* ---------- Input ---------- */
 
 .inputWrapper {
   display: flex;
 
-  gap: 16px;
+  gap: 15px;
 
   margin-top: 20px;
-
-  flex-shrink: 0;
 }
 
 .input {
@@ -181,7 +191,7 @@
 
   background: #111827;
 
-  border: 1px solid #8b5cf6;
+  border: 1px solid #334155;
 
   border-radius: 30px;
 
@@ -191,6 +201,8 @@
 
   font-size: 15px;
 
+  transition: 0.3s;
+
   outline: none;
 }
 
@@ -199,27 +211,25 @@
 }
 
 .input:focus {
-  border-color: #a78bfa;
+  border-color: #8b5cf6;
 }
 
 .inputWrapper button {
-  width: 120px;
+  padding: 0 28px;
 
   background: #8b5cf6;
 
-  color: white;
-
   border: none;
 
-  border-radius: 10px;
+  border-radius: 12px;
 
-  font-size: 16px;
+  color: white;
 
   font-weight: 600;
 
   cursor: pointer;
 
-  transition: 0.25s;
+  transition: 0.3s;
 }
 
 .inputWrapper button:hover {

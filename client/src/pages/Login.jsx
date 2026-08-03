@@ -6,49 +6,62 @@ import { Link } from "react-router-dom";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const handleLogin = () => {
     alert("Login button clicked");
   };
+
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h1>Nova AI</h1>
-        <h2>Welcome Back</h2>
-        <p>Sign in to continue</p>
-        <div>
-          {" "}
+        <h1 className="auth-logo">Nova AI</h1>
+
+        <h2 className="auth-title">Welcome Back</h2>
+
+        <p className="auth-subtitle">
+          Sign in to continue to your productivity assistant.
+        </p>
+
+        <div className="auth-group">
           <label htmlFor="email" className="auth-label">
             Email
           </label>
+
           <input
-            placeholder="Email"
+            id="email"
             className="auth-input"
             type="email"
+            placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            id="email"
-          ></input>
+          />
         </div>
-        <div>
+
+        <div className="auth-group">
           <label htmlFor="password" className="auth-label">
-            Password{" "}
+            Password
           </label>
+
           <input
-            placeholder="Password"
+            id="password"
             className="auth-input"
             type="password"
+            placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            id="password"
-          ></input>
+          />
         </div>
-        <p>
-          <Button className="auth-button" text="Login" onClick={handleLogin} />
-          <p className="auth-account">Don't have an account? </p>
-          <Link className="auth-link" to="/register">
-            Register
-          </Link>
-        </p>
+
+        <Button className="auth-button" text="Login" onClick={handleLogin} />
+
+        <div className="auth-footer">
+          <p className="auth-account">
+            Don't have an account?
+            <Link className="auth-link" to="/register">
+              Register
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

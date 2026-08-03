@@ -5,7 +5,7 @@ export default function AIChat() {
     <div className="chat">
       <div className="Header">
         <h1>Nova AI</h1>
-        <h3>Ai Chat title</h3>
+        <h3>Ai Assistant</h3>
         <button> + New Chat</button>
       </div>
       <div className="chatContainer">

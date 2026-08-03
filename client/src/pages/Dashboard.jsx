@@ -4,131 +4,160 @@ import { Link } from "react-router-dom";
 export default function Dashboard() {
   return (
     <div className="dashboard-container">
-      {/* Navbar */}
       <div className="navbar">
         <div className="logo">Nova AI</div>
 
-        <input className="search" type="text" placeholder="Search..." />
+        <input
+          className="search"
+          type="text"
+          placeholder="Search tasks, notes, chats..."
+        />
 
-        <div className="nav-icon">🔔</div>
-        <div className="nav-icon">👤</div>
+        <div className="nav-right">
+          <div className="nav-icon">🔔</div>
+          <div className="nav-icon">👤</div>
+        </div>
       </div>
 
-      {/* Dashboard Body */}
       <div className="dashboard-body">
-        {/* Sidebar */}
         <div className="sidebar">
-          <Link className="sidebar-link" to="/dashboard">
-            Dashboard
+          <h3 className="sidebar-title">Workspace</h3>
+
+          <Link className="sidebar-link active" to="/dashboard">
+            🏠 Dashboard
           </Link>
 
           <Link className="sidebar-link" to="/chat">
-            AI Chat
+            💬 AI Chat
           </Link>
 
           <Link className="sidebar-link" to="/voice">
-            Voice Assistant
+            🎤 Voice Assistant
           </Link>
 
           <Link className="sidebar-link" to="/notes">
-            Smart Notes
+            📝 Smart Notes
           </Link>
 
           <Link className="sidebar-link" to="/todo">
-            To-Do Manager
+            ✅ To-Do Manager
           </Link>
 
           <Link className="sidebar-link" to="/reminder">
-            Reminders
+            ⏰ Reminders
           </Link>
 
           <Link className="sidebar-link" to="/pdf">
-            PDF Chat
+            📄 PDF Chat
           </Link>
 
           <Link className="sidebar-link" to="/email">
-            Email Writer
+            📧 Email Writer
           </Link>
 
           <Link className="sidebar-link" to="/study">
-            Study Planner
+            📚 Study Planner
           </Link>
 
           <Link className="sidebar-link" to="/resume">
-            Resume Analyzer
+            📑 Resume Analyzer
           </Link>
 
           <Link className="sidebar-link" to="/profile">
-            Profile
+            👤 Profile
           </Link>
 
           <Link className="sidebar-link" to="/search">
-            Search
+            🌐 Search
           </Link>
         </div>
-
-        {/* Main Content */}
 
         <div className="main-content">
           <div className="row">
             <div className="welcome-card">
-              <h2>Welcome back, Leesha! 👋</h2>
+              <span className="page-tag">Productivity Dashboard</span>
 
-              <p>Ready to boost your productivity today?</p>
+              <h2>👋 Welcome back, Leesha!</h2>
 
-              <p>Pending Tasks : 5</p>
+              <p>Here's your productivity summary for today.</p>
+              <p>Today's Quote </p>
+              <p>"Small progress every day leads to big results."</p>
+              <div className="quick-stats">
+                <div className="mini-card pending">
+                  <h3>5</h3>
+                  <span>Pending Tasks</span>
+                </div>
 
-              <p>Today's Reminders : 2</p>
+                <div className="mini-card reminder">
+                  <h3>2</h3>
+                  <span>Today's Reminders</span>
+                </div>
 
-              <p>Notes Created : 12</p>
+                <div className="mini-card notes">
+                  <h3>12</h3>
+                  <span>Notes</span>
+                </div>
 
-              <p>Study Goal : 3 Hours</p>
+                <div className="mini-card study">
+                  <h3>3h</h3>
+                  <span>Study Goal</span>
+                </div>
+              </div>
             </div>
 
             <div className="stats-card">
-              <h2>Productivity Statistics</h2>
+              <h2>📈 Productivity</h2>
 
-              <p>Completed Tasks : 18</p>
+              <div className="score-box">
+                <div className="progress-circle">
+                  <h1>82%</h1>
+                  <span>Here's your productivity summary for today.</span>
+                  <br></br>
+                  <span>Overall Score</span>
+                </div>
+              </div>
 
-              <p>Pending Tasks : 5</p>
-
-              <p>Notes Created : 12</p>
-
-              <p>Study Sessions : 7</p>
-
-              <p>Productivity Score : 82%</p>
+              <div className="stats-list">
+                <p>✔ Completed Tasks : 18</p>
+                <p>📚 Study Sessions : 7</p>
+                <p>📝 Notes Created : 12</p>
+                <p>⏳ Pending Tasks : 5</p>
+              </div>
             </div>
           </div>
 
+          {/* Bottom */}
+
           <div className="row">
             <div className="recent-card">
-              <h2>Recent Tasks</h2>
+              <h2>📋 Recent Tasks</h2>
 
-              <p>✔ Complete React Dashboard</p>
+              <div className="task-card">✔ Complete React Dashboard</div>
 
-              <p>✔ Finish Login & Register UI</p>
+              <div className="task-card">✔ Finish Login UI</div>
 
-              <p>⏳ Connect Backend Authentication</p>
+              <div className="task-card">⏳ Connect Backend Authentication</div>
 
-              <p>📄 Update Resume</p>
+              <div className="task-card">📄 Update Resume</div>
 
-              <p>📚 Prepare DBMS Notes</p>
+              <div className="task-card">📚 Prepare DBMS Notes</div>
             </div>
 
             <div className="assistant-card">
-              <h2>Nova AI Assistant</h2>
+              <div className="assistant-header">🤖 Nova AI Assistant</div>
 
-              <p>💬 Answer Questions</p>
+              <div className="assistant-box">
+                <p>Good Evening, Leesha! 👋</p>
 
-              <p>📝 Summarize Notes</p>
+                <p>You still have 5 pending tasks.</p>
 
-              <p>📄 Analyze PDFs</p>
+                <p>
+                  Shall I organize today's schedule and suggest what to complete
+                  first?
+                </p>
 
-              <p>📧 Write Emails</p>
-
-              <p>📅 Plan Study</p>
-
-              <p>🎯 Manage Daily Tasks</p>
+                <button className="assistant-btn">✨ Ask Nova AI</button>
+              </div>
             </div>
           </div>
         </div>
