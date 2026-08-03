@@ -33,7 +33,7 @@ export default function SmartNotes() {
           placeholder="Start writing your notes here..."
           rows="8"
         ></textarea>
-        <div>
+        <div className="aiTools">
           <h2>AI Tools</h2>
           <div className="tools">
             <button>Summarize</button>
