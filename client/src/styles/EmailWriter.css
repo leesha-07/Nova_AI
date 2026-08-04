@@ -1,0 +1,225 @@
+.emailwriter {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #0f172a;
+  color: white;
+}
+
+/* ================= HEADER ================= */
+
+.emailHeader {
+  height: 78px;
+  background: #1e293b;
+  border-bottom: 1px solid #334155;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0 30px;
+  flex-shrink: 0;
+}
+
+.emailHeader h1 {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.emailHeader h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: white;
+}
+
+.emailHeader button {
+  padding: 12px 22px;
+  background: #8b5cf6;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.emailHeader button:hover {
+  background: #7c3aed;
+  transform: translateY(-2px);
+}
+
+/* ================= MAIN ================= */
+
+.emailmainContainer {
+  flex: 1;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+}
+
+/* ================= CARDS ================= */
+
+.email,
+.emailprompt {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 15px;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  transition: 0.3s;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.18);
+}
+.aiemail {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 15px;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  min-height: 250px;
+}
+.email:hover,
+.emailprompt:hover,
+.aiemail:hover {
+  border-color: #8b5cf6;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(139, 92, 246, 0.15);
+}
+
+/* ================= EMAIL DETAILS ================= */
+
+.email label {
+  color: #cbd5e1;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.email input {
+  height: 45px;
+  padding: 0 14px;
+  margin-bottom: 18px;
+
+  background: #111827;
+  color: white;
+
+  border: 2px solid #334155;
+  border-radius: 8px;
+
+  font-size: 15px;
+
+  outline: none;
+  transition: 0.25s;
+}
+
+.email input:focus {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+}
+
+/* ================= PROMPT ================= */
+
+.emailprompt h3,
+.aiemail h3 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 18px;
+}
+
+.emailprompt textarea {
+  resize: none;
+  height: 170px;
+
+  padding: 15px;
+
+  background: #111827;
+  color: white;
+
+  border: 2px solid #334155;
+  border-radius: 10px;
+
+  font-size: 15px;
+  line-height: 1.6;
+
+  outline: none;
+  transition: 0.25s;
+}
+
+.emailprompt textarea:focus {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+}
+
+/* ================= AI EMAIL ================= */
+
+.aiemail {
+  min-height: 220px;
+}
+
+.aiemail p {
+  background: #111827;
+  border-left: 4px solid #8b5cf6;
+  border-radius: 10px;
+  padding: 18px;
+
+  color: #cbd5e1;
+  font-size: 15px;
+  line-height: 1.5;
+
+  white-space: pre-line;
+}
+
+/* ================= BUTTONS ================= */
+
+.emailbottombuttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.emailbottombuttons button {
+  height: 52px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #8b5cf6;
+  color: white;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.25s;
+
+  box-shadow: 0 3px 12px rgba(139, 92, 246, 0.2);
+}
+
+.emailbottombuttons button:hover {
+  background: #7c3aed;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.35);
+}
+
+/* Generate */
+
+.emailbottombuttons button:first-child {
+  border-top: 3px solid #22c55e;
+}
+
+/* Copy */
+
+.emailbottombuttons button:nth-child(2) {
+  border-top: 3px solid #3b82f6;
+}
+
+/* Send */
+
+.emailbottombuttons button:nth-child(3) {
+  border-top: 3px solid #f59e0b;
+}

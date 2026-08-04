@@ -1,0 +1,279 @@
+/* ================= PAGE ================= */
+
+.ResumeAnalyzer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #0f172a;
+  color: #fff;
+}
+
+/* ================= HEADER ================= */
+
+.resumeHeader {
+  height: 78px;
+  background: #1e293b;
+  border-bottom: 1px solid #334155;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0 30px;
+}
+
+.resumeHeader h1 {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.resumeHeader h2 {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.resumeHeader button {
+  padding: 12px 24px;
+  background: #8b5cf6;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.resumeHeader button:hover {
+  background: #7c3aed;
+  transform: translateY(-2px);
+}
+
+/* ================= MAIN ================= */
+
+.resumeMain {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  padding: 25px;
+}
+
+/* ================= COMMON CARDS ================= */
+
+.resumeuploadCard,
+.resumeanalysiscard,
+.resumeAisuggestion,
+.resumebottombuttons {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 18px;
+  padding: 22px;
+  transition: 0.3s;
+}
+
+.resumeuploadCard:hover,
+.resumeanalysiscard:hover,
+.resumeAisuggestion:hover {
+  border-color: #8b5cf6;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(139, 92, 246, 0.18);
+}
+
+/* ================= UPLOAD CARD ================= */
+
+.resumeuploadCard {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.resumeuploadCard button {
+  width: fit-content;
+  padding: 12px 20px;
+  background: #8b5cf6;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.resumeuploadCard button:hover {
+  background: #7c3aed;
+}
+
+.resumeuploadCard p {
+  background: #111827;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 14px;
+  color: #cbd5e1;
+}
+
+/* ================= ANALYSIS CARD ================= */
+
+.resumeanalysiscard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.resumeanalysiscard p {
+  background: #111827;
+  border: 1px solid #334155;
+  border-left: 4px solid #8b5cf6;
+  border-radius: 10px;
+  padding: 14px;
+  color: #e2e8f0;
+}
+
+/* ================= AI SUGGESTIONS (CENTERED) ================= */
+
+.resumeAisuggestion {
+  grid-column: 1 / -1; /* Spans full width across grid columns */
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 18px;
+  padding: 24px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers title and content horizontally */
+  text-align: center;
+  gap: 20px;
+}
+
+.resumeAisuggestion h3,
+.resumeAisuggestion h2,
+.resumeAisuggestion h4,
+.resumeAisuggestion > *:first-child:not(button) {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+  color: #f8fafc;
+}
+
+/* Grid wrapper for buttons inside the centered container */
+.resumeAisuggestion {
+  display: grid;
+  grid-template-columns: repeat(
+    2,
+    minmax(280px, 1fr)
+  ); /* Centered 2-column layout */
+  justify-content: center;
+  max-width: 900px; /* Constrains width so buttons stay perfectly balanced in the middle */
+  margin: 0 auto;
+  width: 100%;
+}
+
+.resumeAisuggestion > *:first-child:not(button) {
+  grid-column: 1 / -1;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.resumeAisuggestion button {
+  width: 100%;
+  height: 55px;
+
+  border: 1px solid #334155;
+  border-radius: 12px;
+
+  background: #8b5cf6;
+  color: white;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.resumeAisuggestion button:hover {
+  background: #7c3aed;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(139, 92, 246, 0.3);
+}
+
+/* Accent Colors */
+
+.resumeAisuggestion button:nth-of-type(1) {
+  border-top: 3px solid #22c55e;
+}
+
+.resumeAisuggestion button:nth-of-type(2) {
+  border-top: 3px solid #3b82f6;
+}
+
+.resumeAisuggestion button:nth-of-type(3) {
+  border-top: 3px solid #f59e0b;
+}
+
+.resumeAisuggestion button:nth-of-type(4) {
+  border-top: 3px solid #ef4444;
+}
+
+/* ================= BOTTOM BUTTONS ================= */
+
+.resumebottombuttons {
+  grid-column: 1 / -1;
+
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.resumebottombuttons button {
+  width: auto;
+  padding: 0 24px;
+  height: 46px;
+
+  background: #8b5cf6;
+  color: white;
+  border: none;
+  border-radius: 10px;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.resumebottombuttons button:hover {
+  background: #7c3aed;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(139, 92, 246, 0.35);
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1000px) {
+  .resumeMain {
+    grid-template-columns: 1fr;
+  }
+
+  .resumeAisuggestion,
+  .resumebottombuttons {
+    grid-column: auto;
+  }
+
+  .resumeAisuggestion {
+    grid-template-columns: 1fr;
+  }
+
+  .resumebottombuttons {
+    justify-content: center;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .resumebottombuttons button {
+    width: 100%;
+  }
+}

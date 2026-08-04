@@ -2,25 +2,40 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 25px;
-  padding: 30px;
   background: #0f172a;
   color: white;
 }
 
-/* Header */
+/* ================= HEADER ================= */
 
-.header {
+.todoheader {
+  height: 78px;
+  background: #1e293b;
+  border-bottom: 1px solid #334155;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  padding: 0 30px;
+  flex-shrink: 0;
 }
 
-.header h1 {
-  font-size: 34px;
+.todoheader h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  margin: 0;
 }
 
-.header button {
+.todoheader h2 {
+  font-size: 28px;
+  color: white;
+  font-weight: 600;
+  margin: 0;
+}
+
+.todoheader button {
   background: #8b5cf6;
   color: white;
   border: none;
@@ -32,56 +47,81 @@
   transition: 0.3s;
 }
 
-.header button:hover {
+.todoheader button:hover {
   background: #7c3aed;
+  transform: translateY(-2px);
 }
-.filters {
+
+/* ================= MAIN CONTENT WRAPPER ================= */
+
+.todoMain {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+/* ================= FILTERS ================= */
+
+.todofilters {
   display: flex;
   gap: 15px;
 }
 
-.filters button {
+.todofilters button {
   background: #1e293b;
   color: white;
-  border: 1px solid #475569;
+  border: 1px solid #334155;
   border-radius: 10px;
   padding: 10px 20px;
   cursor: pointer;
   transition: 0.3s;
 }
 
-.filters button:hover {
+.todofilters button:hover {
   background: #334155;
 }
 
-.filters .active {
+.todofilters .todoactive {
   background: #8b5cf6;
   border-color: #8b5cf6;
 }
 
-.taskContainer {
+/* ================= TASK CONTAINER ================= */
+
+.todotaskContainer {
   display: flex;
   gap: 25px;
   flex: 1;
 }
 
-.pendingTasks,
-.completedTasks {
+.todopendingTasks,
+.todocompletedTasks {
   flex: 1;
   background: #1e293b;
+  border: 1px solid #334155;
   border-radius: 15px;
   padding: 20px;
   overflow-y: auto;
+  transition: border-color 0.3s ease;
 }
 
-.pendingTasks h2,
-.completedTasks h2 {
+.todopendingTasks:hover,
+.todocompletedTasks:hover {
+  border-color: #8b5cf6;
+}
+
+.todopendingTasks h2,
+.todocompletedTasks h2 {
+  font-size: 22px;
   margin-bottom: 20px;
 }
 
-/* Task Card */
+/* ================= TASK CARDS ================= */
 
-.taskCard {
+.todotaskCard {
   background: #111827;
   border: 1px solid #334155;
   border-radius: 12px;
@@ -90,62 +130,79 @@
   transition: 0.3s;
 }
 
-.taskCard:hover {
+.todotaskCard:hover {
   transform: translateY(-2px);
   border-color: #8b5cf6;
 }
 
-.taskCard h3 {
+.todotaskCard h3 {
   margin-bottom: 10px;
 }
 
-.taskCard p {
+.todotaskCard p {
   color: #94a3b8;
   margin-bottom: 10px;
 }
 
-.high,
-.medium,
-.low {
+.todohigh,
+.todomedium,
+.todolow {
   display: inline-block;
   padding: 5px 12px;
   border-radius: 20px;
   font-size: 13px;
 }
 
-.high {
+.todohigh {
   background: rgba(239, 68, 68, 0.2);
   color: #ef4444;
 }
 
-.medium {
+.todomedium {
   background: rgba(245, 158, 11, 0.2);
   color: #f59e0b;
 }
 
-.low {
+.todolow {
   background: rgba(34, 197, 94, 0.2);
   color: #22c55e;
 }
 
-.completed {
+/* Fixed class selector bug for completed tasks */
+.todotaskCard.completed {
   opacity: 0.7;
+  border-color: #334155;
 }
 
-.aiSuggestion {
+.todotaskCard.completed h3 {
+  text-decoration: line-through;
+  color: #94a3b8;
+}
+
+/* ================= AI SUGGESTION CARD ================= */
+
+.todoaiSuggestion {
   background: #1e293b;
+  border: 1px solid #334155;
   border-radius: 15px;
   padding: 20px;
+  transition: border-color 0.3s ease;
 }
 
-.aiSuggestion h2 {
+.todoaiSuggestion:hover {
+  border-color: #8b5cf6;
+}
+
+.todoaiSuggestion h2 {
+  font-size: 22px;
   margin-bottom: 15px;
 }
 
-.aiSuggestion ul {
+.todoaiSuggestion ul {
   padding-left: 20px;
 }
 
-.aiSuggestion li {
+.todoaiSuggestion li {
   margin-bottom: 10px;
+  color: #cbd5e1;
 }

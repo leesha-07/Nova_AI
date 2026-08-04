@@ -1,13 +1,49 @@
 .note {
   height: 100vh;
   display: flex;
+  flex-direction: column;
   background: #0f172a;
   color: white;
 }
 
+/* ================= HEADER ================= */
+
+.noteHeader {
+  height: 78px;
+  background: #1e293b;
+  border-bottom: 1px solid #334155;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0 30px;
+  flex-shrink: 0;
+}
+
+.noteHeader h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+}
+
+.noteHeader h2 {
+  font-size: 28px;
+  color: white;
+  font-weight: 600;
+}
+
+/* ================= CONTENT WRAPPER ================= */
+
+.noteContent {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
 /* ================= LEFT PANEL ================= */
 
-.leftPanel {
+.noteleftPanel {
   width: 290px;
   background: #1e293b;
   border-right: 1px solid #334155;
@@ -21,20 +57,19 @@
   overflow-y: auto;
 }
 
-.leftPanel h2 {
+.noteleftPanel h2 {
   font-size: 22px;
   margin-bottom: 10px;
 }
 
 .newnote {
-  width: 100%;
-  padding: 13px;
+  padding: 12px 22px;
 
   background: #8b5cf6;
   color: white;
 
   border: none;
-  border-radius: 12px;
+  border-radius: 10px;
 
   font-size: 15px;
   font-weight: 600;
@@ -50,7 +85,7 @@
 
 /* Search */
 
-.search {
+.notesearch {
   width: 100%;
   height: 46px;
 
@@ -73,11 +108,11 @@
   box-sizing: border-box;
 }
 
-.search::placeholder {
+.notesearch::placeholder {
   color: #94a3b8;
 }
 
-.search:focus {
+.notesearch:focus {
   border-color: #8b5cf6;
 }
 
@@ -117,7 +152,7 @@
 
 /* ================= RIGHT PANEL ================= */
 
-.rightPanel {
+.noterightPanel {
   flex: 1;
 
   display: flex;
@@ -126,13 +161,15 @@
   padding: 30px;
 
   gap: 22px;
+
+  overflow-y: auto;
 }
 
-.rightPanel h2 {
-  font-size: 28px;
+.noterightPanel h2 {
+  font-size: 22px;
 }
 
-.rightPanel input {
+.noterightPanel input {
   height: 48px;
 
   background: #1e293b;
@@ -152,11 +189,11 @@
   transition: 0.3s;
 }
 
-.rightPanel input:focus {
+.noterightPanel input:focus {
   border-color: #8b5cf6;
 }
 
-.textarea {
+.notetextarea {
   flex: 1;
 
   min-height: 280px;
@@ -182,30 +219,30 @@
   box-sizing: border-box;
 }
 
-.textarea:focus {
+.notetextarea:focus {
   border-color: #8b5cf6;
 }
 
-.textarea::placeholder {
+.notetextarea::placeholder {
   color: #94a3b8;
 }
 
 /* ================= AI Tools ================= */
 
-.tools {
+.notetools {
   display: flex;
   gap: 14px;
   margin-top: 12px;
 }
 
-.tools button {
+.notetools button {
   padding: 12px 20px;
 
   background: #1e293b;
 
   color: white;
 
-  border: 1px solid #8b5cf6;
+  border: 1px solid #334155;
 
   border-radius: 10px;
 
@@ -216,13 +253,14 @@
   font-weight: 500;
 }
 
-.tools button:hover {
+.notetools button:hover {
   background: #8b5cf6;
+  border-color: #8b5cf6;
 }
 
 /* ================= SAVE BUTTON ================= */
 
-.buttons {
+.notebuttons {
   width: 100%;
   height: 48px;
 
@@ -242,7 +280,7 @@
   transition: 0.3s;
 }
 
-.buttons:hover {
+.notebuttons:hover {
   background: #7c3aed;
   transform: translateY(-2px);
 }
