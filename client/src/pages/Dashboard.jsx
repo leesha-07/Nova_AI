@@ -4,159 +4,203 @@ import { Link } from "react-router-dom";
 export default function Dashboard() {
   return (
     <div className="dashboard-container">
-      <div className="navbar">
-        <div className="logo">Nova AI</div>
+      {/* ================= NAVBAR ================= */}
+
+      <div className="dashboardnavbar">
+        <div className="dashboardlogo">Nova AI</div>
 
         <input
-          className="search"
+          className="dashboardsearch"
           type="text"
           placeholder="Search tasks, notes, chats..."
         />
 
-        <div className="nav-right">
-          <div className="nav-icon">🔔</div>
-          <div className="nav-icon">👤</div>
+        <div className="dashboardnav-right">
+          <div className="dashboardnav-icon">🔔</div>
+          <div className="dashboardnav-icon">👤</div>
         </div>
       </div>
 
-      <div className="dashboard-body">
-        <div className="sidebar">
-          <h3 className="sidebar-title">Workspace</h3>
+      {/* ================= BODY ================= */}
 
-          <Link className="sidebar-link active" to="/dashboard">
+      <div className="dashboard-body">
+        {/* ================= SIDEBAR ================= */}
+
+        <div className="dashboardsidebar">
+          <h3 className="dashboardsidebar-title">Workspace</h3>
+
+          <Link className="dashboardsidebar-link active" to="/dashboard">
             🏠 Dashboard
           </Link>
 
-          <Link className="sidebar-link" to="/chat">
+          <Link className="dashboardsidebar-link" to="/chat">
             💬 AI Chat
           </Link>
 
-          <Link className="sidebar-link" to="/voice">
+          <Link className="dashboardsidebar-link" to="/voice">
             🎤 Voice Assistant
           </Link>
 
-          <Link className="sidebar-link" to="/notes">
+          <Link className="dashboardsidebar-link" to="/notes">
             📝 Smart Notes
           </Link>
 
-          <Link className="sidebar-link" to="/todo">
+          <Link className="dashboardsidebar-link" to="/todo">
             ✅ To-Do Manager
           </Link>
 
-          <Link className="sidebar-link" to="/reminder">
+          <Link className="dashboardsidebar-link" to="/reminder">
             ⏰ Reminders
           </Link>
 
-          <Link className="sidebar-link" to="/pdf">
+          <Link className="dashboardsidebar-link" to="/pdf">
             📄 PDF Chat
           </Link>
 
-          <Link className="sidebar-link" to="/email">
+          <Link className="dashboardsidebar-link" to="/email">
             📧 Email Writer
           </Link>
 
-          <Link className="sidebar-link" to="/study">
+          <Link className="dashboardsidebar-link" to="/study">
             📚 Study Planner
           </Link>
 
-          <Link className="sidebar-link" to="/resume">
+          <Link className="dashboardsidebar-link" to="/resume">
             📑 Resume Analyzer
           </Link>
 
-          <Link className="sidebar-link" to="/profile">
+          <Link className="dashboardsidebar-link" to="/profile">
             👤 Profile
           </Link>
 
-          <Link className="sidebar-link" to="/search">
+          <Link className="dashboardsidebar-link" to="/search">
             🌐 Search
           </Link>
         </div>
 
-        <div className="main-content">
-          <div className="row">
-            <div className="welcome-card">
-              <span className="page-tag">Productivity Dashboard</span>
+        {/* ================= MAIN ================= */}
 
-              <h2>👋 Welcome back, Leesha!</h2>
+        <div className="dashboardmain-content">
+          {/* ================= TOP SECTION ================= */}
 
-              <p>Here's your productivity summary for today.</p>
-              <p>Today's Quote </p>
-              <p>"Small progress every day leads to big results."</p>
-              <div className="quick-stats">
-                <div className="mini-card pending">
+          <div className="dashboardrow">
+            {/* Welcome */}
+
+            <div className="dashboardwelcome-card">
+              <span className="dashboardpage-tag">Productivity Dashboard</span>
+
+              <h2> Welcome back, Leesha👋</h2>
+
+              <p>
+                Here's an overview of your productivity and today's priorities.
+              </p>
+
+              <div className="dashboardquote">
+                <h4>💡 Today's Quote</h4>
+
+                <p>"Small progress every day leads to big results."</p>
+              </div>
+
+              <div className="dashboardquick-stats">
+                <div className="dashboardmini-card dashboardpending">
+                  <div className="dashboardmini-icon">📝</div>
                   <h3>5</h3>
                   <span>Pending Tasks</span>
                 </div>
 
-                <div className="mini-card reminder">
+                <div className="dashboardmini-card dashboardreminder">
+                  <div className="dashboardmini-icon">⏰</div>
                   <h3>2</h3>
                   <span>Today's Reminders</span>
                 </div>
 
-                <div className="mini-card notes">
+                <div className="dashboardmini-card dashboardnotes">
+                  <div className="dashboardmini-icon">📚</div>
                   <h3>12</h3>
-                  <span>Notes</span>
+                  <span>Notes Created</span>
                 </div>
 
-                <div className="mini-card study">
+                <div className="dashboardmini-card dashboardstudy">
+                  <div className="dashboardmini-icon">🎯</div>
                   <h3>3h</h3>
                   <span>Study Goal</span>
                 </div>
               </div>
             </div>
 
-            <div className="stats-card">
+            {/* Productivity */}
+
+            <div className="dashboardstats-card">
               <h2>📈 Productivity</h2>
 
-              <div className="score-box">
-                <div className="progress-circle">
+              <div className="dashboardscore-box">
+                <div className="dashboardprogress-circle">
                   <h1>82%</h1>
-                  <span>Here's your productivity summary for today.</span>
-                  <br></br>
-                  <span>Overall Score</span>
+
+                  <div className="dashboardprogress-bar">
+                    <div className="dashboardprogress-fill"></div>
+                  </div>
+
+                  <span>Overall Productivity Score</span>
                 </div>
               </div>
 
-              <div className="stats-list">
+              <div className="dashboardstats-list">
                 <p>✔ Completed Tasks : 18</p>
+
                 <p>📚 Study Sessions : 7</p>
+
                 <p>📝 Notes Created : 12</p>
+
                 <p>⏳ Pending Tasks : 5</p>
               </div>
             </div>
           </div>
 
-          {/* Bottom */}
+          {/* ================= BOTTOM SECTION ================= */}
 
-          <div className="row">
-            <div className="recent-card">
+          <div className="dashboardrow">
+            {/* Recent Tasks */}
+
+            <div className="dashboardrecent-card">
               <h2>📋 Recent Tasks</h2>
 
-              <div className="task-card">✔ Complete React Dashboard</div>
+              <div className="dashboardtask-card">
+                🟢 Complete React Dashboard
+              </div>
 
-              <div className="task-card">✔ Finish Login UI</div>
+              <div className="dashboardtask-card">🟢 Finish Login UI</div>
 
-              <div className="task-card">⏳ Connect Backend Authentication</div>
+              <div className="dashboardtask-card">
+                🟡 Connect Backend Authentication
+              </div>
 
-              <div className="task-card">📄 Update Resume</div>
+              <div className="dashboardtask-card">🔵 Update Resume</div>
 
-              <div className="task-card">📚 Prepare DBMS Notes</div>
+              <div className="dashboardtask-card">📚 Prepare DBMS Notes</div>
             </div>
 
-            <div className="assistant-card">
-              <div className="assistant-header">🤖 Nova AI Assistant</div>
+            {/* Assistant */}
 
-              <div className="assistant-box">
-                <p>Good Evening, Leesha! 👋</p>
+            <div className="dashboardassistant-card">
+              <h2 className="dashboardassistant-header">
+                🤖 Nova AI Assistant
+              </h2>
 
-                <p>You still have 5 pending tasks.</p>
+              <div className="dashboardassistant-box">
+                <p>👋 Good Evening, Leesha!</p>
 
-                <p>
-                  Shall I organize today's schedule and suggest what to complete
-                  first?
-                </p>
+                <h4>Today's Focus</h4>
 
-                <button className="assistant-btn">✨ Ask Nova AI</button>
+                <p>• Finish React Dashboard</p>
+
+                <p>• Review DBMS Notes</p>
+
+                <p>• Complete Backend Authentication</p>
+
+                <button className="dashboardassistant-btn">
+                  ✨ Ask Nova AI
+                </button>
               </div>
             </div>
           </div>

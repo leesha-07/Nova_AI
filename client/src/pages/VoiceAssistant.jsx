@@ -2,31 +2,35 @@ import "../styles/VoiceAssistant.css";
 export default function VoiceAssistant() {
   return (
     <div className="voiceassistant">
-      <div className="Header">
+      <div className="voiceHeader">
         <h1>Nova AI</h1>
         <h2>Voice Assistant</h2>
         <button>+ New Conversation</button>
       </div>
-      <div className="mainContainer">
+      <div className="voicemainContainer">
         <div className="Microphonesection">
           <button>🎤</button>
-          <p>Listening Status</p>
-          <p>Click the microphone to start talking</p>
+          <h3>Status</h3>
+
+          <p>● Idle 🟢 Listening 🔴 Microphone Off</p>
           <div className="statusCircle"></div>
         </div>
         <div className="Transcriptsection">
-          <p>Transcript</p>
+          <h2>Transcript</h2>
           <textarea rows={8} placeholder="Your Thought...."></textarea>
         </div>
-        <div className="aiResponse">
-          <p>Nova Ai response</p>
-          <p>Nova AI response will appear here...</p>
-        </div>
-        <div className="bottombuttons">
-          <button>Start listening</button>
-          <button>Stop listening</button>
-          <button>clear</button>
-        </div>
+      </div>
+      <div className="aiResponse">
+        <h2>Nova Ai response</h2>
+        <p>🤖 Nova AI </p>
+        <p>--------------------------------</p>
+        <p> Hello Leesha! I'm ready whenever you start speaking.</p>
+        <p>--------------------------------</p>
+      </div>
+      <div className="voicebottombuttons">
+        <button>🎤 Start</button>
+        <button>⏹ Stop </button>
+        <button> 🗑 Clear</button>
       </div>
     </div>
   );

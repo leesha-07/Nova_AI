@@ -1,0 +1,238 @@
+/* ================= PAGE ================= */
+
+.search {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #0f172a;
+  color: white;
+}
+
+/* ================= HEADER ================= */
+
+.searchHeader {
+  height: 78px;
+  background: #1e293b;
+  border-bottom: 1px solid #334155;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0 30px;
+}
+
+.searchHeader h1 {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.searchHeader h2 {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.searchHeader button {
+  padding: 12px 24px;
+  background: #8b5cf6;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.searchHeader button:hover {
+  background: #7c3aed;
+  transform: translateY(-2px);
+}
+
+/* ================= MAIN ================= */
+
+.searchMain {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 25px;
+}
+
+/* ================= CARDS ================= */
+
+.searchinputcard,
+.searchresultcard,
+.searchaisummary,
+.searchbuttoncard {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 18px;
+  padding: 22px;
+  transition: 0.3s;
+}
+
+.searchinputcard:hover,
+.searchresultcard:hover,
+.searchaisummary:hover,
+.searchbuttoncard:hover {
+  transform: translateY(-3px);
+  border-color: #8b5cf6;
+  box-shadow: 0 12px 25px rgba(139, 92, 246, 0.18);
+}
+
+/* ================= HEADINGS ================= */
+
+.searchresultcard h2,
+.searchaisummary h2 {
+  font-size: 22px;
+  margin-bottom: 18px;
+}
+
+/* ================= SEARCH INPUT ================= */
+
+.searchinputcard {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.searchinputcard input {
+  flex: 1;
+  height: 48px;
+
+  background: #111827;
+  color: white;
+  border: 1px solid #334155;
+
+  border-radius: 10px;
+
+  padding: 0 18px;
+  font-size: 15px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.searchinputcard input::placeholder {
+  color: #94a3b8;
+}
+
+.searchinputcard input:focus {
+  border-color: #8b5cf6;
+}
+
+.searchinputcard button {
+  height: 48px;
+  padding: 0 28px;
+
+  background: #8b5cf6;
+  color: white;
+
+  border: none;
+  border-radius: 10px;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.searchinputcard button:hover {
+  background: #7c3aed;
+}
+
+/* ================= SEARCH RESULTS ================= */
+
+.searchresultcard {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.searchresultcard p {
+  background: #111827;
+  border: 1px solid #334155;
+  border-radius: 12px;
+
+  padding: 14px 18px;
+
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.searchresultcard p:hover {
+  border-color: #8b5cf6;
+  background: #273549;
+}
+
+/* ================= AI SUMMARY ================= */
+
+.searchaisummary p {
+  background: #111827;
+  border: 1px solid #334155;
+  border-radius: 12px;
+
+  padding: 18px;
+  line-height: 1.8;
+  color: #cbd5e1;
+}
+
+/* ================= BUTTON CARD ================= */
+
+.searchbottombuttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.searchbottombuttons button {
+  width: 240px;
+  height: 56px;
+
+  background: #8b5cf6;
+  color: white;
+
+  border: none;
+  border-radius: 12px;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.searchbottombuttons button:hover {
+  background: #7c3aed;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(139, 92, 246, 0.35);
+}
+
+.searchbottombuttons button:first-child {
+  border-top: 3px solid #22c55e;
+}
+
+.searchbottombuttons button:last-child {
+  border-top: 3px solid #3b82f6;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 900px) {
+  .searchinputcard {
+    flex-direction: column;
+  }
+
+  .searchinputcard button {
+    width: 100%;
+  }
+
+  .searchbottombuttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .searchbottombuttons button {
+    width: 100%;
+  }
+}

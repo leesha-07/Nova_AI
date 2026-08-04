@@ -1,0 +1,257 @@
+.voiceassistant {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #0f172a;
+  color: white;
+}
+
+/* ================= HEADER ================= */
+
+.voiceHeader {
+  height: 78px;
+  background: #1e293b;
+  border-bottom: 1px solid #334155;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0 30px;
+
+  flex-shrink: 0;
+}
+
+.voiceHeader h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+}
+
+.voiceHeader h2 {
+  font-size: 28px;
+  color: white;
+  font-weight: 600;
+}
+
+.voiceHeader button {
+  padding: 12px 22px;
+
+  background: #8b5cf6;
+  color: white;
+
+  border: none;
+  border-radius: 10px;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.voiceHeader button:hover {
+  background: #7c3aed;
+  transform: translateY(-2px);
+}
+
+/* ================= MAIN ================= */
+
+.voicemainContainer {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* ================= LEFT PANEL ================= */
+
+.Microphonesection {
+  width: 280px;
+
+  background: #1e293b;
+
+  border-right: 1px solid #334155;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 30px 20px;
+
+  gap: 22px;
+}
+
+.Microphonesection button {
+  width: 110px;
+  height: 110px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+
+  color: white;
+
+  font-size: 48px;
+
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: all 0.3s ease;
+
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.35);
+}
+
+.Microphonesection button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.6);
+}
+
+.Microphonesection h3 {
+  font-size: 28px;
+  margin: 0;
+}
+
+.Microphonesection p {
+  font-size: 15px;
+  color: #cbd5e1;
+  text-align: center;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ================= TRANSCRIPT ================= */
+
+.Transcriptsection {
+  flex: 1;
+
+  background: #111827;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 28px;
+
+  border-right: 1px solid #334155;
+}
+
+.Transcriptsection h2 {
+  margin-bottom: 18px;
+  font-size: 24px;
+}
+
+.Transcriptsection textarea {
+  flex: 1;
+
+  resize: none;
+
+  padding: 18px;
+
+  background: #334155;
+
+  color: white;
+
+  border: 1px solid #334155;
+
+  border-radius: 12px;
+
+  outline: none;
+
+  font-size: 16px;
+
+  line-height: 1.6;
+}
+.Transcriptsection textarea:focus {
+  border-color: #8b5cf6;
+}
+.Transcriptsection textarea::placeholder {
+  color: #94a3b8;
+}
+
+/* ================= AI RESPONSE ================= */
+
+.aiResponse {
+  height: 220px;
+
+  background: #1e293b;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+
+  padding: 25px;
+
+  gap: 15px;
+
+  border-top: 1px solid #334155;
+}
+
+.aiResponse h2 {
+  font-size: 22px;
+}
+
+.aiResponse p {
+  color: #cbd5e1;
+  line-height: 1.7;
+  max-width: 650px;
+}
+
+/* ================= BOTTOM BUTTONS ================= */
+
+.voicebottombuttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 20px;
+
+  padding: 22px 30px;
+
+  background: #111827;
+}
+
+.voicebottombuttons button {
+  height: 52px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #8b5cf6;
+
+  color: white;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.voicebottombuttons button:hover {
+  transform: translateY(-2px);
+}
+
+/* Start */
+
+.voicebottombuttons button:first-child {
+  border-top: 3px solid #22c55e;
+}
+
+/* Stop */
+
+.voicebottombuttons button:nth-child(2) {
+  border-top: 3px solid #ef4444;
+}
+
+/* Clear */
+
+.voicebottombuttons button:nth-child(3) {
+  border-top: 3px solid #64748b;
+}

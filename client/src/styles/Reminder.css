@@ -1,0 +1,300 @@
+/* ================= GLOBAL ================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0f172a;
+  color: #fff;
+  font-family:
+    Inter,
+    Segoe UI,
+    sans-serif;
+}
+
+/* ================= PAGE ================= */
+
+.reminder {
+  min-height: 100vh;
+  background: #0f172a;
+}
+
+/* ================= HEADER ================= */
+
+.reminderHeader {
+  height: 78px;
+  padding: 0 28px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background: #111827;
+  border-bottom: 1px solid #273549;
+}
+
+.reminderHeader h1 {
+  font-size: 28px;
+
+  font-weight: 700;
+}
+
+.reminderHeader h2 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.reminderHeader button {
+  background: #8b5cf6;
+  color: white;
+
+  border: none;
+  border-radius: 10px;
+
+  padding: 11px 20px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.reminderHeader button:hover {
+  background: #7c3aed;
+  transform: translateY(-2px);
+}
+
+/* ================= MAIN ================= */
+
+.reminderMaincontent {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 22px;
+
+  padding: 24px;
+}
+
+/* ================= CARDS ================= */
+
+.reminderleftcard,
+.reminderrightcard,
+.reminderbottomcard,
+.reminderbottombuttons {
+  background: #1e293b;
+
+  border: 1px solid #334155;
+
+  border-radius: 18px;
+
+  padding: 22px;
+
+  transition: 0.25s;
+}
+
+.reminderleftcard:hover,
+.reminderrightcard:hover,
+.reminderbottomcard:hover {
+  border-color: #8b5cf6;
+
+  transform: translateY(-3px);
+
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+}
+
+.reminderleftcard h2,
+.reminderrightcard h2,
+.reminderbottomcard h2 {
+  font-size: 22px;
+
+  margin-bottom: 18px;
+
+  font-weight: 600;
+}
+
+/* ================= INNER BOX ================= */
+
+.remindersection,
+.remindersec {
+  background: #111827;
+
+  border: 1px solid #273549;
+
+  border-radius: 14px;
+
+  padding: 18px;
+}
+
+/* Upcoming reminders */
+
+.remindersection {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 18px;
+}
+
+.remindersection p {
+  color: #cbd5e1;
+
+  line-height: 1.8;
+}
+
+/* ================= FORM ================= */
+
+.remindersec {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 15px;
+}
+
+.remindersec label {
+  font-size: 14px;
+
+  color: #cbd5e1;
+
+  font-weight: 600;
+}
+
+.remindersec input,
+.remindersec textarea {
+  width: 100%;
+
+  background: #1e293b;
+
+  border: 1px solid #334155;
+
+  color: white;
+
+  border-radius: 10px;
+
+  padding: 12px 15px;
+
+  font-size: 14px;
+
+  outline: none;
+
+  transition: 0.25s;
+}
+
+.remindersec input {
+  height: 46px;
+}
+
+.remindersec textarea {
+  min-height: 170px;
+
+  resize: none;
+}
+
+.remindersec input:focus,
+.remindersec textarea:focus {
+  border-color: #8b5cf6;
+
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.18);
+}
+
+/* ================= DETAILS CARD ================= */
+
+.reminderbottomcard {
+  grid-column: 1/3;
+}
+
+/* ================= BUTTON SECTION ================= */
+
+.reminderbottombuttons {
+  grid-column: 1/3;
+
+  display: flex;
+
+  justify-content: center;
+}
+
+.reminderbuttons {
+  width: 100%;
+
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 16px;
+}
+
+/* Buttons */
+
+.reminderbuttons button {
+  min-width: 180px;
+
+  height: 48px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.25s;
+}
+
+/* Save */
+
+.reminderbuttons button:nth-child(1) {
+  background: #8b5cf6;
+
+  color: white;
+}
+
+/* Delete */
+
+.reminderbuttons button:nth-child(2) {
+  background: #ef4444;
+
+  color: white;
+}
+
+/* Complete */
+
+.reminderbuttons button:nth-child(3) {
+  background: #22c55e;
+
+  color: white;
+}
+
+.reminderbuttons button:hover {
+  transform: translateY(-2px);
+
+  filter: brightness(1.08);
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1000px) {
+  .reminderMaincontent {
+    grid-template-columns: 1fr;
+  }
+
+  .reminderbottomcard,
+  .reminderbottombuttons {
+    grid-column: auto;
+  }
+
+  .reminderbuttons {
+    flex-direction: column;
+  }
+
+  .reminderbuttons button {
+    width: 100%;
+  }
+}

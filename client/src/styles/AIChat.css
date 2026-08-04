@@ -6,8 +6,8 @@
   color: white;
 }
 
-.Header {
-  height: 72px;
+.chatHeader {
+  height: 78px;
   background: #1e293b;
   border-bottom: 1px solid #334155;
 
@@ -20,19 +20,19 @@
   flex-shrink: 0;
 }
 
-.Header h1 {
-  font-size: 32px;
+.chatHeader h1 {
+  font-size: 28px;
   font-weight: 700;
   color: white;
 }
 
-.Header h3 {
-  font-size: 20px;
-  color: #cbd5e1;
+.chatHeader h2 {
+  font-size: 28px;
+  color: white;
   font-weight: 600;
 }
 
-.Header button {
+.chatHeader button {
   padding: 12px 22px;
 
   background: #8b5cf6;
@@ -48,7 +48,7 @@
   transition: 0.3s;
 }
 
-.Header button:hover {
+.chatHeader button:hover {
   background: #7c3aed;
   transform: translateY(-2px);
 }
@@ -63,7 +63,7 @@
 
 /* ---------- Sidebar ---------- */
 
-.sidebar {
+.chatsidebar {
   width: 280px;
 
   background: #1e293b;
@@ -80,7 +80,7 @@
   overflow-y: auto;
 }
 
-.sidebar h2 {
+.chatsidebar h2 {
   font-size: 22px;
   margin-bottom: 10px;
 }
@@ -104,7 +104,7 @@
   color: white;
 }
 
-.active-chat {
+.chatactive-chat {
   background: #111827;
 
   border-left: 4px solid #8b5cf6;
@@ -127,7 +127,7 @@
   overflow: hidden;
 }
 
-.messages {
+.chatmessages {
   flex: 1;
 
   overflow-y: auto;
@@ -140,7 +140,7 @@
   padding-right: 10px;
 }
 
-.messages p {
+.chatmessages p {
   width: fit-content;
 
   max-width: 75%;
@@ -156,7 +156,7 @@
 
 /* AI Message */
 
-.messages p:nth-child(odd) {
+.chatmessages p:nth-child(odd) {
   background: #1e293b;
 
   border: 1px solid #334155;
@@ -166,7 +166,7 @@
 
 /* User Message */
 
-.messages p:nth-child(even) {
+.chatmessages p:nth-child(even) {
   background: #8b5cf6;
 
   color: white;
@@ -176,7 +176,7 @@
 
 /* ---------- Input ---------- */
 
-.inputWrapper {
+.chatinputWrapper {
   display: flex;
 
   gap: 15px;
@@ -184,7 +184,7 @@
   margin-top: 20px;
 }
 
-.input {
+.chatinput {
   flex: 1;
 
   height: 48px;
@@ -206,15 +206,15 @@
   outline: none;
 }
 
-.input::placeholder {
+.chatinput::placeholder {
   color: #94a3b8;
 }
 
-.input:focus {
+.chatinput:focus {
   border-color: #8b5cf6;
 }
 
-.inputWrapper button {
+.chatinputWrapper button {
   padding: 0 28px;
 
   background: #8b5cf6;
@@ -232,6 +232,6 @@
   transition: 0.3s;
 }
 
-.inputWrapper button:hover {
+.chatinputWrapper button:hover {
   background: #7c3aed;
 }
