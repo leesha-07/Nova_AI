@@ -1,16 +1,36 @@
 import React, { useState } from "react";
 import "../styles/Auth.css";
 import Button from "../components/Button.jsx";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  async function handleLogin() {
+    const response = await fetch("http://localhost:5000/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
 
-  const handleLogin = () => {
-    alert("Login button clicked");
-  };
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    });
 
+    const data = await response.json();
+
+    console.log("STATUS:", response.status);
+    console.log("RESPONSE:", data);
+    if (response.ok) {
+      navigate("/dashboard");
+    } else {
+      setMessage(data.message);
+    }
+  }
   return (
     <div className="auth-container">
       <div className="auth-card">
@@ -51,9 +71,11 @@ export default function Login() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-
+        <div>
+          <Link to="/forgotPassword">Forgot Password ?</Link>
+        </div>
         <Button className="auth-button" text="Login" onClick={handleLogin} />
-
+        {message && <p>{message}</p>}
         <div className="auth-footer">
           <p className="auth-account">
             Don't have an account?

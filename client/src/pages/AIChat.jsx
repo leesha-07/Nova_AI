@@ -1,11 +1,16 @@
 import "../styles/AIChat.css";
-
+import { useState } from "react";
 export default function AIChat() {
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState[""];
+  function handleSend() {
+    console.log(message);
+  }
   return (
     <div className="chat">
       <div className="chatHeader">
         <h1>Nova AI</h1>
-        <h2>Ai Assistant</h2>
+        <h2>AI Assistant</h2>
         <button> + New Chat</button>
       </div>
       <div className="chatContainer">
@@ -36,8 +41,10 @@ export default function AIChat() {
               type="text"
               className="chatinput"
               placeholder="Ask Anything ..."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
             ></input>
-            <button>Send</button>
+            <button onClick={handleSend}>Send</button>
           </div>
         </div>
       </div>

@@ -8,11 +8,30 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState("");
 
-  function handleRegister() {
-    alert("Registration Done");
+  async function handleRegister() {
+    const response = await fetch("http://localhost:5000/api/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        password: password,
+        confirmPassword: confirmPassword,
+      }),
+    });
+
+    const data = await response.json();
+
+    console.log("STATUS:", response.status);
+    console.log("RESPONSE:", data);
+
+    setMessage(data.message);
   }
-
   return (
     <div className="auth-container">
       <div className="auth-card">
@@ -76,7 +95,7 @@ export default function Register() {
           text="Register"
           onClick={handleRegister}
         />
-
+        {message && <p>{message}</p>}
         <div className="auth-footer">
           <p className="auth-account">
             Already have an account?

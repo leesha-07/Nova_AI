@@ -14,6 +14,7 @@ import StudyPlanner from "./pages/StudyPlanner";
 import ResumeAnalyzer from "./pages/ResumeAnalyzer";
 import Profile from "./pages/Profile";
 import Search from "./pages/Search";
+import ForgotPassword from "./pages/ForgotPassword";
 
 function Home() {
   const [message, setMessage] = useState("Loading...");
@@ -51,6 +52,7 @@ function App() {
         <Route path="/resume" element={<ResumeAnalyzer />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/forgotPassword" element={<ForgotPassword />} />
       </Routes>
     </BrowserRouter>
   );
