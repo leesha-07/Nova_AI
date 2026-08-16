@@ -4,7 +4,7 @@ const authRoutes = require("./routes/authRoutes");
 require("dotenv").config();
 const connectDB = require("./config/db");
 const chatRoutes = require("./routes/chatRoutes");
-
+const chatHistoryRoutes = require("./routes/chatHistoryRoutes");
 const app = express();
 
 console.log("MONGO_URI starts with:", process.env.MONGO_URI?.slice(0, 20));
@@ -15,6 +15,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/chat", chatRoutes);
+app.use("/api/chat-history", chatHistoryRoutes);
 
 app.get("/", (req, res) => {
   res.send("Nova AI backend is running...");

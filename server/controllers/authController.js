@@ -23,6 +23,8 @@ const loginUser = async (req, res) => {
   if (!isPasswordCorrect) {
     return res.status(400).json({ message: "Password Doesn't Match" });
   }
-  return res.status(200).json({ message: "Password  Match" });
+  return res
+    .status(200)
+    .json({ message: "Password  Match", userId: existUser._id });
 };
 module.exports = { registerUser, loginUser };

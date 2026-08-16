@@ -26,6 +26,7 @@ export default function Login() {
     console.log("STATUS:", response.status);
     console.log("RESPONSE:", data);
     if (response.ok) {
+      localStorage.setItem("userId", data.userId);
       navigate("/dashboard");
     } else {
       setMessage(data.message);
