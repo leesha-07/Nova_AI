@@ -1,52 +1,202 @@
 import "../styles/Profile.css";
+import { useState, useEffect } from "react";
+
+import { useNavigate } from "react-router-dom";
 export default function Profile() {
+  const [profile, setProfile] = useState("");
+  const userId = localStorage.getItem("userId");
+  const navigate = useNavigate();
+  const [logoutOpen, setLogoutOpen] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [changePasswordOpen, setChangePasswordOpen] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [location, setLocation] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  useEffect(() => {
+    async function getProfile() {
+      const response = await fetch(
+        `http://localhost:5000/api/profile/${userId}`,
+      );
+
+      const data = await response.json();
+
+      setProfile(data.profile);
+    }
+
+    getProfile();
+  }, [userId]);
+
+  function handleEditProfile() {
+    setName(profile.name);
+    setEmail(profile.email);
+    setLocation(profile.location);
+
+    setEditMode(true);
+  }
+
+  async function handleSaveProfile() {
+    const response = await fetch(
+      `http://localhost:5000/api/profile/${userId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          location: location,
+        }),
+      },
+    );
+
+    const data = await response.json();
+
+    setProfile(data.profile);
+    setEditMode(false);
+  }
+  async function handleChangePassword() {
+    const response = await fetch(
+      `http://localhost:5000/api/auth/change-password/${userId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          currentPassword: currentPassword,
+          newPassword: newPassword,
+          confirmPassword: confirmPassword,
+        }),
+      },
+    );
+
+    const data = await response.json();
+
+    alert(data.message);
+    if (response.ok) {
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setChangePasswordOpen(false);
+    }
+  }
+  function handleLogout() {
+    localStorage.removeItem("userId");
+    setLogoutOpen(false);
+    navigate("/");
+  }
   return (
-    <div className="profile">
-      <div className="profileHeader">
-        <h1>Nova AI</h1>
-
-        <h2> Profile</h2>
-
-        <button>Edit profile</button>
-      </div>
-      <div className="profilemainContent">
-        <div className="profileleftcard">
-          <h2>👤 Personal Information</h2>
-          <div className="personal">
-            <p>
-              <strong>👤 Name: </strong>Leesha Jain
-            </p>
-            <p>
-              <strong>📧 Email: </strong>jainleesha@gmail.com
-            </p>
-            <p>
-              <strong>📍 Location: </strong>Mumbai
-            </p>
-            <p>
-              <strong>📈 Productivity Level:</strong>82%
-            </p>
+    <>
+      <div className="profileCard">
+        <div className="profileCardHeader">
+          <div className="profileAvatar">
+            {profile?.name
+              ? profile.name
+                  .split(" ")
+                  .map((word) => word[0])
+                  .join("")
+              : "U"}
           </div>
-        </div>
-        <div className="profilerightcard">
-          <h2>📊 Account Stats</h2>
-          <div className="profilestats">
-            <p>📒 Notes Created: 12</p>
-            <p>✅ Task Completed: 18</p>
-            <p>📄 PDF uploaded: 5</p>
-            <p>📧 Email Generated: 24</p>
+
+          <div>
+            <h3>{profile?.name}</h3>
+            <p>{profile?.email}</p>
           </div>
         </div>
 
-        <div className="profilebottombuttons">
-          <h2>⚙️ Account Settings</h2>
-          <div className="profilebuttons">
-            <button>🔒 Change Password</button>
-            <button>🔔 Notifications</button>
-            <button>🌙 Dark Mode</button>
-            <button>🚪 Logout</button>
-          </div>
+        <div className="profileCardInfo">
+          <p>📍 {profile?.location}</p>
+        </div>
+
+        <div className="profileCardButtons">
+          <button onClick={handleEditProfile}>✏️ Edit Profile</button>
+
+          <button onClick={() => setChangePasswordOpen(true)}>
+            🔒 Change Password
+          </button>
+
+          <button onClick={() => setLogoutOpen(true)}>🚪 Logout</button>
         </div>
       </div>
-    </div>
+
+      {editMode && (
+        <div className="editProfileOverlay">
+          <div className="editProfileCard">
+            <div className="editProfileHeader">
+              <h2>✏️ Edit Profile</h2>
+
+              <button onClick={() => setEditMode(false)}>✕</button>
+            </div>
+
+            <div className="editProfileForm">
+              <label>Name</label>
+
+              <input value={name} onChange={(e) => setName(e.target.value)} />
+
+              <label>Email</label>
+
+              <input value={email} onChange={(e) => setEmail(e.target.value)} />
+
+              <label>Location</label>
+
+              <input
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+              />
+
+              <button onClick={handleSaveProfile}>Save Changes</button>
+            </div>
+          </div>
+        </div>
+      )}
+      {changePasswordOpen && (
+        <div className="changePasswordOverlay">
+          <div className="changePasswordModal">
+            <h2>Change Password</h2>
+
+            <input
+              type="password"
+              placeholder="Current Password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+            />
+
+            <input
+              type="password"
+              placeholder="New Password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+
+            <input
+              type="password"
+              placeholder="Confirm New Password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+
+            <button onClick={handleChangePassword}>Change Password</button>
+            <button onClick={() => setChangePasswordOpen(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
+      {logoutOpen && (
+        <div className="logoutOverlay">
+          <div className="logoutModal">
+            <h2>Logout</h2>
+            <p>Are you sure you want to logout?</p>
+
+            <button onClick={handleLogout}>Yes, Logout</button>
+
+            <button onClick={() => setLogoutOpen(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

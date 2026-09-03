@@ -381,3 +381,7 @@ body {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+.dashboardsidebar button.dashboardsidebar-link {
+  background: transparent;
+  border: none;
+}

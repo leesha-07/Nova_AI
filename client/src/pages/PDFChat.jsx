@@ -1,16 +1,49 @@
+import { useState } from "react";
 import "../styles/PDFChat.css";
 
 export default function PDFChat() {
+  const [selectedPdf, setSelectedPdf] = useState(null);
+  const fileSize = selectedPdf ? selectedPdf.size / (1024 * 1024) : 0;
+  function uploadPdf() {
+    if (!selectedPdf) {
+      alert("Please select a PDF first.");
+    }
+    const formData = new FormData();
+    formData.append("pdf", selectedPdf);
+  }
   return (
     <div className="pdfchat">
       {/* Header */}
 
       <div className="pdfHeader">
         <h1>Nova AI</h1>
-
         <h2>PDF Chat</h2>
-
         <button>+ Upload PDF</button>
+        <input
+          type="file"
+          accept=".pdf"
+          onChange={(event) => {
+            const file = event.target.files[0];
+
+            if (!file) {
+              return;
+            }
+
+            if (file.type !== "application/pdf") {
+              alert("File type should be PDF");
+              return;
+            }
+
+            if (file.size / (1024 * 1024) > 10) {
+              alert("File size should be less than 10 MB");
+              return;
+            }
+
+            setSelectedPdf(file);
+          }}
+        />
+        {selectedPdf ? selectedPdf.name : ""}
+        {selectedPdf ? fileSize.toFixed(2) : ""} MB
       </div>
 
       <div className="pdf-container">

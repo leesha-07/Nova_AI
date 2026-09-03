@@ -1,7 +1,9 @@
 import "../styles/Dashboard.css";
 import { Link } from "react-router-dom";
-
+import { useState } from "react";
+import Profile from "./Profile";
 export default function Dashboard() {
+  const [profileOpen, setProfileOpen] = useState(false);
   return (
     <div className="dashboard-container">
       {/* ================= NAVBAR ================= */}
@@ -17,7 +19,12 @@ export default function Dashboard() {
 
         <div className="dashboardnav-right">
           <div className="dashboardnav-icon">🔔</div>
-          <div className="dashboardnav-icon">👤</div>
+          <button
+            className="dashboardnav-icon"
+            onClick={() => setProfileOpen(!profileOpen)}
+          >
+            👤
+          </button>
         </div>
       </div>
 
@@ -69,10 +76,12 @@ export default function Dashboard() {
             📑 Resume Analyzer
           </Link>
 
-          <Link className="dashboardsidebar-link" to="/profile">
+          <button
+            className="dashboardsidebar-link"
+            onClick={() => setProfileOpen(!profileOpen)}
+          >
             👤 Profile
-          </Link>
-
+          </button>
           <Link className="dashboardsidebar-link" to="/search">
             🌐 Search
           </Link>
@@ -206,6 +215,7 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+      {profileOpen && <Profile />}
     </div>
   );
 }

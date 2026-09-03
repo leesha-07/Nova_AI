@@ -18,7 +18,23 @@ const userSchema = new mongoose.Schema(
       required: true,
       minlength: 8,
     },
+    profileImage: { type: String },
+    bio: { type: String },
+    location: {
+      type: String,
+      trim: true,
+    },
+    resetToken: {
+      type: String,
+      default: null,
+    },
+
+    resetTokenExpiry: {
+      type: Date,
+      default: null,
+    },
   },
+
   { timestamps: true },
 );
 
