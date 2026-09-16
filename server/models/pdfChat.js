@@ -10,7 +10,6 @@ const pdfSchema = new mongoose.Schema(
     extractedText: { type: String, required: true },
     summary: {
       type: String,
-      required: true,
     },
   },
   { timestamps: true },

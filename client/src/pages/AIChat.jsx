@@ -1,6 +1,7 @@
 import "../styles/AIChat.css";
 import ReactMarkdown from "react-markdown";
 import { useState, useEffect } from "react";
+
 export default function AIChat() {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -9,6 +10,7 @@ export default function AIChat() {
   const [loading, setLoading] = useState(false);
   const [loadingChatId, setLoadingChatId] = useState(null);
   const [error, setError] = useState("");
+
   useEffect(() => {
     async function getChats() {
       try {
@@ -34,39 +36,57 @@ export default function AIChat() {
 
     getChats();
   }, []);
+
   async function handleSend() {
     if (!message.trim()) return;
+
+    const userId = localStorage.getItem("userId");
+
     setMessage("");
+
     const sendingChatId = currentChatId;
+
     setError("");
     setLoading(true);
     setLoadingChatId(currentChatId);
+
     try {
-      console.log(message);
       setMessages((prevMessages) => [
         ...prevMessages,
-        { sender: "user", text: message },
+        {
+          sender: "user",
+          text: message,
+        },
       ]);
 
       let interactionID;
+
       const currentChat = chats.find((chat) => chat._id === sendingChatId);
+
       if (currentChat) {
         interactionID = currentChat.interactionID;
       } else {
         interactionID = null;
       }
+
       const response = await fetch("http://localhost:5000/api/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
+          userId: userId,
           message: message,
           interactionID: interactionID,
         }),
       });
+
       if (!response.ok) {
         throw new Error("Failed to get response from server");
       }
+
       const data = await response.json();
+
       const newMessage = [
         {
           sender: "user",
@@ -77,7 +97,7 @@ export default function AIChat() {
           text: data.message,
         },
       ];
-      const userId = localStorage.getItem("userId");
+
       if (sendingChatId === null) {
         const chatHistoryResponse = await fetch(
           "http://localhost:5000/api/chat-history",
@@ -94,11 +114,14 @@ export default function AIChat() {
             }),
           },
         );
+
         if (!chatHistoryResponse.ok) {
           console.log("Failed to save chat history");
         } else {
           const chatData = await chatHistoryResponse.json();
+
           setCurrentChatId(chatData.newChat._id);
+
           setChats((previousChats) => [...previousChats, chatData.newChat]);
         }
       } else {
@@ -106,13 +129,16 @@ export default function AIChat() {
           "http://localhost:5000/api/chat-history/" + sendingChatId,
           {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json",
+            },
             body: JSON.stringify({
               messages: newMessage,
               interactionID: data.interactionID,
             }),
           },
         );
+
         if (!updateResponse.ok) {
           console.log("Failed to update chat");
         } else {
@@ -124,18 +150,23 @@ export default function AIChat() {
                   messages: [...chat.messages, ...newMessage],
                   interactionID: data.interactionID,
                 };
-              } else {
-                return chat;
               }
+
+              return chat;
             }),
           );
         }
       }
+
       setMessages((prevMessages) => [
         ...prevMessages,
-        { sender: "ai", text: data.message },
+        {
+          sender: "ai",
+          text: data.message,
+        },
       ]);
     } catch (error) {
+      console.log("Chat error:", error);
       setError("Something went wrong. Try again.");
     } finally {
       setLoading(false);
@@ -147,36 +178,76 @@ export default function AIChat() {
     setMessage("");
     setMessages([]);
     setCurrentChatId(null);
+    setError("");
   }
+
   function handleChatId(id) {
-    console.log(id);
     const selectedChat = chats.find((chat) => chat._id === id);
+
+    if (!selectedChat) return;
+
     setMessages(selectedChat.messages);
     setCurrentChatId(selectedChat._id);
+    setError("");
   }
+
+  function handleKeyDown(e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  }
+
   return (
     <div className="chat">
+      {/* HEADER */}
       <div className="chatHeader">
-        <h1>Nova AI</h1>
+        <div className="chatLogo">
+          <span>✨</span>
+          Nova AI
+        </div>
+
         <h2>AI Assistant</h2>
-        <button onClick={handleNewChat}> + New Chat</button>
+
+        <button className="chatNewButton" onClick={handleNewChat}>
+          + New Chat
+        </button>
       </div>
+
+      {/* MAIN */}
       <div className="chatContainer">
+        {/* RECENT CHATS */}
         <div className="chatsidebar">
           <h2>Recent Chats</h2>
-          {chats.map((chat) => (
-            <p
-              onClick={() => {
-                handleChatId(chat._id);
-              }}
-              key={chat._id}
-            >
-              {chat.title}
-            </p>
-          ))}
+
+          {chats.length === 0 ? (
+            <p className="noChats">No conversations yet</p>
+          ) : (
+            chats.map((chat) => (
+              <p
+                key={chat._id}
+                className={currentChatId === chat._id ? "activeChat" : ""}
+                onClick={() => handleChatId(chat._id)}
+              >
+                {chat.title}
+              </p>
+            ))
+          )}
         </div>
+
+        {/* CHAT */}
         <div className="chatsection">
           <div className="chatmessages">
+            {messages.length === 0 && (
+              <div className="chatWelcome">
+                <div className="chatWelcomeIcon">✨</div>
+
+                <h3>Welcome to Nova AI</h3>
+
+                <p>Ask me anything or tell me what you need help with.</p>
+              </div>
+            )}
+
             {messages.map((message, index) => (
               <div
                 key={index}
@@ -191,15 +262,17 @@ export default function AIChat() {
             ))}
           </div>
 
+          {/* INPUT */}
           <div className="chatinputWrapper">
             <input
               type="text"
               className="chatinput"
-              placeholder="Ask Anything ..."
+              placeholder="Ask Nova AI anything..."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-            ></input>
-            {error ? error : ""}
+              onKeyDown={handleKeyDown}
+            />
+
             <button
               onClick={handleSend}
               disabled={loading && loadingChatId === currentChatId}
@@ -208,6 +281,8 @@ export default function AIChat() {
                 ? "Sending..."
                 : "Send"}
             </button>
+
+            {error && <span className="chatError">{error}</span>}
           </div>
         </div>
       </div>

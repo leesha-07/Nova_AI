@@ -1,17 +1,27 @@
 const express = require("express");
-const multer = require("multer");
-const path = require("path");
 
-const router = express.Router();
 const {
   createPdf,
   updatePdf,
   getPdf,
   deletePdf,
+  askPdfQuestion,
 } = require("../controllers/pdfChatController");
 
+const { upload, uploadPdf } = require("../controllers/pdfUploadController");
+
+const router = express.Router();
+
+router.post("/upload", upload.single("pdf"), uploadPdf);
+
 router.post("/", createPdf);
+
 router.get("/:userId", getPdf);
+
 router.put("/:pdfId", updatePdf);
+
+router.post("/ask/:pdfId", askPdfQuestion);
+
 router.delete("/:pdfId", deletePdf);
+
 module.exports = router;

@@ -1,300 +1,1320 @@
-/* ================= GLOBAL ================= */
+/* =========================================================
+   NOVA AI - REMINDER MANAGER
+   ========================================================= */
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+:root {
+  --bg: #070a12;
+  --navbar: #0d121f;
+  --sidebar: #0a0e1a;
+
+  --card: #121829;
+  --card-light: #1a2238;
+  --card-hover: #202a45;
+
+  --border: #25304c;
+  --border-subtle: #192238;
+
+  --primary: #a855f7;
+  --primary-light: #c084fc;
+  --primary-dark: #7e22ce;
+
+  --accent-cyan: #38bdf8;
+
+  --text: #f8fafc;
+  --text-light: #aeb9ca;
+  --text-muted: #718096;
+
+  --status-danger: #ef4444;
+  --status-warning: #f59e0b;
+  --status-success: #22c55e;
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.6);
 }
 
-body {
-  background: #0f172a;
-  color: #fff;
-  font-family:
-    Inter,
-    Segoe UI,
-    sans-serif;
-}
-
-/* ================= PAGE ================= */
+/* =========================================================
+   PAGE
+   ========================================================= */
 
 .reminder {
   min-height: 100vh;
-  background: #0f172a;
+  width: 100%;
+
+  background: var(--bg);
+  color: var(--text);
+
+  padding-bottom: 35px;
+
+  box-sizing: border-box;
 }
 
-/* ================= HEADER ================= */
+/* =========================================================
+   HEADER
+   ========================================================= */
 
 .reminderHeader {
-  height: 78px;
-  padding: 0 28px;
+  width: 100%;
+  height: 70px;
 
-  display: flex;
-  justify-content: space-between;
+  padding: 0 30px;
+
+  box-sizing: border-box;
+
+  display: grid;
+
+  /*
+    Left logo | Center title | Right button
+
+    Fixed side columns prevent the title from
+    overlapping the Add Reminder button.
+  */
+  grid-template-columns: 180px minmax(0, 1fr) 180px;
+
   align-items: center;
 
-  background: #111827;
-  border-bottom: 1px solid #273549;
+  background: var(--navbar);
+
+  border-bottom: 1px solid var(--border);
+
+  box-shadow: var(--shadow-sm);
+
+  position: relative;
+
+  z-index: 10;
 }
 
-.reminderHeader h1 {
-  font-size: 28px;
+/* =========================================================
+   NOVA AI LOGO
+   ========================================================= */
 
+.reminderLogo {
+  min-width: 140px;
+
+  display: flex;
+  align-items: center;
+
+  color: var(--primary-light);
+
+  font-size: 20px;
   font-weight: 700;
+
+  letter-spacing: -0.5px;
+
+  white-space: nowrap;
 }
+
+.reminderLogo span {
+  color: var(--primary);
+
+  margin-right: 7px;
+
+  font-size: 24px;
+}
+
+/* =========================================================
+   HEADER TITLE
+   ========================================================= */
 
 .reminderHeader h2 {
-  font-size: 22px;
+  margin: 0;
+
+  text-align: center;
+
+  color: var(--text);
+
+  font-size: 18px;
   font-weight: 600;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
 }
 
-.reminderHeader button {
-  background: #8b5cf6;
-  color: white;
+/* =========================================================
+   ADD REMINDER BUTTON
+   ========================================================= */
+
+.reminderHeader > button {
+  justify-self: end;
+
+  min-height: 40px;
+
+  padding: 10px 17px;
 
   border: none;
+
   border-radius: 10px;
 
-  padding: 11px 20px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+
+  color: #ffffff;
 
   font-size: 14px;
   font-weight: 600;
 
   cursor: pointer;
-  transition: 0.25s;
+
+  white-space: nowrap;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
 
-.reminderHeader button:hover {
-  background: #7c3aed;
-  transform: translateY(-2px);
+.reminderHeader > button:hover {
+  background: var(--primary-light);
+
+  box-shadow: 0 4px 18px rgba(168, 85, 247, 0.4);
+
+  transform: translateY(-1px);
 }
 
-/* ================= MAIN ================= */
+/* =========================================================
+   NOTIFICATION STATUS
+   ========================================================= */
 
-.reminderMaincontent {
-  display: grid;
+.notificationStatus {
+  width: calc(100% - 60px);
 
-  grid-template-columns: 1fr 1fr;
+  min-height: 70px;
 
-  gap: 22px;
+  margin: 22px 30px 0;
 
-  padding: 24px;
-}
+  padding: 13px 18px;
 
-/* ================= CARDS ================= */
+  box-sizing: border-box;
 
-.reminderleftcard,
-.reminderrightcard,
-.reminderbottomcard,
-.reminderbottombuttons {
-  background: #1e293b;
+  display: flex;
 
-  border: 1px solid #334155;
+  align-items: center;
 
-  border-radius: 18px;
+  justify-content: space-between;
 
-  padding: 22px;
+  gap: 20px;
 
-  transition: 0.25s;
-}
+  background: var(--card);
 
-.reminderleftcard:hover,
-.reminderrightcard:hover,
-.reminderbottomcard:hover {
-  border-color: #8b5cf6;
-
-  transform: translateY(-3px);
-
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
-}
-
-.reminderleftcard h2,
-.reminderrightcard h2,
-.reminderbottomcard h2 {
-  font-size: 22px;
-
-  margin-bottom: 18px;
-
-  font-weight: 600;
-}
-
-/* ================= INNER BOX ================= */
-
-.remindersection,
-.remindersec {
-  background: #111827;
-
-  border: 1px solid #273549;
+  border: 1px solid var(--border);
 
   border-radius: 14px;
 
-  padding: 18px;
+  box-shadow: var(--shadow-sm);
 }
 
-/* Upcoming reminders */
+/* Left side */
 
-.remindersection {
+.notificationStatus > div {
+  min-width: 0;
+
   display: flex;
 
-  flex-direction: column;
+  align-items: center;
 
-  gap: 18px;
+  gap: 13px;
 }
 
-.remindersection p {
-  color: #cbd5e1;
+/* Bell */
 
-  line-height: 1.8;
-}
+.notificationIcon {
+  width: 42px;
+  height: 42px;
 
-/* ================= FORM ================= */
+  flex-shrink: 0;
 
-.remindersec {
   display: flex;
 
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-  gap: 15px;
+  background: rgba(168, 85, 247, 0.1);
+
+  border: 1px solid rgba(168, 85, 247, 0.18);
+
+  border-radius: 11px;
+
+  font-size: 19px;
 }
 
-.remindersec label {
+/* Notification heading */
+
+.notificationStatus strong {
+  display: block;
+
+  color: var(--text);
+
   font-size: 14px;
+  font-weight: 600;
+}
 
-  color: #cbd5e1;
+/* Notification description */
+
+.notificationStatus p {
+  margin: 4px 0 0;
+
+  color: var(--text-muted);
+
+  font-size: 12px;
+}
+
+/* Enable notifications */
+
+.notificationStatus button {
+  flex-shrink: 0;
+
+  min-height: 38px;
+
+  padding: 9px 15px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+
+  color: #ffffff;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.notificationStatus button:hover {
+  background: var(--primary-light);
+
+  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.35);
+
+  transform: translateY(-1px);
+}
+
+/* Enabled badge */
+
+.notificationEnabled {
+  flex-shrink: 0;
+
+  padding: 7px 11px;
+
+  background: rgba(34, 197, 94, 0.1);
+
+  border: 1px solid rgba(34, 197, 94, 0.18);
+
+  border-radius: 8px;
+
+  color: var(--status-success);
+
+  font-size: 12px;
 
   font-weight: 600;
 }
 
-.remindersec input,
-.remindersec textarea {
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.reminderMaincontent {
   width: 100%;
 
-  background: #1e293b;
+  padding: 22px 30px 0;
 
-  border: 1px solid #334155;
+  box-sizing: border-box;
 
-  color: white;
+  display: grid;
+
+  /*
+    Balanced two-column layout.
+    Upcoming is slightly wider.
+  */
+  grid-template-columns:
+    minmax(0, 1.08fr)
+    minmax(0, 0.92fr);
+
+  gap: 22px;
+}
+
+/* =========================================================
+   TOP CARDS
+   ========================================================= */
+
+.reminderleftcard,
+.reminderrightcard {
+  min-width: 0;
+
+  height: 430px;
+
+  background: var(--card);
+
+  border: 1px solid var(--border);
+
+  border-radius: 16px;
+
+  box-shadow: var(--shadow-sm);
+
+  overflow: hidden;
+}
+
+/* =========================================================
+   BOTTOM DETAILS CARD
+   ========================================================= */
+
+.reminderbottomcard {
+  grid-column: 1 / -1;
+
+  min-width: 0;
+
+  background: var(--card);
+
+  border: 1px solid var(--border);
+
+  border-radius: 16px;
+
+  box-shadow: var(--shadow-sm);
+
+  overflow: hidden;
+}
+
+/* =========================================================
+   CARD HEADER
+   ========================================================= */
+
+.reminderCardHeader {
+  height: 76px;
+
+  padding: 17px 21px;
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.reminderCardHeader h2 {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 17px;
+
+  font-weight: 600;
+}
+
+.reminderCardHeader p {
+  margin: 5px 0 0;
+
+  color: var(--text-muted);
+
+  font-size: 12px;
+}
+
+/* =========================================================
+   UPCOMING COUNT
+   ========================================================= */
+
+.reminderCount {
+  width: 31px;
+  height: 31px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(168, 85, 247, 0.1);
+
+  border: 1px solid rgba(168, 85, 247, 0.18);
+
+  color: var(--primary-light);
+
+  border-radius: 50%;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+/* =========================================================
+   TODAY BADGE
+   ========================================================= */
+
+.todayBadge {
+  padding: 6px 11px;
+
+  background: rgba(56, 189, 248, 0.09);
+
+  border: 1px solid rgba(56, 189, 248, 0.17);
+
+  color: var(--accent-cyan);
+
+  border-radius: 8px;
+
+  font-size: 11px;
+
+  font-weight: 600;
+}
+
+/* =========================================================
+   UPCOMING REMINDER LIST
+   ========================================================= */
+
+.upcomingReminderList {
+  height: calc(430px - 76px);
+
+  padding: 10px;
+
+  box-sizing: border-box;
+
+  overflow-y: auto;
+}
+
+/* Scrollbar */
+
+.upcomingReminderList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.upcomingReminderList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.upcomingReminderList::-webkit-scrollbar-thumb {
+  background: #303b58;
+
+  border-radius: 10px;
+}
+
+.upcomingReminderList::-webkit-scrollbar-thumb:hover {
+  background: #465272;
+}
+
+/* =========================================================
+   UPCOMING ITEM
+   ========================================================= */
+
+.upcomingReminderItem {
+  min-height: 72px;
+
+  margin-bottom: 5px;
+
+  padding: 13px 14px;
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+
+  border: 1px solid transparent;
+
+  border-radius: 11px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.upcomingReminderItem:last-child {
+  margin-bottom: 0;
+}
+
+.upcomingReminderItem:hover {
+  background: var(--card-hover);
+
+  border-color: var(--border);
+}
+
+/* Selected */
+
+.upcomingReminderItem.selectedReminder {
+  background: rgba(168, 85, 247, 0.08);
+
+  border-color: rgba(168, 85, 247, 0.4);
+
+  box-shadow: inset 3px 0 0 var(--primary);
+}
+
+/* =========================================================
+   REMINDER ITEM ICON
+   ========================================================= */
+
+.reminderItemIcon {
+  width: 40px;
+  height: 40px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background: var(--card-light);
+
+  border: 1px solid var(--border);
 
   border-radius: 10px;
 
-  padding: 12px 15px;
+  font-size: 17px;
+}
+
+/* =========================================================
+   REMINDER ITEM CONTENT
+   ========================================================= */
+
+.reminderItemContent {
+  flex: 1;
+
+  min-width: 0;
+}
+
+.reminderItemContent strong {
+  display: block;
+
+  color: var(--text);
 
   font-size: 14px;
 
-  outline: none;
+  font-weight: 600;
 
-  transition: 0.25s;
+  overflow: hidden;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
 }
 
-.remindersec input {
-  height: 46px;
+.reminderItemContent p {
+  margin: 5px 0;
+
+  color: var(--text-muted);
+
+  font-size: 12px;
 }
 
-.remindersec textarea {
-  min-height: 170px;
+.reminderItemContent span {
+  color: var(--primary-light);
 
-  resize: none;
+  font-size: 12px;
+
+  font-weight: 600;
 }
 
-.remindersec input:focus,
-.remindersec textarea:focus {
-  border-color: #8b5cf6;
+/* =========================================================
+   ARROW
+   ========================================================= */
 
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.18);
+.reminderArrow {
+  flex-shrink: 0;
+
+  color: var(--text-muted);
+
+  font-size: 23px;
+
+  transition: all 0.2s ease;
 }
 
-/* ================= DETAILS CARD ================= */
+.upcomingReminderItem:hover .reminderArrow {
+  color: var(--primary-light);
 
-.reminderbottomcard {
-  grid-column: 1/3;
+  transform: translateX(2px);
 }
 
-/* ================= BUTTON SECTION ================= */
+/* =========================================================
+   TODAY'S SCHEDULE
+   ========================================================= */
 
-.reminderbottombuttons {
-  grid-column: 1/3;
+.todaySchedule {
+  height: calc(430px - 76px);
+
+  padding: 18px 20px;
+
+  box-sizing: border-box;
+
+  overflow-y: auto;
+}
+
+.todaySchedule::-webkit-scrollbar {
+  width: 6px;
+}
+
+.todaySchedule::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.todaySchedule::-webkit-scrollbar-thumb {
+  background: #303b58;
+
+  border-radius: 10px;
+}
+
+.todaySchedule::-webkit-scrollbar-thumb:hover {
+  background: #465272;
+}
+
+/* =========================================================
+   SCHEDULE ITEM
+   ========================================================= */
+
+.scheduleItem {
+  min-height: 72px;
+
+  display: grid;
+
+  grid-template-columns: 72px 20px minmax(0, 1fr);
+
+  gap: 8px;
+
+  cursor: pointer;
+}
+
+/* =========================================================
+   SCHEDULE TIME
+   ========================================================= */
+
+.scheduleTime {
+  padding-top: 3px;
+
+  color: var(--primary-light);
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  text-align: right;
+}
+
+/* =========================================================
+   SCHEDULE LINE
+   ========================================================= */
+
+.scheduleLine {
+  position: relative;
 
   display: flex;
 
   justify-content: center;
 }
 
-.reminderbuttons {
-  width: 100%;
+.scheduleLine::before {
+  content: "";
 
-  display: flex;
+  width: 2px;
 
-  justify-content: flex-end;
+  height: 100%;
 
-  gap: 16px;
+  background: var(--border);
 }
 
-/* Buttons */
+/* Timeline dot */
 
-.reminderbuttons button {
-  min-width: 180px;
+.scheduleLine span {
+  position: absolute;
 
-  height: 48px;
+  top: 3px;
 
-  border: none;
+  width: 9px;
+  height: 9px;
 
-  border-radius: 10px;
+  box-sizing: content-box;
+
+  background: var(--primary);
+
+  border: 2px solid var(--card);
+
+  border-radius: 50%;
+}
+
+/* =========================================================
+   SCHEDULE CONTENT
+   ========================================================= */
+
+.scheduleContent {
+  min-width: 0;
+
+  padding: 0 0 16px 8px;
+}
+
+.scheduleContent strong {
+  display: block;
+
+  color: var(--text);
 
   font-size: 14px;
 
   font-weight: 600;
 
+  overflow: hidden;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+.scheduleContent p {
+  margin: 6px 0;
+
+  color: var(--text-muted);
+
+  font-size: 12px;
+
+  overflow: hidden;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+/* =========================================================
+   STATUS BADGES
+   ========================================================= */
+
+.statusBadge {
+  display: inline-flex;
+
+  align-items: center;
+
+  padding: 4px 8px;
+
+  border-radius: 6px;
+
+  font-size: 10px;
+
+  font-weight: 600;
+
+  text-transform: capitalize;
+}
+
+.statusBadge.pending {
+  background: rgba(245, 158, 11, 0.1);
+
+  border: 1px solid rgba(245, 158, 11, 0.16);
+
+  color: var(--status-warning);
+}
+
+.statusBadge.completed {
+  background: rgba(34, 197, 94, 0.1);
+
+  border: 1px solid rgba(34, 197, 94, 0.16);
+
+  color: var(--status-success);
+}
+
+.statusBadge.sent {
+  background: rgba(113, 128, 150, 0.1);
+
+  border: 1px solid rgba(113, 128, 150, 0.15);
+
+  color: var(--text-muted);
+}
+
+/* =========================================================
+   EMPTY STATES
+   ========================================================= */
+
+.emptyReminder {
+  height: 100%;
+
+  padding: 30px 20px;
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  color: var(--text-muted);
+}
+
+.emptyReminder div {
+  margin-bottom: 11px;
+
+  font-size: 32px;
+}
+
+.emptyReminder h3 {
+  margin: 0;
+
+  color: var(--text-light);
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+.emptyReminder p {
+  margin: 6px 0 0;
+
+  color: var(--text-muted);
+
+  font-size: 12px;
+}
+
+/* =========================================================
+   DETAILS HEADER
+   ========================================================= */
+
+.detailsHeader {
+  min-height: 76px;
+
+  padding: 17px 22px;
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  align-items: center;
+
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.detailsHeader h2 {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 17px;
+
+  font-weight: 600;
+}
+
+.detailsHeader p {
+  margin: 5px 0 0;
+
+  color: var(--text-muted);
+
+  font-size: 12px;
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.remindersec {
+  padding: 22px;
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 17px;
+}
+
+.formGroup {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 7px;
+}
+
+.formGroup label {
+  color: var(--text-light);
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+.formGroup input,
+.formGroup textarea {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  background: var(--bg);
+
+  border: 1px solid var(--border);
+
+  color: var(--text);
+
+  border-radius: 10px;
+
+  padding: 11px 13px;
+
+  outline: none;
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.formGroup input {
+  min-height: 44px;
+}
+
+.formGroup textarea {
+  min-height: 105px;
+
+  line-height: 1.5;
+
+  resize: vertical;
+}
+
+.formGroup input::placeholder,
+.formGroup textarea::placeholder {
+  color: #59657c;
+}
+
+/* Focus */
+
+.formGroup input:focus,
+.formGroup textarea:focus {
+  background: #0a0f1c;
+
+  border-color: var(--primary);
+
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+}
+
+/* =========================================================
+   DATE / TIME
+   ========================================================= */
+
+.dateTimeRow {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 16px;
+}
+
+/* =========================================================
+   ACTION BUTTONS
+   ========================================================= */
+
+.reminderActionButtons {
+  min-height: 67px;
+
+  padding: 16px 22px 20px;
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* All action buttons */
+
+.reminderActionButtons button {
+  min-height: 42px;
+
+  padding: 10px 16px;
+
+  border-radius: 9px;
+
   cursor: pointer;
 
-  transition: 0.25s;
+  font-family: inherit;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  transition: all 0.2s ease;
 }
 
-/* Save */
+/* =========================================================
+   SAVE
+   ========================================================= */
 
-.reminderbuttons button:nth-child(1) {
-  background: #8b5cf6;
+.saveReminderButton {
+  border: none;
 
-  color: white;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+
+  color: #ffffff;
 }
 
-/* Delete */
+.saveReminderButton:hover {
+  background: var(--primary-light);
 
-.reminderbuttons button:nth-child(2) {
-  background: #ef4444;
+  box-shadow: 0 4px 16px rgba(168, 85, 247, 0.35);
 
-  color: white;
+  transform: translateY(-1px);
 }
 
-/* Complete */
+/* =========================================================
+   DELETE
+   ========================================================= */
 
-.reminderbuttons button:nth-child(3) {
-  background: #22c55e;
+.deleteReminderButton {
+  border: 1px solid rgba(239, 68, 68, 0.18) !important;
 
-  color: white;
+  background: rgba(239, 68, 68, 0.09);
+
+  color: #f87171;
 }
 
-.reminderbuttons button:hover {
-  transform: translateY(-2px);
+.deleteReminderButton:hover {
+  background: rgba(239, 68, 68, 0.15);
 
-  filter: brightness(1.08);
+  border-color: rgba(239, 68, 68, 0.3) !important;
 }
 
-/* ================= RESPONSIVE ================= */
+/* =========================================================
+   MARK COMPLETED
+   ========================================================= */
 
-@media (max-width: 1000px) {
-  .reminderMaincontent {
-    grid-template-columns: 1fr;
+.completeReminderButton {
+  border: 1px solid rgba(34, 197, 94, 0.18) !important;
+
+  background: rgba(34, 197, 94, 0.09);
+
+  color: var(--status-success);
+}
+
+.completeReminderButton:hover {
+  background: rgba(34, 197, 94, 0.15);
+
+  border-color: rgba(34, 197, 94, 0.3) !important;
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .reminderHeader {
+    grid-template-columns: 160px minmax(0, 1fr) 160px;
+
+    padding: 0 22px;
   }
 
-  .reminderbottomcard,
-  .reminderbottombuttons {
+  .notificationStatus {
+    width: calc(100% - 44px);
+
+    margin-left: 22px;
+    margin-right: 22px;
+  }
+
+  .reminderMaincontent {
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+
+  .reminderleftcard,
+  .reminderrightcard {
+    height: 400px;
+  }
+
+  .upcomingReminderList,
+  .todaySchedule {
+    height: calc(400px - 76px);
+  }
+}
+
+/* =========================================================
+   SMALL TABLET / MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+  .reminderHeader {
+    height: 68px;
+
+    padding: 0 18px;
+
+    grid-template-columns: 1fr auto;
+  }
+
+  .reminderHeader h2 {
+    display: none;
+  }
+
+  .reminderLogo {
+    font-size: 19px;
+  }
+
+  .reminderHeader > button {
+    padding: 9px 13px;
+
+    font-size: 12px;
+  }
+
+  .notificationStatus {
+    width: calc(100% - 36px);
+
+    margin: 18px 18px 0;
+
+    padding: 12px 14px;
+
+    flex-wrap: wrap;
+  }
+
+  .notificationStatus button,
+  .notificationEnabled {
+    margin-left: auto;
+  }
+
+  .reminderMaincontent {
+    padding: 18px 18px 0;
+
+    grid-template-columns: 1fr;
+
+    gap: 18px;
+  }
+
+  .reminderleftcard,
+  .reminderrightcard {
+    height: 390px;
+  }
+
+  .upcomingReminderList,
+  .todaySchedule {
+    height: calc(390px - 76px);
+  }
+
+  .reminderbottomcard {
     grid-column: auto;
   }
 
-  .reminderbuttons {
+  .dateTimeRow {
+    grid-template-columns: 1fr;
+
+    gap: 15px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 500px) {
+  .reminderHeader {
+    padding: 0 14px;
+  }
+
+  .reminderLogo {
+    font-size: 18px;
+  }
+
+  .reminderLogo span {
+    font-size: 22px;
+
+    margin-right: 6px;
+  }
+
+  .reminderHeader > button {
+    padding: 8px 10px;
+
+    font-size: 11px;
+  }
+
+  .notificationStatus {
+    width: calc(100% - 28px);
+
+    margin-left: 14px;
+    margin-right: 14px;
+
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .notificationStatus > div {
+    width: 100%;
+  }
+
+  .notificationStatus button,
+  .notificationEnabled {
+    margin-left: 0;
+
+    align-self: flex-start;
+  }
+
+  .reminderMaincontent {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .reminderCardHeader {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .remindersec {
+    padding: 17px;
+  }
+
+  .detailsHeader {
+    padding-left: 17px;
+    padding-right: 17px;
+  }
+
+  .reminderActionButtons {
+    padding-left: 17px;
+    padding-right: 17px;
+
+    flex-wrap: wrap;
+
+    justify-content: stretch;
+  }
+
+  .reminderActionButtons button {
+    flex: 1;
+
+    min-width: 125px;
+  }
+}
+
+/* =========================================================
+   VERY SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 380px) {
+  .reminderActionButtons {
     flex-direction: column;
   }
 
-  .reminderbuttons button {
+  .reminderActionButtons button {
     width: 100%;
+
+    flex: none;
+  }
+
+  .scheduleItem {
+    grid-template-columns: 62px 17px minmax(0, 1fr);
+  }
+
+  .scheduleTime {
+    font-size: 11px;
   }
 }

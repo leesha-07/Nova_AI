@@ -1,217 +1,639 @@
+:root {
+  --bg: #070a12;
+  --navbar: #0d121f;
+  --sidebar: #0a0e1a;
+
+  --card: #121829;
+  --card-light: #1a2238;
+  --card-hover: #202a45;
+
+  --border: #25304c;
+  --border-subtle: #192238;
+
+  --primary: #a855f7;
+  --primary-light: #c084fc;
+  --primary-dark: #7e22ce;
+
+  --accent-cyan: #38bdf8;
+
+  --text: #f8fafc;
+  --text-light: #aeb9ca;
+  --text-muted: #718096;
+
+  --status-danger: #ef4444;
+  --status-warning: #f59e0b;
+  --status-success: #22c55e;
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.6);
+}
+
+* {
+  box-sizing: border-box;
+}
+
 /* ================= PAGE ================= */
 
 .ResumeAnalyzer {
   min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
   display: flex;
   flex-direction: column;
-  background: #0f172a;
-  color: #fff;
 }
 
 /* ================= HEADER ================= */
 
 .resumeHeader {
-  height: 78px;
-  background: #1e293b;
-  border-bottom: 1px solid #334155;
+  height: 70px;
+  min-height: 70px;
+
+  background: var(--navbar);
+
+  border-bottom: 1px solid var(--border);
 
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 
   padding: 0 30px;
+
+  box-shadow: var(--shadow-sm);
+
+  position: relative;
+  z-index: 10;
 }
 
-.resumeHeader h1 {
-  font-size: 28px;
+.resumeLogo {
+  min-width: 140px;
+
+  display: flex;
+  align-items: center;
+
+  font-size: 20px;
   font-weight: 700;
+
+  letter-spacing: -0.5px;
+
+  color: var(--primary-light);
+}
+
+.resumeLogo span {
+  color: var(--primary);
+  margin-right: 7px;
+  font-size: 24px;
 }
 
 .resumeHeader h2 {
-  font-size: 28px;
+  position: absolute;
+
+  left: 50%;
+  transform: translateX(-50%);
+
+  margin: 0;
+
+  font-size: 18px;
   font-weight: 600;
+
+  color: var(--text);
 }
 
-.resumeHeader button {
-  padding: 12px 24px;
-  background: #8b5cf6;
-  color: white;
+.resumeHeaderAction button {
   border: none;
+
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+
+  color: white;
+
+  padding: 10px 18px;
+
   border-radius: 10px;
-  font-size: 15px;
-  font-weight: 600;
+
   cursor: pointer;
-  transition: 0.3s;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  transition: 0.2s ease;
 }
 
-.resumeHeader button:hover {
-  background: #7c3aed;
-  transform: translateY(-2px);
+.resumeHeaderAction button:hover {
+  background: var(--primary-light);
+
+  box-shadow: 0 4px 18px rgba(168, 85, 247, 0.45);
+
+  transform: translateY(-1px);
 }
 
 /* ================= MAIN ================= */
 
 .resumeMain {
+  width: 100%;
+  max-width: none;
+
+  margin: 0 auto;
+
+  padding: 24px 30px 35px;
+
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-  padding: 25px;
+
+  grid-template-columns:
+    minmax(0, 0.85fr)
+    minmax(0, 1.15fr);
+
+  gap: 20px;
+
+  align-items: start;
+}
+
+/* ================= MESSAGES ================= */
+
+.resumeMessage {
+  grid-column: 1 / -1;
+
+  width: 100%;
+
+  padding: 12px 16px;
+
+  border-radius: 10px;
+
+  border: 1px solid;
+
+  font-size: 14px;
+}
+
+.resumeError {
+  color: #fecaca;
+
+  background: rgba(127, 29, 29, 0.25);
+
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.resumeSuccess {
+  color: #bbf7d0;
+
+  background: rgba(20, 83, 45, 0.25);
+
+  border-color: rgba(34, 197, 94, 0.5);
 }
 
 /* ================= COMMON CARDS ================= */
 
 .resumeuploadCard,
 .resumeanalysiscard,
-.resumeAisuggestion,
-.resumebottombuttons {
-  background: #1e293b;
-  border: 1px solid #334155;
+.resumeAisuggestion {
+  background: var(--card);
+
+  border: 1px solid var(--border);
+
   border-radius: 18px;
+
   padding: 22px;
-  transition: 0.3s;
+
+  box-shadow: var(--shadow-sm);
+
+  min-width: 0;
+
+  transition: 0.2s ease;
 }
 
 .resumeuploadCard:hover,
 .resumeanalysiscard:hover,
 .resumeAisuggestion:hover {
-  border-color: #8b5cf6;
-  transform: translateY(-3px);
-  box-shadow: 0 12px 25px rgba(139, 92, 246, 0.18);
+  border-color: rgba(168, 85, 247, 0.35);
+
+  box-shadow: var(--shadow-lg);
 }
 
-/* ================= UPLOAD CARD ================= */
+/* ================= CARD HEADER ================= */
+
+.resumeCardHeader {
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 18px;
+}
+
+.resumeCardHeader h2 {
+  margin: 0 0 6px;
+
+  font-size: 21px;
+
+  font-weight: 650;
+}
+
+.resumeCardHeader p {
+  margin: 0;
+
+  color: var(--text-muted);
+
+  font-size: 13px;
+}
+
+.resumeCount {
+  min-width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: rgba(168, 85, 247, 0.12);
+
+  color: var(--primary-light);
+
+  font-weight: 700;
+}
+
+.aiTag {
+  padding: 7px 12px;
+
+  border-radius: 20px;
+
+  background: rgba(168, 85, 247, 0.12);
+
+  border: 1px solid rgba(168, 85, 247, 0.3);
+
+  color: var(--primary-light);
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+/* ================= RESUME CARD ================= */
 
 .resumeuploadCard {
+  min-height: 330px;
+}
+
+.selectedResume {
   display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
 
-.resumeuploadCard button {
-  width: fit-content;
-  padding: 12px 20px;
-  background: #8b5cf6;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.3s;
-}
+  align-items: center;
 
-.resumeuploadCard button:hover {
-  background: #7c3aed;
-}
+  gap: 13px;
 
-.resumeuploadCard p {
-  background: #111827;
-  border: 1px solid #334155;
-  border-radius: 10px;
   padding: 14px;
-  color: #cbd5e1;
-}
 
-/* ================= ANALYSIS CARD ================= */
+  background: var(--card-light);
 
-.resumeanalysiscard {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
+  border: 1px solid var(--border);
 
-.resumeanalysiscard p {
-  background: #111827;
-  border: 1px solid #334155;
-  border-left: 4px solid #8b5cf6;
-  border-radius: 10px;
-  padding: 14px;
-  color: #e2e8f0;
-}
-
-/* ================= AI SUGGESTIONS (CENTERED) ================= */
-
-.resumeAisuggestion {
-  grid-column: 1 / -1; /* Spans full width across grid columns */
-  background: #1e293b;
-  border: 1px solid #334155;
-  border-radius: 18px;
-  padding: 24px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Centers title and content horizontally */
-  text-align: center;
-  gap: 20px;
-}
-
-.resumeAisuggestion h3,
-.resumeAisuggestion h2,
-.resumeAisuggestion h4,
-.resumeAisuggestion > *:first-child:not(button) {
-  font-size: 20px;
-  font-weight: 600;
-  margin: 0;
-  color: #f8fafc;
-}
-
-/* Grid wrapper for buttons inside the centered container */
-.resumeAisuggestion {
-  display: grid;
-  grid-template-columns: repeat(
-    2,
-    minmax(280px, 1fr)
-  ); /* Centered 2-column layout */
-  justify-content: center;
-  max-width: 900px; /* Constrains width so buttons stay perfectly balanced in the middle */
-  margin: 0 auto;
-  width: 100%;
-}
-
-.resumeAisuggestion > *:first-child:not(button) {
-  grid-column: 1 / -1;
-  text-align: center;
-  margin-bottom: 6px;
-}
-
-.resumeAisuggestion button {
-  width: 100%;
-  height: 55px;
-
-  border: 1px solid #334155;
   border-radius: 12px;
 
-  background: #8b5cf6;
+  margin-bottom: 16px;
+}
+
+.resumeFileIcon {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: rgba(168, 85, 247, 0.12);
+
+  color: var(--primary-light);
+
+  font-size: 11px;
+
+  font-weight: 800;
+}
+
+.resumeFileInfo {
+  min-width: 0;
+
+  flex: 1;
+}
+
+.resumeFileInfo strong {
+  display: block;
+
+  font-size: 14px;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+.resumeFileInfo span {
+  display: block;
+
+  margin-top: 4px;
+
+  color: var(--text-muted);
+
+  font-size: 12px;
+}
+
+.saveResumeButton {
+  flex-shrink: 0;
+
+  border: none;
+
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+
   color: white;
 
-  font-size: 15px;
+  padding: 9px 14px;
+
+  border-radius: 9px;
+
+  font-size: 12px;
+
   font-weight: 600;
 
   cursor: pointer;
-  transition: 0.3s;
 }
 
-.resumeAisuggestion button:hover {
-  background: #7c3aed;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 18px rgba(139, 92, 246, 0.3);
+.saveResumeButton:hover {
+  background: var(--primary-light);
 }
 
-/* Accent Colors */
+.saveResumeButton:disabled {
+  opacity: 0.5;
 
-.resumeAisuggestion button:nth-of-type(1) {
-  border-top: 3px solid #22c55e;
+  cursor: not-allowed;
 }
 
-.resumeAisuggestion button:nth-of-type(2) {
-  border-top: 3px solid #3b82f6;
+.savedResumeSelector {
+  margin-top: 18px;
+
+  padding-top: 18px;
+
+  border-top: 1px solid var(--border-subtle);
 }
 
-.resumeAisuggestion button:nth-of-type(3) {
-  border-top: 3px solid #f59e0b;
+.savedResumeSelector label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: var(--text-light);
+
+  font-size: 13px;
+
+  font-weight: 600;
 }
 
-.resumeAisuggestion button:nth-of-type(4) {
-  border-top: 3px solid #ef4444;
+.savedResumeSelector select {
+  width: 100%;
+
+  height: 46px;
+
+  padding: 0 13px;
+
+  background: var(--card-light);
+
+  color: var(--text);
+
+  border: 1px solid var(--border);
+
+  border-radius: 10px;
+
+  outline: none;
+
+  font-size: 14px;
+}
+
+.savedResumeSelector select:focus {
+  border-color: var(--primary);
+
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+}
+
+/* ================= EMPTY STATE ================= */
+
+.resumeEmptyState {
+  min-height: 190px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 20px;
+}
+
+.resumeEmptyIcon {
+  font-size: 38px;
+
+  margin-bottom: 8px;
+}
+
+.resumeEmptyState h3 {
+  margin: 0 0 6px;
+
+  font-size: 16px;
+}
+
+.resumeEmptyState p {
+  margin: 0;
+
+  max-width: 400px;
+
+  color: var(--text-muted);
+
+  font-size: 13px;
+
+  line-height: 1.5;
+}
+
+/* ================= ANALYSIS ================= */
+
+.resumeanalysiscard {
+  min-height: 330px;
+}
+
+.analysisStats {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 10px;
+}
+
+.analysisItem {
+  padding: 15px;
+
+  background: var(--card-light);
+
+  border: 1px solid var(--border);
+
+  border-radius: 11px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
+}
+
+.analysisItem span {
+  color: var(--text-muted);
+
+  font-size: 12px;
+}
+
+.analysisItem strong {
+  color: var(--primary-light);
+
+  font-size: 17px;
+}
+
+.analysisItem.mainScore {
+  grid-column: 1 / -1;
+
+  border-left: 3px solid var(--primary);
+}
+
+.analysisItem.mainScore strong {
+  font-size: 24px;
+}
+
+/* ================= AI SUGGESTIONS ================= */
+
+.resumeAisuggestion {
+  grid-column: 1 / -1;
+}
+
+.suggestionIcon {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: rgba(168, 85, 247, 0.12);
+
+  color: var(--primary-light);
+}
+
+.suggestionList {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+
+  max-height: 330px;
+
+  overflow-y: auto;
+
+  padding-right: 4px;
+}
+
+.suggestionList::-webkit-scrollbar {
+  width: 7px;
+}
+
+.suggestionList::-webkit-scrollbar-thumb {
+  background: var(--primary-dark);
+
+  border-radius: 10px;
+}
+
+.suggestionItem {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 12px;
+
+  padding: 13px 15px;
+
+  background: var(--card-light);
+
+  border: 1px solid var(--border);
+
+  border-radius: 11px;
+}
+
+.suggestionItem > span {
+  width: 24px;
+  height: 24px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 7px;
+
+  background: rgba(34, 197, 94, 0.1);
+
+  color: #86efac;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+.suggestionItem p {
+  margin: 2px 0 0;
+
+  color: var(--text-light);
+
+  font-size: 14px;
+
+  line-height: 1.55;
+}
+
+.resumeSuggestionEmpty {
+  min-height: 130px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  color: var(--text-muted);
+}
+
+.resumeSuggestionEmpty span {
+  font-size: 30px;
+
+  margin-bottom: 8px;
+}
+
+.resumeSuggestionEmpty p {
+  margin: 0;
+
+  font-size: 13px;
 }
 
 /* ================= BOTTOM BUTTONS ================= */
@@ -220,57 +642,120 @@
   grid-column: 1 / -1;
 
   display: flex;
-  justify-content: flex-end;
-  gap: 16px;
 
-  background: transparent;
-  border: none;
-  padding: 0;
+  justify-content: flex-end;
+
+  gap: 12px;
+
+  padding-top: 18px;
+
+  border-top: 1px solid var(--border);
 }
 
 .resumebottombuttons button {
-  width: auto;
-  padding: 0 24px;
-  height: 46px;
+  min-width: 190px;
 
-  background: #8b5cf6;
-  color: white;
+  height: 48px;
+
   border: none;
+
   border-radius: 10px;
 
-  font-size: 15px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+
+  color: white;
+
+  font-size: 14px;
+
   font-weight: 600;
 
   cursor: pointer;
-  transition: 0.3s;
+
+  transition: 0.2s ease;
 }
 
-.resumebottombuttons button:hover {
-  background: #7c3aed;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 18px rgba(139, 92, 246, 0.35);
+.resumebottombuttons button:hover:not(:disabled) {
+  transform: translateY(-1px);
+
+  box-shadow: 0 7px 18px rgba(168, 85, 247, 0.3);
+}
+
+.resumebottombuttons button:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+}
+
+.resumebottombuttons .deleteResumeButton {
+  background: rgba(239, 68, 68, 0.1);
+
+  border: 1px solid rgba(239, 68, 68, 0.25);
+
+  color: #fca5a5;
+}
+
+.resumebottombuttons .deleteResumeButton:hover:not(:disabled) {
+  background: var(--status-danger);
+
+  border-color: var(--status-danger);
+
+  color: white;
 }
 
 /* ================= RESPONSIVE ================= */
 
-@media (max-width: 1000px) {
+@media (max-width: 900px) {
   .resumeMain {
     grid-template-columns: 1fr;
   }
 
-  .resumeAisuggestion,
-  .resumebottombuttons {
+  .resumeAisuggestion {
     grid-column: auto;
   }
 
+  .resumebottombuttons {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 650px) {
+  .resumeHeader {
+    padding: 0 16px;
+  }
+
+  .resumeHeader h2 {
+    display: none;
+  }
+
+  .resumeMain {
+    padding: 16px;
+  }
+
+  .resumeuploadCard,
+  .resumeanalysiscard,
   .resumeAisuggestion {
+    padding: 18px;
+  }
+
+  .selectedResume {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .saveResumeButton {
+    width: 100%;
+  }
+
+  .analysisStats {
     grid-template-columns: 1fr;
   }
 
+  .analysisItem.mainScore {
+    grid-column: auto;
+  }
+
   .resumebottombuttons {
-    justify-content: center;
     flex-direction: column;
-    align-items: stretch;
   }
 
   .resumebottombuttons button {

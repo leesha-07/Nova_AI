@@ -94,7 +94,9 @@ export default function ForgotPassword() {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h1 className="auth-logo">Nova AI</h1>
+        <h1 className="auth-logo">
+          <span>✨</span> Nova AI
+        </h1>
 
         {!showResetForm ? (
           <>
@@ -124,7 +126,7 @@ export default function ForgotPassword() {
 
             <div className="auth-footer">
               <p className="auth-account">
-                Remember your password?{" "}
+                Remember your password?
                 <Link className="auth-link" to="/">
                   Login
                 </Link>
@@ -170,7 +172,7 @@ export default function ForgotPassword() {
 
             <div className="auth-footer">
               <p className="auth-account">
-                Remember your password?{" "}
+                Remember your password?
                 <Link className="auth-link" to="/">
                   Login
                 </Link>

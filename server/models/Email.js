@@ -19,7 +19,7 @@ const emailSchema = new mongoose.Schema(
     },
     content: {
       type: String,
-      required: true,
+      default: "",
     },
     generatedEmail: {
       type: String,

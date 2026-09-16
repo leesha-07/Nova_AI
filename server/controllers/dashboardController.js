@@ -26,10 +26,15 @@ const getDashboard = async (req, res) => {
   ).length;
 
   const totalNotes = notes.length;
-
   const totalStudyPlans = studies.length;
-
   const totalResumes = resumes.length;
+
+  const productivity =
+    totalTodos > 0 ? Math.round((completedTodos / totalTodos) * 100) : 0;
+
+  const recentTodos = await Todo.find({ userId })
+    .sort({ createdAt: -1 })
+    .limit(5);
 
   res.status(200).json({
     message: "Dashboard data found",
@@ -51,6 +56,10 @@ const getDashboard = async (req, res) => {
       studyPlans: totalStudyPlans,
 
       resumes: totalResumes,
+
+      productivity: productivity,
+
+      recentTodos: recentTodos,
     },
   });
 };

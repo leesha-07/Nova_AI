@@ -1,293 +1,1365 @@
-.pdfchat {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: #0f172a;
-  color: white;
+:root {
+  --bg: #070a12;
+  --navbar: #0d121f;
+  --sidebar: #0a0e1a;
+
+  --card: #121829;
+  --card-light: #1a2238;
+  --card-hover: #202a45;
+
+  --border: #25304c;
+  --border-subtle: #192238;
+
+  --primary: #a855f7;
+  --primary-light: #c084fc;
+  --primary-dark: #7e22ce;
+
+  --accent-cyan: #38bdf8;
+
+  --text: #f8fafc;
+  --text-light: #aeb9ca;
+  --text-muted: #718096;
+
+  --status-danger: #ef4444;
+  --status-warning: #f59e0b;
+  --status-success: #22c55e;
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.6);
 }
 
-/* ================= HEADER ================= */
+/* =========================
+   PAGE
+========================= */
+
+.pdfchat {
+  width: 100%;
+  height: 100vh;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* =========================
+   HEADER
+========================= */
 
 .pdfHeader {
-  height: 78px;
-  background: #1e293b;
-  border-bottom: 1px solid #334155;
+  height: 70px;
+  min-height: 70px;
+  background: var(--navbar);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+  position: relative;
+  box-shadow: var(--shadow-sm);
+  z-index: 10;
+  box-sizing: border-box;
+}
+
+/* Left brand area */
+
+.pdfBrand {
+  min-width: 180px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.pdfBrand h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--primary-light);
+}
+
+.pdfBrand h1::before {
+  content: "✨";
+  color: var(--primary);
+  margin-right: 7px;
+  font-size: 24px;
+}
+
+.pdfBrand span {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+
+  white-space: nowrap;
+}
+
+/* =========================
+   UPLOAD AREA
+========================= */
+
+.pdfUploadArea {
+  min-width: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Choose PDF */
+
+.pdfChooseButton {
+  height: 40px;
+  padding: 0 15px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--card-light);
+  color: var(--text-light);
+
+  border: 1px solid var(--border);
+  border-radius: 9px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.pdfChooseButton:hover {
+  background: var(--card-hover);
+  color: var(--text);
+  border-color: var(--primary);
+}
+
+.pdfChooseButton input {
+  display: none;
+}
+
+/* Selected file */
+
+.selectedFile {
+  max-width: 210px;
+  min-width: 120px;
+
+  height: 40px;
+  padding: 0 12px;
 
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
 
-  padding: 0 30px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.selectedFileName {
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.selectedFileSize {
+  color: var(--text-muted);
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+/* Upload */
+
+.uploadPdfButton {
+  height: 40px;
+  padding: 0 16px;
+
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+
+  color: white;
+
+  border: none;
+  border-radius: 9px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.uploadPdfButton:hover:not(:disabled) {
+  background: var(--primary-light);
+  box-shadow: 0 4px 18px rgba(168, 85, 247, 0.35);
+  transform: translateY(-1px);
+}
+
+.uploadPdfButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* =========================
+   MAIN LAYOUT
+========================= */
+
+.pdf-container {
+  flex: 1;
+  min-height: 0;
+
+  display: grid;
+  grid-template-columns: 360px minmax(0, 1fr);
+
+  gap: 20px;
+
+  width: 100%;
+  padding: 24px 30px 30px;
+
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* =========================
+   LEFT PDF LIBRARY
+========================= */
+
+.pdfupload {
+  min-width: 0;
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  background: var(--card);
+
+  border: 1px solid var(--border);
+  border-radius: 16px;
+
+  box-shadow: var(--shadow-sm);
+
+  overflow: hidden;
+}
+
+/* =========================
+   SECTION HEADER
+========================= */
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
 
   flex-shrink: 0;
 }
 
-.pdfHeader h1 {
-  font-size: 28px;
-  font-weight: 700;
+.pdfupload > .sectionHeader {
+  padding: 22px 22px 18px;
+
+  border-bottom: 1px solid var(--border-subtle);
 }
 
-.pdfHeader h2 {
-  font-size: 24px;
+.sectionHeader h2 {
+  margin: 0;
+
+  font-size: 18px;
+  font-weight: 650;
+
+  color: var(--text);
+}
+
+.sectionHeader p {
+  margin: 5px 0 0;
+
+  color: var(--text-muted);
+
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* PDF count */
+
+.pdfCount {
+  flex-shrink: 0;
+
+  padding: 6px 10px;
+
+  background: rgba(168, 85, 247, 0.12);
+
+  border: 1px solid rgba(168, 85, 247, 0.25);
+
+  border-radius: 8px;
+
+  color: var(--primary-light);
+
+  font-size: 12px;
   font-weight: 600;
-  color: white;
 }
 
-.pdfHeader button {
-  padding: 12px 22px;
+/* =========================
+   PDF LIST
+========================= */
 
-  background: #8b5cf6;
-  color: white;
-
-  border: none;
-  border-radius: 10px;
-
-  font-size: 15px;
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition: all 0.3s ease;
-}
-
-.pdfHeader button:hover {
-  background: #7c3aed;
-  transform: translateY(-2px);
-}
-
-/* ================= PAGE ================= */
-
-.pdf-container {
+.pdfList {
   flex: 1;
+  min-height: 0;
 
   display: flex;
   flex-direction: column;
 
-  gap: 20px;
+  gap: 12px;
 
-  padding: 25px;
+  padding: 18px;
 
   overflow-y: auto;
+  overflow-x: hidden;
+
+  box-sizing: border-box;
 }
 
-/* ================= COMMON CARD ================= */
+/* Scrollbar */
 
-.pdfupload,
-.pdfask,
-.pdfresponse,
-.pdfbutton {
-  background: #1e293b;
-
-  border: 1px solid #334155;
-
-  border-radius: 15px;
-
-  padding: 18px 20px;
-
-  transition: 0.3s;
+.pdfList::-webkit-scrollbar,
+.pdfresponse-card::-webkit-scrollbar,
+.markdownResponse::-webkit-scrollbar {
+  width: 7px;
 }
 
-/* Change 1: Purple hover effect only */
-.pdfupload:hover,
-.pdfask:hover,
-.pdfresponse:hover {
-  border-color: #8b5cf6;
+.pdfList::-webkit-scrollbar-track,
+.pdfresponse-card::-webkit-scrollbar-track,
+.markdownResponse::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.pdfupload h3,
-.pdfask h3,
-.pdfresponse h3 {
-  margin-bottom: 18px;
-  font-size: 22px;
+.pdfList::-webkit-scrollbar-thumb,
+.pdfresponse-card::-webkit-scrollbar-thumb,
+.markdownResponse::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 10px;
 }
 
-/* ================= PDF CARD ================= */
+.pdfList::-webkit-scrollbar-thumb:hover,
+.pdfresponse-card::-webkit-scrollbar-thumb:hover,
+.markdownResponse::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* =========================
+   PDF CARD
+========================= */
 
 .pdf-card {
-  background: #111827;
-
-  border: 1px solid #334155;
-
-  border-radius: 12px;
-
-  padding: 18px 20px;
+  width: 100%;
+  flex-shrink: 0;
 
   display: flex;
   flex-direction: column;
 
-  gap: 14px;
-
-  transition: 0.3s;
-}
-
-.pdf-card:hover {
-  border-color: #8b5cf6;
-}
-
-.pdfstatus {
-  color: #22c55e;
-  font-weight: 600;
-  font-size: 14px;
-}
-
-/* ================= QUESTION ================= */
-
-.pdfask textarea {
-  width: 100%;
-  min-height: 120px;
-
-  resize: none;
+  gap: 15px;
 
   padding: 16px;
 
-  background: #111827;
+  background: var(--card-light);
 
-  color: white;
-
-  /* Change 1: Subtle gray border by default instead of heavy purple */
-  border: 1px solid #334155;
-
-  border-radius: 10px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
 
   box-sizing: border-box;
 
-  font-size: 15px;
-
-  line-height: 1.6;
-
-  outline: none;
-
-  transition: border-color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
-/* Purple only on focus */
-.pdfask textarea:focus {
-  border-color: #8b5cf6;
+.pdf-card:hover {
+  background: var(--card-hover);
+  border-color: #34415f;
+  transform: translateY(-1px);
 }
 
-.pdfask textarea::placeholder {
-  color: #94a3b8;
+.pdf-card.selected-pdf {
+  background: rgba(168, 85, 247, 0.09);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.12);
 }
 
-.pdfask button {
-  margin-top: 20px;
+/* PDF information */
 
-  align-self: flex-start;
-
-  width: auto;
-  min-width: 180px;
-  height: 48px;
-  padding: 0 24px;
-
-  background: #8b5cf6;
-  color: white;
-
-  border: none;
-  border-radius: 10px;
-
-  font-size: 16px;
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition: 0.3s;
-}
-
-.pdfask button:hover {
-  background: #7c3aed;
-  transform: translateY(-2px);
-}
-
-/* ================= RESPONSE ================= */
-
-/* Change 4: Centered layout for clean empty state */
-.pdfresponse-card {
-  background: #111827;
-
-  border: 1px solid #334155;
-
-  border-left: 5px solid #8b5cf6;
-
-  border-radius: 12px;
-
-  padding: 28px;
-
-  line-height: 1.7;
+.pdfCardInfo {
+  min-width: 0;
 
   display: flex;
-  flex-direction: column;
+  align-items: center;
+
+  gap: 12px;
+}
+
+.pdfFileIcon {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  min-height: 160px;
-}
 
-.pdfresponse-card h4 {
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: #f8fafc;
-}
+  background: rgba(168, 85, 247, 0.14);
 
-.pdfresponse-card p {
-  color: #94a3b8;
-  font-size: 15px;
-}
+  border: 1px solid rgba(168, 85, 247, 0.25);
 
-/* ================= BOTTOM BUTTONS ================= */
-
-/* Change 5: Right-aligned buttons layout */
-.pdfbutton {
-  display: flex;
-
-  justify-content: flex-end;
-
-  gap: 16px;
-
-  background: transparent;
-  border: none;
-  padding: 0;
-}
-
-.pdfbutton button {
-  width: auto;
-  padding: 0 24px;
-  height: 44px;
-
-  border: 1px solid #334155;
   border-radius: 10px;
 
-  background: #1e293b;
-  color: #f8fafc;
+  color: var(--primary-light);
+
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.pdfFileDetails {
+  min-width: 0;
+  flex: 1;
+}
+
+.pdfFileDetails h3 {
+  margin: 0;
+
+  color: var(--text);
 
   font-size: 14px;
   font-weight: 600;
 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* PDF meta */
+
+.pdfMeta {
+  margin-top: 7px;
+}
+
+.readyStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  color: var(--text-muted);
+
+  font-size: 11px;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: var(--status-success);
+
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+}
+
+/* =========================
+   PDF CARD BUTTONS
+========================= */
+
+.pdfCardActions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  gap: 8px;
+}
+
+.selectButton,
+.selectedButton,
+.deleteButton {
+  height: 36px;
+
+  border-radius: 8px;
+
+  font-size: 12px;
+  font-weight: 600;
+
   cursor: pointer;
 
-  transition: 0.3s;
+  transition: all 0.2s ease;
 }
 
-.pdfbutton button:hover {
-  border-color: #8b5cf6;
-  background: #273549;
-  transform: translateY(-2px);
+/* Select */
+
+.selectButton {
+  background: transparent;
+
+  color: var(--text-light);
+
+  border: 1px solid var(--border);
 }
 
-.pdfbutton button:first-child {
-  border-top: 1px solid #334155;
+.selectButton:hover {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
 }
 
-.pdfbutton button:first-child:hover {
-  border-color: #ef4444;
+/* Selected */
+
+.selectedButton {
+  background: rgba(168, 85, 247, 0.15);
+
+  color: var(--primary-light);
+
+  border: 1px solid rgba(168, 85, 247, 0.4);
+
+  cursor: default;
+}
+
+/* Delete */
+
+.deleteButton {
+  background: transparent;
+
   color: #fca5a5;
+
+  border: 1px solid rgba(239, 68, 68, 0.25);
 }
 
-.pdfbutton button:last-child {
-  border-top: 1px solid #334155;
+.deleteButton:hover {
+  background: rgba(239, 68, 68, 0.12);
+
+  color: var(--status-danger);
+
+  border-color: var(--status-danger);
 }
 
-.pdfbutton button:last-child:hover {
-  border-color: #22c55e;
-  color: #86efac;
+/* =========================
+   EMPTY PDF STATE
+========================= */
+
+.pdfEmptyState {
+  flex: 1;
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 30px;
+}
+
+.emptyIcon {
+  width: 54px;
+  height: 54px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 15px;
+
+  background: rgba(168, 85, 247, 0.1);
+
+  border: 1px solid rgba(168, 85, 247, 0.2);
+
+  border-radius: 14px;
+
+  font-size: 25px;
+}
+
+.pdfEmptyState h3 {
+  margin: 0;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  color: var(--text);
+}
+
+.pdfEmptyState p {
+  max-width: 250px;
+
+  margin: 7px 0 0;
+
+  color: var(--text-muted);
+
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* =========================
+   RIGHT CHAT WORKSPACE
+========================= */
+
+.pdfChatWorkspace {
+  min-width: 0;
+  min-height: 0;
+
+  display: grid;
+
+  grid-template-rows: auto auto minmax(0, 1fr);
+
+  gap: 16px;
+
+  overflow: hidden;
+}
+
+/* =========================
+   SELECTED PDF BAR
+========================= */
+
+.selectedPdfBar {
+  min-width: 0;
+
+  min-height: 68px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  padding: 13px 18px;
+
+  background: var(--card);
+
+  border: 1px solid var(--border);
+
+  border-radius: 14px;
+
+  box-shadow: var(--shadow-sm);
+
+  box-sizing: border-box;
+}
+
+.selectedPdfIcon {
+  width: 40px;
+  height: 40px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(56, 189, 248, 0.1);
+
+  border: 1px solid rgba(56, 189, 248, 0.2);
+
+  border-radius: 9px;
+
+  color: var(--accent-cyan);
+
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.selectedPdfContent {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.selectedPdfContent span {
+  color: var(--text-muted);
+
+  font-size: 11px;
+}
+
+.selectedPdfContent strong {
+  min-width: 0;
+
+  color: var(--text);
+
+  font-size: 14px;
+  font-weight: 600;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* =========================
+   ASK NOVA
+========================= */
+
+.pdfask {
+  min-width: 0;
+
+  padding: 20px;
+
+  background: var(--card);
+
+  border: 1px solid var(--border);
+
+  border-radius: 14px;
+
+  box-shadow: var(--shadow-sm);
+
+  box-sizing: border-box;
+}
+
+.pdfask .sectionHeader {
+  margin-bottom: 14px;
+}
+
+.pdfask textarea {
+  width: 100%;
+
+  min-height: 105px;
+  max-height: 180px;
+
+  padding: 14px 16px;
+
+  background: var(--bg);
+
+  color: var(--text);
+
+  border: 1px solid var(--border);
+
+  border-radius: 11px;
+
+  font-family: inherit;
+
+  font-size: 14px;
+  line-height: 1.5;
+
+  resize: vertical;
+
+  outline: none;
+
+  box-sizing: border-box;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.pdfask textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.pdfask textarea:focus {
+  border-color: var(--primary);
+
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.08);
+}
+
+.pdfask textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =========================
+   QUESTION ACTIONS
+========================= */
+
+.questionActions {
+  min-height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-top: 12px;
+}
+
+.questionHint {
+  color: var(--text-muted);
+
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.questionActions button {
+  flex-shrink: 0;
+
+  height: 38px;
+
+  padding: 0 18px;
+
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+
+  color: white;
+
+  border: none;
+
+  border-radius: 9px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.questionActions button:hover:not(:disabled) {
+  background: var(--primary-light);
+
+  box-shadow: 0 4px 18px rgba(168, 85, 247, 0.35);
+
+  transform: translateY(-1px);
+}
+
+.questionActions button:disabled {
+  opacity: 0.4;
+
+  cursor: not-allowed;
+}
+
+/* =========================
+   RESPONSE AREA
+========================= */
+
+.pdfresponse {
+  min-width: 0;
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  background: var(--card);
+
+  border: 1px solid var(--border);
+
+  border-radius: 14px;
+
+  box-shadow: var(--shadow-sm);
+
+  overflow: hidden;
+}
+
+/* Response header */
+
+.responseHeader {
+  min-height: 65px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding: 16px 20px;
+
+  border-bottom: 1px solid var(--border-subtle);
+
+  box-sizing: border-box;
+}
+
+.responseHeader h2 {
+  margin: 0;
+
+  font-size: 17px;
+  font-weight: 650;
+
+  color: var(--text);
+}
+
+.responseHeader p {
+  margin: 4px 0 0;
+
+  color: var(--text-muted);
+
+  font-size: 11px;
+}
+
+/* AI badge */
+
+.responseBadge {
+  flex-shrink: 0;
+
+  padding: 6px 9px;
+
+  background: rgba(168, 85, 247, 0.12);
+
+  border: 1px solid rgba(168, 85, 247, 0.25);
+
+  border-radius: 7px;
+
+  color: var(--primary-light);
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* =========================
+   RESPONSE CARD
+========================= */
+
+.pdfresponse-card {
+  flex: 1;
+  min-height: 0;
+
+  margin: 18px;
+
+  padding: 20px;
+
+  background: var(--bg);
+
+  border: 1px solid var(--border-subtle);
+
+  border-radius: 12px;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  box-sizing: border-box;
+}
+
+/* =========================
+   MARKDOWN RESPONSE
+========================= */
+
+.markdownResponse {
+  width: 100%;
+
+  color: var(--text-light);
+
+  font-size: 14px;
+  line-height: 1.7;
+
+  overflow-wrap: break-word;
+}
+
+.markdownResponse h1,
+.markdownResponse h2,
+.markdownResponse h3,
+.markdownResponse h4 {
+  color: var(--text);
+
+  line-height: 1.35;
+
+  margin-top: 20px;
+  margin-bottom: 9px;
+}
+
+.markdownResponse h1 {
+  font-size: 21px;
+}
+
+.markdownResponse h2 {
+  font-size: 18px;
+}
+
+.markdownResponse h3 {
+  font-size: 16px;
+}
+
+.markdownResponse p {
+  margin: 0 0 12px;
+}
+
+.markdownResponse ul,
+.markdownResponse ol {
+  margin: 8px 0 14px;
+
+  padding-left: 22px;
+}
+
+.markdownResponse li {
+  margin-bottom: 6px;
+}
+
+.markdownResponse strong {
+  color: var(--text);
+
+  font-weight: 650;
+}
+
+.markdownResponse code {
+  padding: 2px 5px;
+
+  background: var(--card-light);
+
+  border: 1px solid var(--border);
+
+  border-radius: 5px;
+
+  color: var(--primary-light);
+
+  font-size: 12px;
+}
+
+.markdownResponse pre {
+  padding: 14px;
+
+  background: var(--card-light);
+
+  border: 1px solid var(--border);
+
+  border-radius: 9px;
+
+  overflow-x: auto;
+
+  margin: 12px 0;
+}
+
+.markdownResponse pre code {
+  padding: 0;
+
+  background: transparent;
+
+  border: none;
+}
+
+.markdownResponse blockquote {
+  margin: 12px 0;
+
+  padding: 10px 14px;
+
+  border-left: 3px solid var(--primary);
+
+  background: rgba(168, 85, 247, 0.06);
+
+  color: var(--text-light);
+}
+
+/* =========================
+   LOADING STATE
+========================= */
+
+.loadingState {
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.loadingDots {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+
+  margin-bottom: 14px;
+}
+
+.loadingDots span {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: var(--primary);
+
+  animation: pdfLoading 1.2s infinite ease-in-out;
+}
+
+.loadingDots span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.loadingDots span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes pdfLoading {
+  0%,
+  80%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+
+  40% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
+}
+
+.loadingState h3 {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.loadingState p {
+  margin: 6px 0 0;
+
+  color: var(--text-muted);
+
+  font-size: 12px;
+}
+
+/* =========================
+   EMPTY RESPONSE
+========================= */
+
+.responseEmptyState {
+  height: 100%;
+  min-height: 180px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 25px;
+  box-sizing: border-box;
+}
+
+.responseIcon {
+  width: 58px;
+  height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 14px;
+
+  background: rgba(168, 85, 247, 0.1);
+
+  border: 1px solid rgba(168, 85, 247, 0.2);
+
+  border-radius: 15px;
+
+  font-size: 27px;
+}
+
+.responseEmptyState h3 {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.responseEmptyState p {
+  max-width: 480px;
+
+  margin: 7px 0 0;
+
+  color: var(--text-muted);
+
+  font-size: 12px;
+
+  line-height: 1.6;
+}
+
+/* =========================
+   CLEAR CHAT
+========================= */
+
+.pdfbutton {
+  flex-shrink: 0;
+
+  display: flex;
+  justify-content: flex-end;
+
+  padding: 12px 18px;
+
+  border-top: 1px solid var(--border-subtle);
+
+  background: var(--card);
+
+  box-sizing: border-box;
+}
+
+.pdfbutton button {
+  height: 34px;
+
+  padding: 0 14px;
+
+  background: transparent;
+
+  color: var(--text-muted);
+
+  border: 1px solid var(--border);
+
+  border-radius: 8px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.pdfbutton button:hover:not(:disabled) {
+  background: var(--card-light);
+
+  color: var(--text);
+
+  border-color: var(--primary);
+}
+
+.pdfbutton button:disabled {
+  opacity: 0.35;
+
+  cursor: not-allowed;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1100px) {
+  .pdfHeader {
+    padding: 0 20px;
+  }
+
+  .pdfUploadArea {
+    min-width: auto;
+  }
+
+  .pdf-container {
+    grid-template-columns: 300px minmax(0, 1fr);
+
+    padding: 20px;
+  }
+}
+
+@media (max-width: 850px) {
+  .pdfchat {
+    overflow-y: auto;
+  }
+
+  .pdfHeader {
+    height: auto;
+    min-height: 70px;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+
+    padding: 14px 20px;
+  }
+
+  .pdfBrand {
+    min-width: auto;
+  }
+
+  .pdfBrand span {
+    position: static;
+
+    transform: none;
+
+    margin-left: 20px;
+  }
+
+  .pdfUploadArea {
+    width: 100%;
+
+    justify-content: flex-start;
+
+    flex-wrap: wrap;
+  }
+
+  .pdf-container {
+    flex: none;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: visible;
+
+    padding: 18px;
+  }
+
+  .pdfupload {
+    min-height: 300px;
+  }
+
+  .pdfChatWorkspace {
+    min-height: 850px;
+  }
+}
+
+@media (max-width: 600px) {
+  .pdfHeader {
+    padding: 13px 15px;
+  }
+
+  .pdfBrand {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .pdfBrand span {
+    display: none;
+  }
+
+  .pdfUploadArea {
+    justify-content: center;
+  }
+
+  .selectedFile {
+    max-width: 150px;
+  }
+
+  .pdf-container {
+    padding: 12px;
+    gap: 14px;
+  }
+
+  .pdfupload > .sectionHeader {
+    padding: 18px 16px 15px;
+  }
+
+  .pdfList {
+    padding: 14px;
+  }
+
+  .pdfask {
+    padding: 16px;
+  }
+
+  .responseHeader {
+    padding: 14px 16px;
+  }
+
+  .pdfresponse-card {
+    margin: 12px;
+    padding: 15px;
+  }
+
+  .questionActions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .questionActions button {
+    width: 100%;
+  }
 }

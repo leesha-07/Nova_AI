@@ -1,9 +1,10 @@
 const Reminder = require("../models/Reminder.js");
 const createReminder = async (req, res) => {
-  const { userId, title, message, reminderDate, reminderTime, status } =
+  const { userId, todoId, title, message, reminderDate, reminderTime, status } =
     req.body;
   const newReminder = await Reminder.create({
     userId,
+    todoId,
     title,
     message,
     reminderDate,

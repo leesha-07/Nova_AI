@@ -21,6 +21,11 @@ const resumeSchema = new mongoose.Schema(
       type: String,
     },
 
+    resumeText: {
+      type: String,
+      default: "",
+    },
+
     overallScore: {
       type: Number,
       default: 0,

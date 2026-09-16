@@ -1,6 +1,7 @@
 import "../styles/SmartNotes.css";
 import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
+
 export default function SmartNotes() {
   const [notes, setNotes] = useState([]);
   const [selectedNote, setSelectedNote] = useState(null);
@@ -8,105 +9,168 @@ export default function SmartNotes() {
   const [summarizingNoteId, setSummarizingNoteId] = useState(null);
   const [summaryError, setSummaryError] = useState("");
   const [summaryPrompt, setSummaryPrompt] = useState("");
+
   useEffect(() => {
     async function getNote() {
-      const userId = localStorage.getItem("userId");
-      if (!userId) {
-        throw new Error("User Id not found");
-      }
-      const response = await fetch(`http://localhost:5000/api/notes/${userId}`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch notes");
-      }
-      const data = await response.json();
-      setNotes(data.notes);
-      if (data.notes.length > 0) {
-        setSelectedNote(data.notes[0]);
+      try {
+        const userId = localStorage.getItem("userId");
+
+        if (!userId) {
+          throw new Error("User Id not found");
+        }
+
+        const response = await fetch(
+          `http://localhost:5000/api/notes/${userId}`,
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch notes");
+        }
+
+        const data = await response.json();
+
+        setNotes(data.notes);
+
+        if (data.notes.length > 0) {
+          setSelectedNote(data.notes[0]);
+        }
+      } catch (error) {
+        console.error("Error fetching notes:", error);
       }
     }
+
     getNote();
   }, []);
+
   async function saveNote() {
     if (selectedNote === null) {
-      throw new Error("The Note is empty");
-    } else {
+      return;
+    }
+
+    try {
       const response = await fetch(
         `http://localhost:5000/api/notes/${selectedNote._id}`,
         {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({
             title: selectedNote.title,
             content: selectedNote.content,
           }),
         },
       );
+
       if (!response.ok) {
         throw new Error("Failed to update note");
-      } else {
-        setNotes(
-          notes.map((note) => {
-            if (note._id === selectedNote._id) {
-              return selectedNote;
-            } else {
-              return note;
-            }
-          }),
-        );
       }
+
+      const data = await response.json();
+
+      setNotes((previousNotes) =>
+        previousNotes.map((note) =>
+          note._id === selectedNote._id ? data.note : note,
+        ),
+      );
+
+      setSelectedNote(data.note);
+    } catch (error) {
+      console.error("Save note error:", error);
     }
   }
+
   async function createNewNote() {
-    const userId = localStorage.getItem("userId");
-    if (!userId) {
-      throw new Error("User Id not found");
+    try {
+      const userId = localStorage.getItem("userId");
+
+      if (!userId) {
+        throw new Error("User Id not found");
+      }
+
+      const newNote = {
+        userId,
+        title: "Untitled Note",
+        content: "Start writing...",
+      };
+
+      const response = await fetch("http://localhost:5000/api/notes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newNote),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create note");
+      }
+
+      const data = await response.json();
+
+      setNotes((previousNotes) => [...previousNotes, data.note]);
+      setSelectedNote(data.note);
+      setSummaryPrompt("");
+      setSummaryError("");
+    } catch (error) {
+      console.error("Create note error:", error);
     }
-    const newNote = {
-      userId,
-      title: "Untitled Note",
-      content: "Start writing...",
-    };
-    const response = await fetch("http://localhost:5000/api/notes", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newNote),
-    });
-    if (!response.ok) {
-      throw new Error("Failed to create note");
-    }
-    const data = await response.json();
-    setNotes([...notes, data.note]);
-    setSelectedNote(data.note);
-    setSummaryPrompt("");
   }
+
   const filteredNotes = notes.filter((note) =>
     note.title.toLowerCase().includes(search.toLowerCase()),
   );
+
   async function deleteNote() {
     if (selectedNote === null) {
       return;
     }
-    const response = await fetch(
-      `http://localhost:5000/api/notes/${selectedNote._id}`,
-      { method: "DELETE" },
-    );
-    if (!response.ok) {
-      throw new Error("Note not found");
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/notes/${selectedNote._id}`,
+        {
+          method: "DELETE",
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Note not found");
+      }
+
+      const updatedNotes = notes.filter(
+        (note) => note._id !== selectedNote._id,
+      );
+
+      setNotes(updatedNotes);
+
+      if (updatedNotes.length > 0) {
+        setSelectedNote(updatedNotes[0]);
+      } else {
+        setSelectedNote(null);
+      }
+
+      setSummaryPrompt("");
+      setSummaryError("");
+    } catch (error) {
+      console.error("Delete note error:", error);
     }
-    const updatedNotes = notes.filter((note) => note._id !== selectedNote._id);
-    setNotes(updatedNotes);
-    setSelectedNote(null);
   }
+
   async function summarizeNote() {
-    setSummaryError(null);
+    setSummaryError("");
+
     try {
       if (selectedNote === null) {
         return setSummaryError("Please select a note");
       }
+
       if (!selectedNote.content || !selectedNote.content.trim()) {
-        return setSummaryError("Content is empty so cant summarize it");
+        return setSummaryError("Content is empty, so it cannot be summarized.");
       }
+
       setSummarizingNoteId(selectedNote._id);
+
       const response = await fetch(
         `http://localhost:5000/api/notes/${selectedNote._id}/summarize`,
         {
@@ -119,20 +183,28 @@ export default function SmartNotes() {
           }),
         },
       );
+
       const data = await response.json();
+
       if (!response.ok) {
         return setSummaryError(data.message);
       }
-      const updatedNote = { ...selectedNote, summary: data.summary };
+
+      const updatedNote = {
+        ...selectedNote,
+        summary: data.summary,
+      };
+
       setSelectedNote(updatedNote);
 
-      setNotes((prevNotes) =>
-        prevNotes.map((note) =>
+      setNotes((previousNotes) =>
+        previousNotes.map((note) =>
           note._id === updatedNote._id ? updatedNote : note,
         ),
       );
     } catch (error) {
-      setSummaryError("Network is down");
+      console.error("Summary error:", error);
+      setSummaryError("Unable to generate summary. Please try again.");
     } finally {
       setSummarizingNoteId(null);
     }
@@ -140,15 +212,26 @@ export default function SmartNotes() {
 
   return (
     <div className="note">
+      {/* ================= HEADER ================= */}
+
       <div className="noteHeader">
-        <h1>Nova AI</h1>
+        <div className="noteLogo">
+          <span>✨</span>
+          Nova AI
+        </div>
+
         <h2>Smart Notes</h2>
+
         <button className="newnote" onClick={createNewNote}>
           + New Note
         </button>
       </div>
 
+      {/* ================= MAIN CONTENT ================= */}
+
       <div className="noteContent">
+        {/* ================= LEFT PANEL ================= */}
+
         <div className="noteleftPanel">
           <input
             className="notesearch"
@@ -166,13 +249,24 @@ export default function SmartNotes() {
                 onClick={() => {
                   setSelectedNote(note);
                   setSummaryPrompt("");
+                  setSummaryError("");
                 }}
               >
                 {note.title}
               </p>
             ))}
           </div>
+
+          {/* Only show this when there are no notes */}
+          {notes.length === 0 && (
+            <button className="createNoteEmptyButton" onClick={createNewNote}>
+              + Create Your First Note
+            </button>
+          )}
         </div>
+
+        {/* ================= RIGHT PANEL ================= */}
+
         <div className="noterightPanel">
           <h2>My Note</h2>
 
@@ -181,19 +275,30 @@ export default function SmartNotes() {
             placeholder="Enter note title..."
             value={selectedNote === null ? "" : selectedNote.title}
             onChange={(event) => {
-              setSelectedNote({ ...selectedNote, title: event.target.value });
+              if (!selectedNote) return;
+
+              setSelectedNote({
+                ...selectedNote,
+                title: event.target.value,
+              });
             }}
           />
 
           <textarea
             className="notetextarea"
             placeholder="Start writing your notes here..."
-            rows="8"
             value={selectedNote === null ? "" : selectedNote.content}
             onChange={(event) => {
-              setSelectedNote({ ...selectedNote, content: event.target.value });
+              if (!selectedNote) return;
+
+              setSelectedNote({
+                ...selectedNote,
+                content: event.target.value,
+              });
             }}
-          ></textarea>
+          />
+
+          {/* ================= AI TOOLS ================= */}
 
           <div className="noteaiTools">
             <h2>AI Tools</h2>
@@ -208,12 +313,19 @@ export default function SmartNotes() {
                 onChange={(event) => setSummaryPrompt(event.target.value)}
               />
             </div>
+
             <div className="summaryBox">
-              <ReactMarkdown>
-                {selectedNote?.summary || "No summary yet"}
-              </ReactMarkdown>
+              {summaryError ? (
+                <p className="summaryError">{summaryError}</p>
+              ) : (
+                <ReactMarkdown>
+                  {selectedNote?.summary || "No summary yet"}
+                </ReactMarkdown>
+              )}
             </div>
           </div>
+
+          {/* ================= BOTTOM BUTTONS ================= */}
 
           <div className="Buttons">
             <button
@@ -227,12 +339,22 @@ export default function SmartNotes() {
             >
               {summarizingNoteId === selectedNote?._id
                 ? "Summarizing..."
-                : "Summarize"}
+                : "✨ Summarize"}
             </button>
-            <button className="savebuttons" onClick={saveNote}>
+
+            <button
+              className="savebuttons"
+              onClick={saveNote}
+              disabled={!selectedNote}
+            >
               💾 Save
             </button>
-            <button className="deletebuttons" onClick={deleteNote}>
+
+            <button
+              className="deletebuttons"
+              onClick={deleteNote}
+              disabled={!selectedNote}
+            >
               🗑 Delete
             </button>
           </div>

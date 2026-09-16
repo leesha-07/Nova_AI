@@ -1,7 +1,7 @@
 import React, { useState } from "react";
+import "../styles/Auth.css";
 import Button from "../components/Button.jsx";
 import { Link } from "react-router-dom";
-import "../styles/Auth.css";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -32,10 +32,13 @@ export default function Register() {
 
     setMessage(data.message);
   }
+
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h1 className="auth-logo">Nova AI</h1>
+        <h1 className="auth-logo">
+          <span>✨</span> Nova AI
+        </h1>
 
         <h2 className="auth-title">Create Account</h2>
 
@@ -48,6 +51,7 @@ export default function Register() {
 
           <input
             className="auth-input"
+            type="text"
             placeholder="Enter your name"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -95,7 +99,9 @@ export default function Register() {
           text="Register"
           onClick={handleRegister}
         />
-        {message && <p>{message}</p>}
+
+        {message && <p className="auth-message">{message}</p>}
+
         <div className="auth-footer">
           <p className="auth-account">
             Already have an account?

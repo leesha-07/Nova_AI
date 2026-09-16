@@ -1,262 +1,985 @@
+/* =========================================================
+   TODO PAGE
+   NOVA AI DESIGN SYSTEM
+   ========================================================= */
+
 .todoPage {
   min-height: 100vh;
-  background: #0f172a;
-  color: white;
+  width: 100%;
+  background: var(--bg);
+  color: var(--text);
 }
 
-/* HEADER */
+/* =========================================================
+   HEADER
+   SAME AS AI CHAT / DASHBOARD
+   ========================================================= */
 
 .todoheader {
-  height: 78px;
-  background: #1e293b;
-  border-bottom: 1px solid #334155;
+  height: 70px;
+  width: 100%;
+
+  background: var(--navbar);
+  border-bottom: 1px solid var(--border);
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
   padding: 0 30px;
+
+  position: relative;
+  flex-shrink: 0;
+
+  box-shadow: var(--shadow-sm);
+
+  z-index: 10;
 }
 
-.todoheader h1,
+/* =========================================================
+   LOGO
+   ========================================================= */
+
+.todoLogo {
+  min-width: 140px;
+
+  display: flex;
+  align-items: center;
+
+  font-size: 20px;
+  font-weight: 700;
+
+  letter-spacing: -0.5px;
+
+  color: var(--primary-light);
+}
+
+.todoLogo span {
+  color: var(--primary);
+  margin-right: 7px;
+  font-size: 24px;
+}
+
+/* =========================================================
+   HEADER TITLE
+   ========================================================= */
+
 .todoheader h2 {
+  position: absolute;
+
+  left: 50%;
+  transform: translateX(-50%);
+
   margin: 0;
+
+  font-size: 18px;
+  font-weight: 600;
+
+  color: var(--text);
 }
 
-.todoheader h1 {
-  font-size: 28px;
-}
+/* =========================================================
+   ADD TASK BUTTON
+   ========================================================= */
 
-.todoheader h2 {
-  font-size: 28px;
-}
-
-.todoheader button {
-  background: #8b5cf6;
-  color: white;
-
+.todoNewButton {
   border: none;
+
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+
+  color: #ffffff;
+
+  padding: 10px 18px;
+
   border-radius: 10px;
 
-  padding: 12px 22px;
+  cursor: pointer;
 
   font-weight: 600;
-  cursor: pointer;
+  font-size: 14px;
+
+  transition: all 0.2s ease;
 }
 
-.todoheader button:hover {
-  background: #7c3aed;
+.todoNewButton:hover {
+  background: var(--primary-light);
+
+  box-shadow: 0 4px 18px rgba(168, 85, 247, 0.45);
+
+  transform: translateY(-1px);
 }
 
-/* TASK DETAILS */
+/* =========================================================
+   MAIN CONTENT
+   TWO COLUMN LAYOUT
+   ========================================================= */
 
-.todoDetails {
-  padding: 20px 30px;
-  background: #0f172a;
-}
-
-.todoDetails h2 {
-  margin: 0 0 12px;
-}
-
-.todoTitleInput,
-.todoContentInput {
+.todoContent {
   width: 100%;
+
+  display: grid;
+
+  grid-template-columns: minmax(0, 1fr) 360px;
+
+  gap: 24px;
+
+  padding: 28px 30px 35px;
+
   box-sizing: border-box;
-
-  background: #111827;
-  color: white;
-
-  border: 1px solid #334155;
-  border-radius: 8px;
-
-  padding: 10px;
-
-  margin-bottom: 10px;
 }
 
-.todoContentInput {
-  height: 80px;
-  resize: vertical;
+/* =========================================================
+   TASK SECTION
+   ========================================================= */
+
+.todoTaskSection {
+  min-width: 0;
 }
 
-/* PRIORITY DATE STATUS */
+/* =========================================================
+   TASK SECTION TOP
+   ========================================================= */
 
-.todoOptions {
+.todoSectionTop {
   display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap: 25px;
+
+  margin-bottom: 20px;
 }
 
-.todoOptions select,
-.todoOptions input {
-  flex: 1;
+.todoSectionTop h2 {
+  margin: 0 0 5px;
 
-  background: #1e293b;
-  color: white;
+  font-size: 24px;
+  font-weight: 700;
 
-  border: 1px solid #334155;
-  border-radius: 8px;
-
-  padding: 10px;
+  color: var(--text);
 }
 
-/* SAVE DELETE */
+.todoSectionTop p {
+  margin: 0;
 
-.todoActions {
-  display: flex;
-  gap: 20px;
+  color: var(--text-muted);
+
+  font-size: 14px;
 }
 
-.todoActions button {
-  flex: 1;
+/* =========================================================
+   SEARCH
+   ========================================================= */
 
-  border: none;
-  border-radius: 8px;
+.todoSearch {
+  width: 280px;
+  height: 44px;
 
-  padding: 10px;
+  background: var(--card);
 
-  color: white;
-  font-weight: 600;
+  border: 1px solid var(--border);
 
-  cursor: pointer;
+  border-radius: 10px;
+
+  padding: 0 14px;
+
+  color: var(--text);
+
+  font-size: 14px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  box-sizing: border-box;
 }
 
-.todoActions button:first-child {
-  background: #22c55e;
+.todoSearch::placeholder {
+  color: var(--text-muted);
 }
 
-.todoActions button:last-child {
-  background: #ef4444;
+.todoSearch:focus {
+  border-color: var(--primary);
+
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.18);
 }
 
-.todoActions button:hover {
-  opacity: 0.85;
-}
-
-/* MAIN */
-
-.todoMain {
-  padding: 30px;
-}
-
-/* FILTERS */
+/* =========================================================
+   FILTERS
+   ========================================================= */
 
 .todofilters {
   display: flex;
-  gap: 15px;
-  margin-bottom: 25px;
+
+  gap: 10px;
+
+  margin-bottom: 20px;
+
+  flex-wrap: wrap;
 }
 
 .todofilters button {
-  background: #1e293b;
-  color: white;
+  background: var(--card);
 
-  border: 1px solid #334155;
-  border-radius: 10px;
+  color: var(--text-light);
 
-  padding: 10px 20px;
+  border: 1px solid var(--border);
+
+  border-radius: 9px;
+
+  padding: 9px 17px;
 
   cursor: pointer;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  transition: all 0.2s ease;
 }
 
 .todofilters button:hover {
-  background: #334155;
+  background: var(--card-hover);
+
+  color: var(--text);
 }
 
 .todofilters .todoactive {
-  background: #8b5cf6;
-  border-color: #8b5cf6;
+  background: var(--primary);
+
+  border-color: var(--primary);
+
+  color: #ffffff;
 }
 
-/* PENDING + COMPLETED */
+.todofilters .todoactive:hover {
+  background: var(--primary-dark);
+
+  border-color: var(--primary-dark);
+}
+
+/* =========================================================
+   PENDING + COMPLETED CONTAINER
+   ========================================================= */
 
 .todotaskContainer {
-  display: flex;
-  gap: 25px;
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 20px;
 }
 
-.todopendingTasks,
-.todocompletedTasks {
-  width: 50%;
-  height: 400px;
+/* =========================================================
+   TASK COLUMNS
+   ========================================================= */
 
-  box-sizing: border-box;
+.todotaskColumn {
+  min-width: 0;
 
-  background: #1e293b;
-  border: 1px solid #334155;
-  border-radius: 15px;
+  height: 430px;
 
-  padding: 20px;
+  background: var(--card);
+
+  border: 1px solid var(--border);
+
+  border-radius: 14px;
+
+  overflow: hidden;
+
+  box-shadow: var(--shadow-sm);
+
+  display: flex;
+
+  flex-direction: column;
+}
+
+/* =========================================================
+   COLUMN HEADER
+   ========================================================= */
+
+.todoColumnHeader {
+  min-height: 62px;
+
+  padding: 0 18px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  border-bottom: 1px solid var(--border);
+
+  background: var(--card-light);
+
+  flex-shrink: 0;
+}
+
+.todoColumnHeader h3 {
+  margin: 0;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  color: var(--text);
+}
+
+.todoColumnHeader span {
+  min-width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: var(--card-hover);
+
+  color: var(--primary-light);
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* =========================================================
+   TASK LIST
+   ========================================================= */
+
+.todoTaskList {
+  flex: 1;
+
+  padding: 16px;
 
   overflow-y: auto;
 }
 
-.todopendingTasks h2,
-.todocompletedTasks h2 {
-  margin-top: 0;
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+.todoTaskList::-webkit-scrollbar,
+.todoDetails::-webkit-scrollbar {
+  width: 7px;
 }
 
-/* TASK CARD */
+.todoTaskList::-webkit-scrollbar-track,
+.todoDetails::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.todoTaskList::-webkit-scrollbar-thumb,
+.todoDetails::-webkit-scrollbar-thumb {
+  background: var(--border);
+
+  border-radius: 10px;
+}
+
+.todoTaskList::-webkit-scrollbar-thumb:hover,
+.todoDetails::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+
+/* =========================================================
+   TASK CARD
+   ========================================================= */
 
 .todotaskCard {
-  background: #111827;
+  background: var(--card-light);
 
-  border: 1px solid #334155;
-  border-radius: 10px;
+  border: 1px solid var(--border);
+
+  border-radius: 11px;
 
   padding: 15px;
+
   margin-bottom: 12px;
 
   cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+
+  box-sizing: border-box;
 }
 
 .todotaskCard:hover {
-  border-color: #8b5cf6;
+  background: var(--card-hover);
+
+  border-color: var(--primary);
+
+  transform: translateY(-1px);
 }
 
-.todotaskCard h3 {
+.todotaskCard.selectedTask {
+  border-color: var(--primary);
+
+  box-shadow:
+    0 0 0 1px var(--primary),
+    0 5px 18px rgba(168, 85, 247, 0.12);
+}
+
+/* =========================================================
+   TASK CARD TOP
+   ========================================================= */
+
+.taskCardTop {
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: space-between;
+
+  gap: 12px;
+}
+
+.taskCardTop h3 {
   margin: 0;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  color: var(--text);
+
+  overflow-wrap: anywhere;
 }
 
-/* AI SUGGESTIONS */
+/* =========================================================
+   TASK CONTENT
+   ========================================================= */
+
+.todotaskCard p {
+  margin: 9px 0;
+
+  color: var(--text-light);
+
+  font-size: 13px;
+
+  line-height: 1.5;
+
+  overflow-wrap: anywhere;
+}
+
+.todotaskCard small {
+  color: var(--text-muted);
+
+  font-size: 12px;
+}
+
+/* =========================================================
+   PRIORITY
+   ========================================================= */
+
+.priority {
+  padding: 4px 8px;
+
+  border-radius: 6px;
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  flex-shrink: 0;
+}
+
+.priority.low {
+  color: var(--status-success);
+
+  background: rgba(34, 197, 94, 0.1);
+}
+
+.priority.medium {
+  color: var(--status-warning);
+
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.priority.high {
+  color: var(--status-danger);
+
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* =========================================================
+   COMPLETED BADGE
+   ========================================================= */
+
+.completedBadge {
+  padding: 4px 8px;
+
+  border-radius: 6px;
+
+  background: rgba(34, 197, 94, 0.1);
+
+  color: var(--status-success);
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  flex-shrink: 0;
+}
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.todoEmpty {
+  margin: 0;
+
+  padding: 35px 10px;
+
+  text-align: center;
+
+  color: var(--text-muted);
+
+  font-size: 14px;
+}
+
+/* =========================================================
+   TASK DETAILS
+   RIGHT SIDEBAR
+   ========================================================= */
+
+.todoDetails {
+  background: var(--card);
+
+  border: 1px solid var(--border);
+
+  border-radius: 14px;
+
+  padding: 22px;
+
+  box-sizing: border-box;
+
+  box-shadow: var(--shadow-sm);
+
+  max-height: 100%;
+
+  overflow-y: auto;
+
+  align-self: start;
+}
+
+/* =========================================================
+   DETAILS HEADER
+   ========================================================= */
+
+.todoDetailsHeader {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+  margin-bottom: 20px;
+}
+
+.todoDetailsHeader h2 {
+  margin: 0;
+
+  font-size: 19px;
+
+  color: var(--text);
+}
+
+.todoDetailsHeader span {
+  color: var(--text-muted);
+
+  font-size: 11px;
+}
+
+/* =========================================================
+   LABELS
+   ========================================================= */
+
+.todoDetails label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: var(--text-light);
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+/* =========================================================
+   TITLE INPUT
+   ========================================================= */
+
+.todoTitleInput {
+  width: 100%;
+
+  height: 44px;
+
+  background: var(--card-light);
+
+  color: var(--text);
+
+  border: 1px solid var(--border);
+
+  border-radius: 9px;
+
+  padding: 0 13px;
+
+  font-size: 14px;
+
+  outline: none;
+
+  margin-bottom: 16px;
+
+  box-sizing: border-box;
+
+  transition: 0.2s;
+}
+
+.todoTitleInput:focus {
+  border-color: var(--primary);
+
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
+}
+
+/* =========================================================
+   DESCRIPTION
+   ========================================================= */
+
+.todoContentInput {
+  width: 100%;
+
+  min-height: 110px;
+
+  background: var(--card-light);
+
+  color: var(--text);
+
+  border: 1px solid var(--border);
+
+  border-radius: 9px;
+
+  padding: 12px 13px;
+
+  font-size: 14px;
+
+  line-height: 1.5;
+
+  outline: none;
+
+  resize: vertical;
+
+  margin-bottom: 16px;
+
+  box-sizing: border-box;
+
+  transition: 0.2s;
+}
+
+.todoContentInput:focus {
+  border-color: var(--primary);
+
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
+}
+
+/* =========================================================
+   OPTIONS
+   ========================================================= */
+
+.todoOptions {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 12px;
+
+  margin-bottom: 16px;
+}
+
+.todoOptions > div {
+  min-width: 0;
+}
+
+.todoOptions select,
+.todoOptions input,
+.todoStatus select {
+  width: 100%;
+
+  height: 42px;
+
+  background: var(--card-light);
+
+  color: var(--text);
+
+  border: 1px solid var(--border);
+
+  border-radius: 9px;
+
+  padding: 0 11px;
+
+  font-size: 13px;
+
+  outline: none;
+
+  box-sizing: border-box;
+
+  transition: 0.2s;
+}
+
+.todoOptions select:focus,
+.todoOptions input:focus,
+.todoStatus select:focus {
+  border-color: var(--primary);
+
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.12);
+}
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.todoStatus {
+  margin-bottom: 20px;
+}
+
+/* =========================================================
+   SAVE + DELETE
+   ========================================================= */
+
+.todoActions {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 10px;
+
+  padding-top: 18px;
+
+  border-top: 2px solid var(--primary);
+}
+
+.todoActions button {
+  height: 44px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  color: #ffffff;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.todoSaveButton {
+  background: var(--status-success);
+}
+
+.todoDeleteButton {
+  background: var(--status-danger);
+}
+
+.todoSaveButton:hover,
+.todoDeleteButton:hover {
+  transform: translateY(-1px);
+
+  box-shadow: var(--shadow-sm);
+
+  opacity: 0.9;
+}
+
+/* =========================================================
+   NO TODO SELECTED
+   ========================================================= */
+
+.noTodoSelected {
+  padding: 35px 10px;
+
+  text-align: center;
+
+  color: var(--text-muted);
+
+  font-size: 13px;
+}
+
+/* =========================================================
+   AI SUGGESTIONS
+   FULL WIDTH BELOW TASKS
+   ========================================================= */
 
 .todoaiSuggestion {
-  margin-top: 25px;
+  grid-column: 1 / -1;
 
-  background: #1e293b;
-  border: 1px solid #334155;
-  border-radius: 15px;
+  background: var(--card);
+
+  border: 1px solid var(--border);
+
+  border-radius: 14px;
 
   padding: 20px;
+
+  box-shadow: var(--shadow-sm);
 }
 
 .todoaiSuggestion h2 {
-  margin-top: 0;
+  margin: 0 0 15px;
+
+  font-size: 18px;
+
+  color: var(--text);
+}
+
+.todoaiSuggestion ul {
+  margin: 0;
+
+  padding: 0;
+
+  list-style: none;
 }
 
 .todoaiSuggestion li {
-  margin-bottom: 8px;
-  color: #cbd5e1;
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 11px 0;
+
+  border-bottom: 1px solid var(--border-subtle);
+
+  color: var(--text-light);
+
+  font-size: 13px;
+
+  line-height: 1.5;
 }
 
-/* SMALL SCREEN */
+.todoaiSuggestion li:last-child {
+  border-bottom: none;
+}
 
-@media (max-width: 800px) {
-  .todoheader h2 {
-    font-size: 20px;
+.todoaiSuggestion li strong {
+  color: var(--text);
+
+  font-weight: 600;
+}
+
+.noSuggestions {
+  margin: 0;
+
+  color: var(--text-muted);
+
+  font-size: 13px;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1000px) {
+  .todoContent {
+    grid-template-columns: 1fr;
   }
 
-  .todoOptions {
+  .todoDetails {
+    grid-column: 1;
+    order: 2;
+  }
+
+  .todoaiSuggestion {
+    order: 3;
+  }
+}
+
+@media (max-width: 750px) {
+  .todoheader {
+    padding: 0 18px;
+  }
+
+  .todoLogo {
+    min-width: auto;
+  }
+
+  .todoheader h2 {
+    font-size: 16px;
+  }
+
+  .todoNewButton {
+    padding: 9px 13px;
+  }
+
+  .todoContent {
+    padding: 20px 18px 30px;
+  }
+
+  .todoSectionTop {
+    align-items: stretch;
+
     flex-direction: column;
+  }
+
+  .todoSearch {
+    width: 100%;
   }
 
   .todotaskContainer {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 
-  .todopendingTasks,
-  .todocompletedTasks {
-    width: 100%;
+  .todotaskColumn {
+    height: 350px;
+  }
+
+  .todoOptions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 500px) {
+  .todoheader h2 {
+    position: static;
+
+    transform: none;
+
+    margin-left: auto;
+
+    margin-right: 12px;
+
+    font-size: 15px;
+  }
+
+  .todoLogo {
+    font-size: 18px;
+  }
+
+  .todoLogo span {
+    font-size: 21px;
+  }
+
+  .todoNewButton {
+    font-size: 12px;
+
+    padding: 8px 11px;
+  }
+
+  .todoActions {
+    grid-template-columns: 1fr;
   }
 }

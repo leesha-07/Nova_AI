@@ -5,9 +5,11 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+
   async function handleLogin() {
     const response = await fetch("http://localhost:5000/api/auth/login", {
       method: "POST",
@@ -25,6 +27,7 @@ export default function Login() {
 
     console.log("STATUS:", response.status);
     console.log("RESPONSE:", data);
+
     if (response.ok) {
       localStorage.setItem("userId", data.userId);
       navigate("/dashboard");
@@ -32,10 +35,13 @@ export default function Login() {
       setMessage(data.message);
     }
   }
+
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h1 className="auth-logo">Nova AI</h1>
+        <h1 className="auth-logo">
+          <span>✨</span> Nova AI
+        </h1>
 
         <h2 className="auth-title">Welcome Back</h2>
 
@@ -72,11 +78,17 @@ export default function Login() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <div>
-          <Link to="/forgotPassword">Forgot Password ?</Link>
+
+        <div className="auth-forgot">
+          <Link className="auth-link" to="/forgotPassword">
+            Forgot Password?
+          </Link>
         </div>
+
         <Button className="auth-button" text="Login" onClick={handleLogin} />
-        {message && <p>{message}</p>}
+
+        {message && <p className="auth-message">{message}</p>}
+
         <div className="auth-footer">
           <p className="auth-account">
             Don't have an account?
