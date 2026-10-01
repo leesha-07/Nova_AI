@@ -1,4 +1,5 @@
 const express = require("express");
+
 const {
   createReminder,
   getReminders,
@@ -6,10 +7,19 @@ const {
   updateReminder,
   deleteReminder,
 } = require("../controllers/reminderController");
+
+const protect = require("../middleware/authMiddleware");
+
 const router = express.Router();
-router.post("/", createReminder);
-router.get("/user/:userId", getReminders);
-router.get("/:reminderId", getReminder);
-router.put("/:reminderId", updateReminder);
-router.delete("/:reminderId", deleteReminder);
+
+router.post("/", protect, createReminder);
+
+router.get("/user/:userId", protect, getReminders);
+
+router.get("/:reminderId", protect, getReminder);
+
+router.put("/:reminderId", protect, updateReminder);
+
+router.delete("/:reminderId", protect, deleteReminder);
+
 module.exports = router;

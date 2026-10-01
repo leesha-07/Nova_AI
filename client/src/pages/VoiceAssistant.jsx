@@ -1,8 +1,10 @@
 import "../styles/VoiceAssistant.css";
 import { useState, useEffect, useRef } from "react";
+import ReactMarkdown from "react-markdown";
 
 export default function VoiceAssistant() {
   const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
 
   const [transcript, setTranscript] = useState("");
   const [response, setResponse] = useState("");
@@ -15,9 +17,18 @@ export default function VoiceAssistant() {
 
   useEffect(() => {
     async function getVoiceHistory() {
+      if (!userId || !token) {
+        return;
+      }
+
       try {
         const response = await fetch(
           `http://localhost:5000/api/voice/user/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
         );
 
         const data = await response.json();
@@ -33,13 +44,11 @@ export default function VoiceAssistant() {
       }
     }
 
-    if (userId) {
-      getVoiceHistory();
-    }
-  }, [userId]);
+    getVoiceHistory();
+  }, [userId, token]);
 
   async function saveVoiceConversation(command, aiResponse) {
-    if (!userId || !command || !aiResponse) {
+    if (!userId || !token || !command || !aiResponse) {
       return;
     }
 
@@ -48,9 +57,9 @@ export default function VoiceAssistant() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          userId: userId,
           command: command,
           response: aiResponse,
         }),
@@ -70,11 +79,18 @@ export default function VoiceAssistant() {
   }
 
   async function deleteVoiceConversation(voiceId) {
+    if (!token) {
+      return;
+    }
+
     try {
       const response = await fetch(
         `http://localhost:5000/api/voice/${voiceId}`,
         {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
       );
 
@@ -170,6 +186,11 @@ export default function VoiceAssistant() {
       return;
     }
 
+    if (!token) {
+      setResponse("Authentication required. Please log in again.");
+      return;
+    }
+
     stopSpeaking();
 
     const currentTranscript = transcript;
@@ -182,9 +203,9 @@ export default function VoiceAssistant() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          userId: userId,
           message: currentTranscript,
         }),
       });
@@ -255,16 +276,12 @@ export default function VoiceAssistant() {
 
   return (
     <div className="voiceassistant">
-      {/* HEADER */}
       <div className="voiceHeader">
         <h1>✨ Nova AI</h1>
-
         <h2>Voice Assistant</h2>
       </div>
 
-      {/* MAIN WORKSPACE */}
       <div className="voicemainContainer">
-        {/* MICROPHONE */}
         <div className="Microphonesection">
           <button
             className={`microphoneButton ${listening ? "active" : ""}`}
@@ -278,7 +295,6 @@ export default function VoiceAssistant() {
 
           <div className="voiceStatus">
             <span className={`statusDot ${statusClass}`}></span>
-
             <span>{statusText}</span>
           </div>
 
@@ -293,7 +309,6 @@ export default function VoiceAssistant() {
           </p>
         </div>
 
-        {/* TRANSCRIPT */}
         <div className="Transcriptsection">
           <div className="sectionTitle">
             <h2>Transcript</h2>
@@ -313,7 +328,6 @@ export default function VoiceAssistant() {
         </div>
       </div>
 
-      {/* AI RESPONSE */}
       <div className="aiResponse">
         <div className="responseHeader">
           <h2>Nova AI Response</h2>
@@ -330,20 +344,20 @@ export default function VoiceAssistant() {
             {thinking ? (
               <p className="thinkingText">Nova is thinking...</p>
             ) : (
-              <p>
-                {response || "Hello! I'm ready whenever you start speaking."}
-              </p>
+              <div className="markdownContent">
+                <ReactMarkdown>
+                  {response || "Hello! I'm ready whenever you start speaking."}
+                </ReactMarkdown>
+              </div>
             )}
           </div>
         </div>
       </div>
 
-      {/* HISTORY */}
       <div className="voiceHistory">
         <div className="historyHeader">
           <div>
             <h2>Voice History</h2>
-
             <p>Your previous conversations with Nova</p>
           </div>
 
@@ -356,7 +370,6 @@ export default function VoiceAssistant() {
           {voiceHistory.length === 0 ? (
             <div className="emptyHistory">
               <span>🎙️</span>
-
               <p>No voice conversations yet.</p>
             </div>
           ) : (
@@ -372,7 +385,9 @@ export default function VoiceAssistant() {
                   <div className="novaMessage">
                     <span className="messageLabel">Nova AI</span>
 
-                    <p>{voice.response}</p>
+                    <div className="markdownContent">
+                      <ReactMarkdown>{voice.response}</ReactMarkdown>
+                    </div>
                   </div>
                 </div>
 
@@ -388,7 +403,6 @@ export default function VoiceAssistant() {
         </div>
       </div>
 
-      {/* CONTROLS */}
       <div className="voicebottombuttons">
         <button
           className="startButton"

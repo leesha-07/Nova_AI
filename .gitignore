@@ -2,3 +2,7 @@
 **/.env
 dist/
 build/
+
+# Uploaded user files
+server/uploads/
+

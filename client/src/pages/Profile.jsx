@@ -2,33 +2,57 @@ import "../styles/Profile.css";
 import { useState, useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
+
 export default function Profile() {
   const [profile, setProfile] = useState("");
   const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
   const navigate = useNavigate();
+
   const [logoutOpen, setLogoutOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [location, setLocation] = useState("");
+
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const [passwordMessage, setPasswordMessage] = useState("");
+  const [passwordMessageType, setPasswordMessageType] = useState("");
+
   useEffect(() => {
     async function getProfile() {
-      const response = await fetch(
-        `http://localhost:5000/api/profile/${userId}`,
-      );
+      try {
+        const response = await fetch("http://localhost:5000/api/profile", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-      const data = await response.json();
+        if (!response.ok) {
+          if (response.status === 401) {
+            localStorage.removeItem("userId");
+            localStorage.removeItem("token");
+            navigate("/");
+          }
 
-      setProfile(data.profile);
+          return;
+        }
+
+        const data = await response.json();
+
+        setProfile(data.profile);
+      } catch (error) {
+        console.error("Get profile error:", error);
+      }
     }
 
     getProfile();
-  }, [userId]);
+  }, [userId, token, navigate]);
 
   function handleEditProfile() {
     setName(profile.name);
@@ -39,57 +63,103 @@ export default function Profile() {
   }
 
   async function handleSaveProfile() {
-    const response = await fetch(
-      `http://localhost:5000/api/profile/${userId}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: name,
-          email: email,
-          location: location,
-        }),
+    const response = await fetch("http://localhost:5000/api/profile", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-    );
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        location: location,
+      }),
+    });
 
     const data = await response.json();
+
+    if (!response.ok) {
+      return;
+    }
 
     setProfile(data.profile);
     setEditMode(false);
   }
+
   async function handleChangePassword() {
-    const response = await fetch(
-      `http://localhost:5000/api/auth/change-password/${userId}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
+    setPasswordMessage("");
+    setPasswordMessageType("");
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      setPasswordMessage("All password fields are required");
+      setPasswordMessageType("error");
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      setPasswordMessage("New password must be at least 8 characters long");
+      setPasswordMessageType("error");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setPasswordMessage("New password doesn't match");
+      setPasswordMessageType("error");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/auth/change-password",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            currentPassword: currentPassword,
+            newPassword: newPassword,
+            confirmPassword: confirmPassword,
+          }),
         },
-        body: JSON.stringify({
-          currentPassword: currentPassword,
-          newPassword: newPassword,
-          confirmPassword: confirmPassword,
-        }),
-      },
-    );
+      );
 
-    const data = await response.json();
+      const data = await response.json();
 
-    alert(data.message);
-    if (response.ok) {
+      if (!response.ok) {
+        setPasswordMessage(data.message || "Failed to change password");
+        setPasswordMessageType("error");
+        return;
+      }
+
+      setPasswordMessage(data.message);
+      setPasswordMessageType("success");
+
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
-      setChangePasswordOpen(false);
+
+      setTimeout(() => {
+        setChangePasswordOpen(false);
+        setPasswordMessage("");
+        setPasswordMessageType("");
+      }, 1500);
+    } catch (error) {
+      console.error("Change password error:", error);
+
+      setPasswordMessage("Something went wrong. Please try again.");
+      setPasswordMessageType("error");
     }
   }
+
   function handleLogout() {
     localStorage.removeItem("userId");
+    localStorage.removeItem("token");
     setLogoutOpen(false);
     navigate("/");
   }
+
   return (
     <>
       <div className="profileCard">
@@ -116,7 +186,13 @@ export default function Profile() {
         <div className="profileCardButtons">
           <button onClick={handleEditProfile}>✏️ Edit Profile</button>
 
-          <button onClick={() => setChangePasswordOpen(true)}>
+          <button
+            onClick={() => {
+              setPasswordMessage("");
+              setPasswordMessageType("");
+              setChangePasswordOpen(true);
+            }}
+          >
             🔒 Change Password
           </button>
 
@@ -154,6 +230,7 @@ export default function Profile() {
           </div>
         </div>
       )}
+
       {changePasswordOpen && (
         <div className="changePasswordOverlay">
           <div className="changePasswordModal">
@@ -180,15 +257,38 @@ export default function Profile() {
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
 
+            {passwordMessage && (
+              <p
+                className={`passwordMessage ${
+                  passwordMessageType === "error"
+                    ? "passwordError"
+                    : "passwordSuccess"
+                }`}
+              >
+                {passwordMessage}
+              </p>
+            )}
+
             <button onClick={handleChangePassword}>Change Password</button>
-            <button onClick={() => setChangePasswordOpen(false)}>Cancel</button>
+
+            <button
+              onClick={() => {
+                setChangePasswordOpen(false);
+                setPasswordMessage("");
+                setPasswordMessageType("");
+              }}
+            >
+              Cancel
+            </button>
           </div>
         </div>
       )}
+
       {logoutOpen && (
         <div className="logoutOverlay">
           <div className="logoutModal">
             <h2>Logout</h2>
+
             <p>Are you sure you want to logout?</p>
 
             <button onClick={handleLogout}>Yes, Logout</button>

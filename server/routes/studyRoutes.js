@@ -1,5 +1,7 @@
 const express = require("express");
+
 const router = express.Router();
+
 const {
   createStudy,
   getStudys,
@@ -8,10 +10,19 @@ const {
   deleteStudy,
   generateStudyPlan,
 } = require("../controllers/studyController.js");
-router.post("/", createStudy);
-router.get("/user/:userId", getStudys);
-router.post("/generate", generateStudyPlan);
-router.get("/:studyId", getStudy);
-router.put("/:studyId", updateStudy);
-router.delete("/:studyId", deleteStudy);
+
+const protect = require("../middleware/authMiddleware");
+
+router.post("/", protect, createStudy);
+
+router.get("/user/:userId", protect, getStudys);
+
+router.post("/generate", protect, generateStudyPlan);
+
+router.get("/:studyId", protect, getStudy);
+
+router.put("/:studyId", protect, updateStudy);
+
+router.delete("/:studyId", protect, deleteStudy);
+
 module.exports = router;

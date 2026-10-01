@@ -3,9 +3,10 @@ const { sendPushNotification } = require("../services/pushService");
 
 const saveSubscription = async (req, res) => {
   try {
-    const { userId, endpoint, keys } = req.body;
+    const userId = req.user.userId;
+    const { endpoint, keys } = req.body;
 
-    if (!userId || !endpoint || !keys) {
+    if (!endpoint || !keys) {
       return res.status(400).json({
         message: "Subscription data is required",
       });
@@ -38,20 +39,13 @@ const saveSubscription = async (req, res) => {
 
     res.status(500).json({
       message: "Failed to save push subscription",
-      error: error.message,
     });
   }
 };
 
 const testPushNotification = async (req, res) => {
   try {
-    const { userId } = req.body;
-
-    if (!userId) {
-      return res.status(400).json({
-        message: "userId is required",
-      });
-    }
+    const userId = req.user.userId;
 
     const subscription = await PushSubscription.findOne({
       userId,
@@ -69,7 +63,6 @@ const testPushNotification = async (req, res) => {
         message: "🔔 Test notification is working!",
       });
     } catch (error) {
-      // Remove expired subscription
       if (error.statusCode === 404 || error.statusCode === 410) {
         await PushSubscription.deleteOne({
           _id: subscription._id,
@@ -91,7 +84,6 @@ const testPushNotification = async (req, res) => {
 
     res.status(500).json({
       message: "Failed to send test notification",
-      error: error.message,
     });
   }
 };

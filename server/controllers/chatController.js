@@ -16,19 +16,14 @@ const emailGenai = new GoogleGenAI({
 
 const chatUser = async (req, res) => {
   try {
-    const { userId, message, interactionID } = req.body;
+    const { message, interactionID } = req.body;
+    const userId = req.user.userId;
 
     /*
     ==================================================
     VALIDATION
     ==================================================
     */
-
-    if (!userId) {
-      return res.status(400).json({
-        message: "User ID is required",
-      });
-    }
 
     if (!message || message.trim() === "") {
       return res.status(400).json({
@@ -103,6 +98,7 @@ DELETE_STUDY_PLAN
 CREATE_NOTE
 UPDATE_NOTE
 DELETE_NOTE
+GET_NOTE
 
 GET_EMAILS
 CREATE_EMAIL
@@ -422,7 +418,56 @@ Data:
 
 The user may give the note title instead of ID.
 
+==================================================
+GET NOTE
+==================================================
 
+Use this action when the user asks Nova to:
+
+- find a note
+- show a note
+- retrieve a note
+- read a note
+- show the content of a note
+- find my note titled ...
+- what is inside my note ...
+- show me the complete content of my note
+
+Data:
+
+{
+  "noteId": "existing note id or null",
+  "title": "note title or null"
+}
+
+The user may give the note title instead of MongoDB ID.
+
+If the user gives a note title, put the exact title in "title".
+
+If the user gives a MongoDB ID, put it in "noteId".
+
+Do not invent note content.
+
+The system will retrieve the actual note from the database.
+
+Example:
+
+User:
+Find my note titled "Nova AI Documentation" and show me the complete content.
+
+Return:
+
+{
+  "actions": [
+    {
+      "type": "GET_NOTE",
+      "data": {
+        "noteId": null,
+        "title": "Nova AI Documentation"
+      }
+    }
+  ]
+}
 ==================================================
 GET EMAILS
 ==================================================
@@ -905,28 +950,33 @@ The user requested:
 
 ${message}
 
-Nova executed the requested productivity actions.
+Nova executed the requested actions.
 
-${actionSummary}
+Execution results:
 
-Respond naturally and briefly.
+${JSON.stringify(actionResults, null, 2)}
 
-Tell the user what was successfully done.
+Respond naturally and clearly.
 
-If an email was generated, you may briefly say that
-the email was generated and saved.
+IMPORTANT RULES:
 
-If something failed, explain what could not be done.
+- Use the actual data returned in the execution results.
+- If a GET_NOTE action succeeded, show the ACTUAL note title and COMPLETE note content to the user.
+- Do not replace note content with placeholders.
+- Do not invent or modify note content.
+- Do not summarize the note when the user asks for the complete content.
+- If the note content is long, still provide the complete content.
+- If an action failed, explain what could not be completed.
+- Do not claim that an action was completed unless it appears in the execution results.
+- Do not invent additional actions.
 
-Do not invent any additional actions.
+If the user asked to find or show a note, directly provide the retrieved note content.
 
-Do not say that you performed an action unless it appears
-in the execution results above.
-      `,
+Respond naturally and briefly for normal actions.
+  `,
 
       previous_interaction_id: interactionID,
     });
-
     console.log(finalResponse);
 
     /*

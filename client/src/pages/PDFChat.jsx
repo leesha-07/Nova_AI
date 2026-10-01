@@ -12,15 +12,23 @@ export default function PDFChat() {
   const [uploading, setUploading] = useState(false);
 
   const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     async function getPdfs() {
-      if (!userId) {
+      if (!userId || !token) {
         return;
       }
 
       try {
-        const response = await fetch(`http://localhost:5000/api/pdf/${userId}`);
+        const response = await fetch(
+          `http://localhost:5000/api/pdf/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
 
         const data = await response.json();
 
@@ -36,7 +44,7 @@ export default function PDFChat() {
     }
 
     getPdfs();
-  }, [userId]);
+  }, [userId, token]);
 
   const fileSize = selectedPdf ? selectedPdf.size / (1024 * 1024) : 0;
 
@@ -46,7 +54,7 @@ export default function PDFChat() {
       return;
     }
 
-    if (!userId) {
+    if (!userId || !token) {
       alert("User is not logged in.");
       return;
     }
@@ -57,10 +65,12 @@ export default function PDFChat() {
       const formData = new FormData();
 
       formData.append("pdf", selectedPdf);
-      formData.append("userId", userId);
 
       const response = await fetch("http://localhost:5000/api/pdf/upload", {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         body: formData,
       });
 
@@ -68,6 +78,7 @@ export default function PDFChat() {
 
       if (!response.ok) {
         console.error(data.message);
+        alert(data.message || "PDF upload failed.");
         return;
       }
 
@@ -76,6 +87,7 @@ export default function PDFChat() {
       setSelectedPdf(null);
     } catch (error) {
       console.error("PDF upload failed:", error);
+      alert("PDF upload failed.");
     } finally {
       setUploading(false);
     }
@@ -98,6 +110,11 @@ export default function PDFChat() {
       return;
     }
 
+    if (!token) {
+      alert("Authentication required. Please log in again.");
+      return;
+    }
+
     try {
       setLoading(true);
       setAnswer("");
@@ -108,6 +125,7 @@ export default function PDFChat() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             question: question,
@@ -119,12 +137,14 @@ export default function PDFChat() {
 
       if (!response.ok) {
         console.error(data.message);
+        alert(data.message || "Failed to answer PDF question.");
         return;
       }
 
       setAnswer(data.answer);
     } catch (error) {
       console.error("Failed to ask PDF question:", error);
+      alert("Failed to answer PDF question.");
     } finally {
       setLoading(false);
     }
@@ -136,15 +156,24 @@ export default function PDFChat() {
   }
 
   async function deletePdf(pdfId) {
+    if (!token) {
+      alert("Authentication required. Please log in again.");
+      return;
+    }
+
     try {
       const response = await fetch(`http://localhost:5000/api/pdf/${pdfId}`, {
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       const data = await response.json();
 
       if (!response.ok) {
         console.error(data.message);
+        alert(data.message || "Failed to delete PDF.");
         return;
       }
 
@@ -157,6 +186,7 @@ export default function PDFChat() {
       }
     } catch (error) {
       console.error("Failed to delete PDF:", error);
+      alert("Failed to delete PDF.");
     }
   }
 
@@ -317,6 +347,7 @@ export default function PDFChat() {
               </div>
             )}
           </div>
+
           {/* QUESTION */}
 
           <div className="pdfask">

@@ -1,5 +1,7 @@
 const express = require("express");
+
 const router = express.Router();
+
 const {
   createEmail,
   getEmails,
@@ -9,11 +11,18 @@ const {
   generateEmail,
 } = require("../controllers/emailController");
 
-router.post("/", createEmail);
-router.get("/user/:userId", getEmails);
+const protect = require("../middleware/authMiddleware");
+
+router.post("/", protect, createEmail);
+
+router.get("/user/:userId", protect, getEmails);
+
 router.post("/generate", generateEmail);
-router.get("/:emailId", getEmail);
-router.put("/:emailId", updateEmail);
-router.delete("/:emailId", deleteEmail);
+
+router.get("/:emailId", protect, getEmail);
+
+router.put("/:emailId", protect, updateEmail);
+
+router.delete("/:emailId", protect, deleteEmail);
 
 module.exports = router;

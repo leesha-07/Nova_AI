@@ -14,13 +14,19 @@ export default function SmartNotes() {
     async function getNote() {
       try {
         const userId = localStorage.getItem("userId");
+        const token = localStorage.getItem("token");
 
-        if (!userId) {
-          throw new Error("User Id not found");
+        if (!userId || !token) {
+          throw new Error("Authentication information not found");
         }
 
         const response = await fetch(
           `http://localhost:5000/api/notes/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
         );
 
         if (!response.ok) {
@@ -48,12 +54,15 @@ export default function SmartNotes() {
     }
 
     try {
+      const token = localStorage.getItem("token");
+
       const response = await fetch(
         `http://localhost:5000/api/notes/${selectedNote._id}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             title: selectedNote.title,
@@ -82,14 +91,13 @@ export default function SmartNotes() {
 
   async function createNewNote() {
     try {
-      const userId = localStorage.getItem("userId");
+      const token = localStorage.getItem("token");
 
-      if (!userId) {
-        throw new Error("User Id not found");
+      if (!token) {
+        throw new Error("Authentication token not found");
       }
 
       const newNote = {
-        userId,
         title: "Untitled Note",
         content: "Start writing...",
       };
@@ -98,6 +106,7 @@ export default function SmartNotes() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(newNote),
       });
@@ -127,10 +136,15 @@ export default function SmartNotes() {
     }
 
     try {
+      const token = localStorage.getItem("token");
+
       const response = await fetch(
         `http://localhost:5000/api/notes/${selectedNote._id}`,
         {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
       );
 
@@ -171,12 +185,15 @@ export default function SmartNotes() {
 
       setSummarizingNoteId(selectedNote._id);
 
+      const token = localStorage.getItem("token");
+
       const response = await fetch(
         `http://localhost:5000/api/notes/${selectedNote._id}/summarize`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             prompt: summaryPrompt,
@@ -258,6 +275,7 @@ export default function SmartNotes() {
           </div>
 
           {/* Only show this when there are no notes */}
+
           {notes.length === 0 && (
             <button className="createNoteEmptyButton" onClick={createNewNote}>
               + Create Your First Note

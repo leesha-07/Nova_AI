@@ -34,13 +34,17 @@
 
 .pdfchat {
   width: 100%;
-  height: 100vh;
+  height: 100%;
   min-height: 0;
+
   display: flex;
   flex-direction: column;
+
   background: var(--bg);
   color: var(--text);
+
   overflow: hidden;
+
   box-sizing: border-box;
 }
 
@@ -51,15 +55,22 @@
 .pdfHeader {
   height: 70px;
   min-height: 70px;
+
   background: var(--navbar);
   border-bottom: 1px solid var(--border);
+
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   padding: 0 30px;
+
   position: relative;
+
   box-shadow: var(--shadow-sm);
+
   z-index: 10;
+
   box-sizing: border-box;
 }
 
@@ -67,34 +78,46 @@
 
 .pdfBrand {
   min-width: 180px;
+
   display: flex;
   align-items: center;
+
   gap: 0;
 }
 
 .pdfBrand h1 {
   margin: 0;
+
   font-size: 20px;
   font-weight: 700;
+
   letter-spacing: -0.5px;
+
   color: var(--primary-light);
 }
 
 .pdfBrand h1::before {
   content: "✨";
+
   color: var(--primary);
+
   margin-right: 7px;
+
   font-size: 24px;
 }
 
 .pdfBrand span {
   position: absolute;
+
   left: 50%;
+
   transform: translateX(-50%);
 
   margin: 0;
+
   font-size: 18px;
   font-weight: 600;
+
   color: var(--text);
 
   white-space: nowrap;
@@ -106,9 +129,11 @@
 
 .pdfUploadArea {
   min-width: 420px;
+
   display: flex;
   align-items: center;
   justify-content: flex-end;
+
   gap: 10px;
 }
 
@@ -116,6 +141,7 @@
 
 .pdfChooseButton {
   height: 40px;
+
   padding: 0 15px;
 
   display: inline-flex;
@@ -123,16 +149,20 @@
   justify-content: center;
 
   background: var(--card-light);
+
   color: var(--text-light);
 
   border: 1px solid var(--border);
+
   border-radius: 9px;
 
   font-size: 14px;
   font-weight: 600;
 
   cursor: pointer;
+
   transition: all 0.2s ease;
+
   box-sizing: border-box;
 }
 
@@ -153,6 +183,7 @@
   min-width: 120px;
 
   height: 40px;
+
   padding: 0 12px;
 
   display: flex;
@@ -160,26 +191,34 @@
   justify-content: center;
 
   background: var(--card);
+
   border: 1px solid var(--border);
+
   border-radius: 9px;
 
   box-sizing: border-box;
+
   overflow: hidden;
 }
 
 .selectedFileName {
   color: var(--text);
+
   font-size: 12px;
   font-weight: 600;
 
   white-space: nowrap;
+
   overflow: hidden;
+
   text-overflow: ellipsis;
 }
 
 .selectedFileSize {
   color: var(--text-muted);
+
   font-size: 11px;
+
   margin-top: 2px;
 }
 
@@ -187,6 +226,7 @@
 
 .uploadPdfButton {
   height: 40px;
+
   padding: 0 16px;
 
   background: linear-gradient(135deg, var(--primary), var(--primary-dark));
@@ -194,23 +234,28 @@
   color: white;
 
   border: none;
+
   border-radius: 9px;
 
   font-size: 14px;
   font-weight: 600;
 
   cursor: pointer;
+
   transition: all 0.2s ease;
 }
 
 .uploadPdfButton:hover:not(:disabled) {
   background: var(--primary-light);
+
   box-shadow: 0 4px 18px rgba(168, 85, 247, 0.35);
+
   transform: translateY(-1px);
 }
 
 .uploadPdfButton:disabled {
   opacity: 0.45;
+
   cursor: not-allowed;
 }
 
@@ -220,18 +265,27 @@
 
 .pdf-container {
   flex: 1;
+
   min-height: 0;
 
   display: grid;
+
   grid-template-columns: 360px minmax(0, 1fr);
 
   gap: 20px;
 
   width: 100%;
+
   padding: 24px 30px 30px;
 
   box-sizing: border-box;
-  overflow: hidden;
+
+  /*
+    Allow the main PDF area to scroll if the available
+    viewport becomes smaller than the content.
+  */
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* =========================
@@ -248,6 +302,7 @@
   background: var(--card);
 
   border: 1px solid var(--border);
+
   border-radius: 16px;
 
   box-shadow: var(--shadow-sm);
@@ -261,7 +316,9 @@
 
 .sectionHeader {
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
 
   gap: 15px;
@@ -279,6 +336,7 @@
   margin: 0;
 
   font-size: 18px;
+
   font-weight: 650;
 
   color: var(--text);
@@ -290,6 +348,7 @@
   color: var(--text-muted);
 
   font-size: 13px;
+
   line-height: 1.4;
 }
 
@@ -309,6 +368,7 @@
   color: var(--primary-light);
 
   font-size: 12px;
+
   font-weight: 600;
 }
 
@@ -318,9 +378,11 @@
 
 .pdfList {
   flex: 1;
+
   min-height: 0;
 
   display: flex;
+
   flex-direction: column;
 
   gap: 12px;
@@ -328,6 +390,7 @@
   padding: 18px;
 
   overflow-y: auto;
+
   overflow-x: hidden;
 
   box-sizing: border-box;
@@ -336,27 +399,24 @@
 /* Scrollbar */
 
 .pdfList::-webkit-scrollbar,
-.pdfresponse-card::-webkit-scrollbar,
-.markdownResponse::-webkit-scrollbar {
+.pdfresponse-card::-webkit-scrollbar {
   width: 7px;
 }
 
 .pdfList::-webkit-scrollbar-track,
-.pdfresponse-card::-webkit-scrollbar-track,
-.markdownResponse::-webkit-scrollbar-track {
+.pdfresponse-card::-webkit-scrollbar-track {
   background: transparent;
 }
 
 .pdfList::-webkit-scrollbar-thumb,
-.pdfresponse-card::-webkit-scrollbar-thumb,
-.markdownResponse::-webkit-scrollbar-thumb {
+.pdfresponse-card::-webkit-scrollbar-thumb {
   background: var(--border);
+
   border-radius: 10px;
 }
 
 .pdfList::-webkit-scrollbar-thumb:hover,
-.pdfresponse-card::-webkit-scrollbar-thumb:hover,
-.markdownResponse::-webkit-scrollbar-thumb:hover {
+.pdfresponse-card::-webkit-scrollbar-thumb:hover {
   background: var(--primary);
 }
 
@@ -366,9 +426,11 @@
 
 .pdf-card {
   width: 100%;
+
   flex-shrink: 0;
 
   display: flex;
+
   flex-direction: column;
 
   gap: 15px;
@@ -378,6 +440,7 @@
   background: var(--card-light);
 
   border: 1px solid var(--border);
+
   border-radius: 13px;
 
   box-sizing: border-box;
@@ -387,13 +450,17 @@
 
 .pdf-card:hover {
   background: var(--card-hover);
+
   border-color: #34415f;
+
   transform: translateY(-1px);
 }
 
 .pdf-card.selected-pdf {
   background: rgba(168, 85, 247, 0.09);
+
   border-color: var(--primary);
+
   box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.12);
 }
 
@@ -403,6 +470,7 @@
   min-width: 0;
 
   display: flex;
+
   align-items: center;
 
   gap: 12px;
@@ -415,7 +483,9 @@
   flex-shrink: 0;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 
   background: rgba(168, 85, 247, 0.14);
@@ -427,12 +497,15 @@
   color: var(--primary-light);
 
   font-size: 11px;
+
   font-weight: 800;
+
   letter-spacing: 0.5px;
 }
 
 .pdfFileDetails {
   min-width: 0;
+
   flex: 1;
 }
 
@@ -442,10 +515,13 @@
   color: var(--text);
 
   font-size: 14px;
+
   font-weight: 600;
 
   white-space: nowrap;
+
   overflow: hidden;
+
   text-overflow: ellipsis;
 }
 
@@ -457,7 +533,9 @@
 
 .readyStatus {
   display: inline-flex;
+
   align-items: center;
+
   gap: 6px;
 
   color: var(--text-muted);
@@ -482,6 +560,7 @@
 
 .pdfCardActions {
   display: grid;
+
   grid-template-columns: 1fr 1fr;
 
   gap: 8px;
@@ -495,6 +574,7 @@
   border-radius: 8px;
 
   font-size: 12px;
+
   font-weight: 600;
 
   cursor: pointer;
@@ -514,7 +594,9 @@
 
 .selectButton:hover {
   background: var(--primary);
+
   color: white;
+
   border-color: var(--primary);
 }
 
@@ -554,12 +636,15 @@
 
 .pdfEmptyState {
   flex: 1;
+
   min-height: 0;
 
   display: flex;
+
   flex-direction: column;
 
   align-items: center;
+
   justify-content: center;
 
   text-align: center;
@@ -572,7 +657,9 @@
   height: 54px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 
   margin-bottom: 15px;
@@ -590,6 +677,7 @@
   margin: 0;
 
   font-size: 15px;
+
   font-weight: 600;
 
   color: var(--text);
@@ -603,6 +691,7 @@
   color: var(--text-muted);
 
   font-size: 12px;
+
   line-height: 1.5;
 }
 
@@ -612,15 +701,20 @@
 
 .pdfChatWorkspace {
   min-width: 0;
+
   min-height: 0;
 
   display: grid;
 
-  grid-template-rows: auto auto minmax(0, 1fr);
+  grid-template-rows: auto auto minmax(300px, 1fr);
 
   gap: 16px;
 
-  overflow: hidden;
+  /*
+    Do not independently clip the whole workspace.
+    The response card itself handles its own scrolling.
+  */
+  overflow: visible;
 }
 
 /* =========================
@@ -633,6 +727,7 @@
   min-height: 68px;
 
   display: flex;
+
   align-items: center;
 
   gap: 14px;
@@ -657,7 +752,9 @@
   flex-shrink: 0;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 
   background: rgba(56, 189, 248, 0.1);
@@ -669,6 +766,7 @@
   color: var(--accent-cyan);
 
   font-size: 10px;
+
   font-weight: 800;
 }
 
@@ -676,6 +774,7 @@
   min-width: 0;
 
   display: flex;
+
   flex-direction: column;
 
   gap: 3px;
@@ -693,10 +792,13 @@
   color: var(--text);
 
   font-size: 14px;
+
   font-weight: 600;
 
   white-space: nowrap;
+
   overflow: hidden;
+
   text-overflow: ellipsis;
 }
 
@@ -728,6 +830,7 @@
   width: 100%;
 
   min-height: 105px;
+
   max-height: 180px;
 
   padding: 14px 16px;
@@ -743,6 +846,7 @@
   font-family: inherit;
 
   font-size: 14px;
+
   line-height: 1.5;
 
   resize: vertical;
@@ -768,6 +872,7 @@
 
 .pdfask textarea:disabled {
   opacity: 0.6;
+
   cursor: not-allowed;
 }
 
@@ -779,7 +884,9 @@
   min-height: 38px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
 
   gap: 15px;
@@ -791,6 +898,7 @@
   color: var(--text-muted);
 
   font-size: 11px;
+
   line-height: 1.4;
 }
 
@@ -810,6 +918,7 @@
   border-radius: 9px;
 
   font-size: 13px;
+
   font-weight: 600;
 
   cursor: pointer;
@@ -837,9 +946,11 @@
 
 .pdfresponse {
   min-width: 0;
-  min-height: 0;
+
+  min-height: 300px;
 
   display: flex;
+
   flex-direction: column;
 
   background: var(--card);
@@ -861,7 +972,9 @@
   flex-shrink: 0;
 
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
 
   gap: 15px;
@@ -877,6 +990,7 @@
   margin: 0;
 
   font-size: 17px;
+
   font-weight: 650;
 
   color: var(--text);
@@ -906,6 +1020,7 @@
   color: var(--primary-light);
 
   font-size: 10px;
+
   font-weight: 700;
 }
 
@@ -915,7 +1030,8 @@
 
 .pdfresponse-card {
   flex: 1;
-  min-height: 0;
+
+  min-height: 220px;
 
   margin: 18px;
 
@@ -928,6 +1044,7 @@
   border-radius: 12px;
 
   overflow-y: auto;
+
   overflow-x: hidden;
 
   box-sizing: border-box;
@@ -943,6 +1060,7 @@
   color: var(--text-light);
 
   font-size: 14px;
+
   line-height: 1.7;
 
   overflow-wrap: break-word;
@@ -957,6 +1075,7 @@
   line-height: 1.35;
 
   margin-top: 20px;
+
   margin-bottom: 9px;
 }
 
@@ -1049,9 +1168,11 @@
   height: 100%;
 
   display: flex;
+
   flex-direction: column;
 
   align-items: center;
+
   justify-content: center;
 
   text-align: center;
@@ -1059,6 +1180,7 @@
 
 .loadingDots {
   display: flex;
+
   align-items: center;
 
   gap: 5px;
@@ -1090,11 +1212,13 @@
   80%,
   100% {
     opacity: 0.35;
+
     transform: translateY(0);
   }
 
   40% {
     opacity: 1;
+
     transform: translateY(-4px);
   }
 }
@@ -1105,6 +1229,7 @@
   color: var(--text);
 
   font-size: 15px;
+
   font-weight: 600;
 }
 
@@ -1122,17 +1247,21 @@
 
 .responseEmptyState {
   height: 100%;
+
   min-height: 180px;
 
   display: flex;
+
   flex-direction: column;
 
   align-items: center;
+
   justify-content: center;
 
   text-align: center;
 
   padding: 25px;
+
   box-sizing: border-box;
 }
 
@@ -1141,7 +1270,9 @@
   height: 58px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 
   margin-bottom: 14px;
@@ -1161,6 +1292,7 @@
   color: var(--text);
 
   font-size: 16px;
+
   font-weight: 600;
 }
 
@@ -1184,6 +1316,7 @@
   flex-shrink: 0;
 
   display: flex;
+
   justify-content: flex-end;
 
   padding: 12px 18px;
@@ -1209,6 +1342,7 @@
   border-radius: 8px;
 
   font-size: 12px;
+
   font-weight: 600;
 
   cursor: pointer;
@@ -1252,11 +1386,18 @@
 
 @media (max-width: 850px) {
   .pdfchat {
+    height: 100%;
+
+    min-height: 0;
+
     overflow-y: auto;
+
+    overflow-x: hidden;
   }
 
   .pdfHeader {
     height: auto;
+
     min-height: 70px;
 
     flex-wrap: wrap;
@@ -1290,6 +1431,7 @@
     flex: none;
 
     display: flex;
+
     flex-direction: column;
 
     overflow: visible;
@@ -1303,6 +1445,8 @@
 
   .pdfChatWorkspace {
     min-height: 850px;
+
+    overflow: visible;
   }
 }
 
@@ -1313,6 +1457,7 @@
 
   .pdfBrand {
     width: 100%;
+
     justify-content: center;
   }
 
@@ -1330,6 +1475,7 @@
 
   .pdf-container {
     padding: 12px;
+
     gap: 14px;
   }
 
@@ -1351,11 +1497,13 @@
 
   .pdfresponse-card {
     margin: 12px;
+
     padding: 15px;
   }
 
   .questionActions {
     align-items: stretch;
+
     flex-direction: column;
   }
 

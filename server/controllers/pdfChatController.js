@@ -4,53 +4,128 @@ const { GoogleGenAI } = require("@google/genai");
 const genai = new GoogleGenAI({
   apiKey: process.env.PDF_GEMINI_API_KEY,
 });
+
 const createPdf = async (req, res) => {
-  const { userId, fileName, fileUrl, extractedText } = req.body;
-  const pdf = await Pdf.create({
-    userId,
-    fileName,
-    fileUrl,
-    extractedText,
-  });
-  res.status(201).json({ message: "PDFs created successfully", pdf });
+  try {
+    const userId = req.user.userId;
+
+    const { fileName, fileUrl, extractedText } = req.body;
+
+    const pdf = await Pdf.create({
+      userId,
+      fileName,
+      fileUrl,
+      extractedText,
+    });
+
+    res.status(201).json({
+      message: "PDFs created successfully",
+      pdf,
+    });
+  } catch (error) {
+    console.error("Create PDF Error:", error);
+
+    res.status(500).json({
+      message: "Something went wrong. Please try again later.",
+    });
+  }
 };
 
 const getPdf = async (req, res) => {
-  const { userId } = req.params;
-  const pdfs = await Pdf.find({ userId });
-  res.status(200).json({ message: "Found PDFs", pdfs });
+  try {
+    const userId = req.user.userId;
+
+    const pdfs = await Pdf.find({ userId });
+
+    res.status(200).json({
+      message: "Found PDFs",
+      pdfs,
+    });
+  } catch (error) {
+    console.error("Get PDFs Error:", error);
+
+    res.status(500).json({
+      message: "Something went wrong. Please try again later.",
+    });
+  }
 };
 
 const updatePdf = async (req, res) => {
-  const { pdfId } = req.params;
-  const { userId, fileName, fileUrl, extractedText } = req.body;
-  const pdf = await Pdf.findById(pdfId);
-  if (!pdf) {
-    return res.status(404).json({ message: "PDF was not found" });
-  }
-  pdf.userId = userId;
-  pdf.fileName = fileName;
-  pdf.fileUrl = fileUrl;
-  pdf.extractedText = extractedText;
+  try {
+    const { pdfId } = req.params;
+    const userId = req.user.userId;
 
-  await pdf.save();
-  res.status(200).json({ message: "PDF was updated successfully", pdf });
+    const { fileName, fileUrl, extractedText } = req.body;
+
+    const pdf = await Pdf.findOne({
+      _id: pdfId,
+      userId,
+    });
+
+    if (!pdf) {
+      return res.status(404).json({
+        message: "PDF was not found",
+      });
+    }
+
+    pdf.fileName = fileName;
+    pdf.fileUrl = fileUrl;
+    pdf.extractedText = extractedText;
+
+    await pdf.save();
+
+    res.status(200).json({
+      message: "PDF was updated successfully",
+      pdf,
+    });
+  } catch (error) {
+    console.error("Update PDF Error:", error);
+
+    res.status(500).json({
+      message: "Something went wrong. Please try again later.",
+    });
+  }
 };
 
 const deletePdf = async (req, res) => {
-  const { pdfId } = req.params;
-  const pdf = await Pdf.findById(pdfId);
-  if (!pdf) {
-    return res.status(404).json({ message: "PDF was not found" });
+  try {
+    const { pdfId } = req.params;
+    const userId = req.user.userId;
+
+    const pdf = await Pdf.findOne({
+      _id: pdfId,
+      userId,
+    });
+
+    if (!pdf) {
+      return res.status(404).json({
+        message: "PDF was not found",
+      });
+    }
+
+    await pdf.deleteOne();
+
+    res.status(200).json({
+      message: "PDF was deleted successfully",
+    });
+  } catch (error) {
+    console.error("Delete PDF Error:", error);
+
+    res.status(500).json({
+      message: "Something went wrong. Please try again later.",
+    });
   }
-  await pdf.deleteOne();
-  res.status(200).json({ message: "PDF was deleted successfully" });
 };
+
 const summarizePdf = async (req, res) => {
   try {
     const { pdfId } = req.params;
+    const userId = req.user.userId;
 
-    const pdf = await Pdf.findById(pdfId);
+    const pdf = await Pdf.findOne({
+      _id: pdfId,
+      userId,
+    });
 
     if (!pdf) {
       return res.status(404).json({
@@ -94,13 +169,14 @@ ${pdf.extractedText}`,
 
     res.status(500).json({
       message: "PDF summary failed",
-      error: error.message,
     });
   }
 };
+
 const askPdfQuestion = async (req, res) => {
   try {
     const { pdfId } = req.params;
+    const userId = req.user.userId;
     const { question } = req.body;
 
     if (!question || question.trim() === "") {
@@ -109,7 +185,10 @@ const askPdfQuestion = async (req, res) => {
       });
     }
 
-    const pdf = await Pdf.findById(pdfId);
+    const pdf = await Pdf.findOne({
+      _id: pdfId,
+      userId,
+    });
 
     if (!pdf) {
       return res.status(404).json({
@@ -154,10 +233,10 @@ ${question}`,
 
     res.status(500).json({
       message: "Failed to answer PDF question",
-      error: error.message,
     });
   }
 };
+
 module.exports = {
   createPdf,
   getPdf,

@@ -30,6 +30,7 @@ export default function Login() {
 
     if (response.ok) {
       localStorage.setItem("userId", data.userId);
+      localStorage.setItem("token", data.token);
       navigate("/dashboard");
     } else {
       setMessage(data.message);

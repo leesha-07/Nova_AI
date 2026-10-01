@@ -3,6 +3,7 @@ import "../styles/Search.css";
 
 export default function Search() {
   const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
 
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState(null);
@@ -20,6 +21,11 @@ export default function Search() {
         `http://localhost:5000/api/search/${userId}?query=${encodeURIComponent(
           query,
         )}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
 
       const data = await response.json();

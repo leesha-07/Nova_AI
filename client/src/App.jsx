@@ -15,7 +15,7 @@ import ResumeAnalyzer from "./pages/ResumeAnalyzer";
 import Profile from "./pages/Profile";
 import Search from "./pages/Search";
 import ForgotPassword from "./pages/ForgotPassword";
-
+import ResetPassword from "./pages/ResetPassword";
 function Home() {
   const [message, setMessage] = useState("Loading...");
 
@@ -52,6 +52,7 @@ function App() {
         <Route path="/resume" element={<ResumeAnalyzer />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
         <Route path="/forgotPassword" element={<ForgotPassword />} />
       </Routes>
     </BrowserRouter>

@@ -9,30 +9,63 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
-
+  const [messageType, setMessageType] = useState("");
   async function handleRegister() {
-    const response = await fetch("http://localhost:5000/api/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+    setMessage("");
 
-      body: JSON.stringify({
-        name: name,
-        email: email,
-        password: password,
-        confirmPassword: confirmPassword,
-      }),
-    });
+    if (!name.trim() || !email.trim() || !password || !confirmPassword) {
+      setMessage("All fields are required");
+      return;
+    }
 
-    const data = await response.json();
+    if (name.trim().length < 2) {
+      setMessage("Name must be at least 2 characters long");
+      return;
+    }
 
-    console.log("STATUS:", response.status);
-    console.log("RESPONSE:", data);
+    if (password.length < 8) {
+      setMessage("Password must be at least 8 characters long");
+      return;
+    }
 
-    setMessage(data.message);
+    if (password !== confirmPassword) {
+      setMessage("Passwords do not match");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim().toLowerCase(),
+          password,
+          confirmPassword,
+        }),
+      });
+
+      const data = await response.json();
+
+      console.log("STATUS:", response.status);
+      console.log("RESPONSE:", data);
+
+      setMessage(data.message);
+
+      if (response.ok) {
+        setName("");
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
+      }
+    } catch (error) {
+      console.error("Registration Error:", error);
+
+      setMessage("Unable to connect to the server. Please try again later.");
+    }
   }
-
   return (
     <div className="auth-container">
       <div className="auth-card">
@@ -100,7 +133,7 @@ export default function Register() {
           onClick={handleRegister}
         />
 
-        {message && <p className="auth-message">{message}</p>}
+        {message && <p className={`auth-message ${messageType}`}>{message}</p>}
 
         <div className="auth-footer">
           <p className="auth-account">

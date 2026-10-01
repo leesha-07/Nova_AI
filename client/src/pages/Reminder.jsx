@@ -4,6 +4,7 @@ import { urlBase64ToUint8Array } from "../utils/vapid";
 
 export default function Reminder() {
   const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
 
   const [notificationPermission, setNotificationPermission] = useState("");
 
@@ -16,8 +17,15 @@ export default function Reminder() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    setNotificationPermission(Notification.permission);
+    const permission = Notification.permission;
+
+    setNotificationPermission(permission);
+
     getReminders();
+
+    if (permission === "granted") {
+      requestNotificationPermission();
+    }
   }, []);
 
   // =========================
@@ -26,8 +34,17 @@ export default function Reminder() {
 
   async function getReminders() {
     try {
+      if (!userId || !token) {
+        throw new Error("Authentication information not found");
+      }
+
       const response = await fetch(
         `http://localhost:5000/api/reminder/user/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
 
       const data = await response.json();
@@ -78,6 +95,10 @@ export default function Reminder() {
     }
 
     try {
+      if (!token) {
+        throw new Error("Authentication token not found");
+      }
+
       // UPDATE
       if (selectedReminder) {
         const response = await fetch(
@@ -86,6 +107,7 @@ export default function Reminder() {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
               title: title,
@@ -116,9 +138,9 @@ export default function Reminder() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          userId: userId,
           title: title,
           message: message,
           reminderDate: reminderDate,
@@ -160,10 +182,17 @@ export default function Reminder() {
     }
 
     try {
+      if (!token) {
+        throw new Error("Authentication token not found");
+      }
+
       const response = await fetch(
         `http://localhost:5000/api/reminder/${selectedReminder._id}`,
         {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
       );
 
@@ -193,12 +222,17 @@ export default function Reminder() {
     }
 
     try {
+      if (!token) {
+        throw new Error("Authentication token not found");
+      }
+
       const response = await fetch(
         `http://localhost:5000/api/reminder/${selectedReminder._id}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             title: selectedReminder.title,
@@ -231,6 +265,10 @@ export default function Reminder() {
 
   async function requestNotificationPermission() {
     try {
+      if (!token) {
+        throw new Error("Authentication token not found");
+      }
+
       const permission = await Notification.requestPermission();
 
       setNotificationPermission(permission);
@@ -251,23 +289,34 @@ export default function Reminder() {
         applicationServerKey: urlBase64ToUint8Array(data.publicKey),
       });
 
+      const subscriptionData = subscription.toJSON();
+
       const saveResponse = await fetch(
         "http://localhost:5000/api/push/subscribe",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            userId: userId,
-            endpoint: subscription.endpoint,
+            endpoint: subscriptionData.endpoint,
             keys: {
-              p256dh: subscription.toJSON().keys.p256dh,
-              auth: subscription.toJSON().keys.auth,
+              p256dh: subscriptionData.keys.p256dh,
+              auth: subscriptionData.keys.auth,
             },
           }),
         },
       );
+
+      const saveData = await saveResponse.json();
+
+      if (!saveResponse.ok) {
+        console.error("Failed to save push subscription:", saveData.message);
+        return;
+      }
+
+      console.log("Push subscription saved:", saveData);
     } catch (error) {
       console.error("Push notification error:", error);
     }
@@ -346,23 +395,16 @@ export default function Reminder() {
 
   return (
     <div className="reminder">
-      {/* =========================
-          HEADER
-      ========================= */}
-
       <div className="reminderHeader">
         <div className="reminderLogo">
           <span>✨</span>
           Nova AI
         </div>
+
         <h2>Reminder Manager</h2>
 
         <button onClick={createNewReminder}>+ Add Reminder</button>
       </div>
-
-      {/* =========================
-          NOTIFICATION STATUS
-      ========================= */}
 
       <div className="notificationStatus">
         <div>
@@ -390,15 +432,7 @@ export default function Reminder() {
         )}
       </div>
 
-      {/* =========================
-          MAIN
-      ========================= */}
-
       <div className="reminderMaincontent">
-        {/* =========================
-            UPCOMING
-        ========================= */}
-
         <div className="reminderleftcard">
           <div className="reminderCardHeader">
             <div>
@@ -443,10 +477,6 @@ export default function Reminder() {
             )}
           </div>
         </div>
-
-        {/* =========================
-            TODAY
-        ========================= */}
 
         <div className="reminderrightcard">
           <div className="reminderCardHeader">
@@ -494,10 +524,6 @@ export default function Reminder() {
             )}
           </div>
         </div>
-
-        {/* =========================
-            DETAILS
-        ========================= */}
 
         <div className="reminderbottomcard">
           <div className="detailsHeader">

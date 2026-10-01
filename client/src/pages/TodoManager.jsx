@@ -11,13 +11,19 @@ export default function TodoManager() {
     async function getTodos() {
       try {
         const userId = localStorage.getItem("userId");
+        const token = localStorage.getItem("token");
 
-        if (!userId) {
-          throw new Error("User Id not found");
+        if (!userId || !token) {
+          throw new Error("Authentication information not found");
         }
 
         const response = await fetch(
           `http://localhost:5000/api/todo/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
         );
 
         if (!response.ok) {
@@ -45,12 +51,19 @@ export default function TodoManager() {
     }
 
     try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        throw new Error("Authentication token not found");
+      }
+
       const response = await fetch(
         `http://localhost:5000/api/todo/${selectedTodo._id}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             title: selectedTodo.title,
@@ -82,14 +95,13 @@ export default function TodoManager() {
 
   async function createNewTodo() {
     try {
-      const userId = localStorage.getItem("userId");
+      const token = localStorage.getItem("token");
 
-      if (!userId) {
-        throw new Error("User Id not found");
+      if (!token) {
+        throw new Error("Authentication token not found");
       }
 
       const newTodo = {
-        userId,
         title: "Untitled Todo",
         content: "Start writing...",
       };
@@ -98,6 +110,7 @@ export default function TodoManager() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(newTodo),
       });
@@ -121,10 +134,19 @@ export default function TodoManager() {
     }
 
     try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        throw new Error("Authentication token not found");
+      }
+
       const response = await fetch(
         `http://localhost:5000/api/todo/${selectedTodo._id}`,
         {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
       );
 

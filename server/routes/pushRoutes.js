@@ -5,6 +5,8 @@ const {
   testPushNotification,
 } = require("../controllers/pushController");
 
+const protect = require("../middleware/authMiddleware");
+
 const router = express.Router();
 
 router.get("/public-key", (req, res) => {
@@ -13,8 +15,8 @@ router.get("/public-key", (req, res) => {
   });
 });
 
-router.post("/subscribe", saveSubscription);
+router.post("/subscribe", protect, saveSubscription);
 
-router.post("/test", testPushNotification);
+router.post("/test", protect, testPushNotification);
 
 module.exports = router;

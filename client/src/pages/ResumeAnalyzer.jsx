@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 export default function ResumeAnalyser() {
   const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
 
   const [resumes, setResumes] = useState([]);
   const [selectedResume, setSelectedResume] = useState(null);
@@ -20,10 +21,18 @@ export default function ResumeAnalyser() {
 
   async function getResumes() {
     try {
-      if (!userId) return;
+      if (!userId || !token) {
+        setError("Authentication required");
+        return;
+      }
 
       const response = await fetch(
         `http://localhost:5000/api/resume/user/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
 
       const data = await response.json();
@@ -66,16 +75,23 @@ export default function ResumeAnalyser() {
       return;
     }
 
+    if (!token) {
+      setError("Authentication required");
+      return;
+    }
+
     try {
       setUploading(true);
 
       const formData = new FormData();
 
       formData.append("resume", file);
-      formData.append("userId", userId);
 
       const response = await fetch("http://localhost:5000/api/resume/upload", {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         body: formData,
       });
 
@@ -108,6 +124,11 @@ export default function ResumeAnalyser() {
       return;
     }
 
+    if (!token) {
+      setError("Authentication required");
+      return;
+    }
+
     try {
       setAnalyzing(true);
 
@@ -115,6 +136,9 @@ export default function ResumeAnalyser() {
         `http://localhost:5000/api/resume/${selectedResume._id}/analyze`,
         {
           method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
       );
 
@@ -150,6 +174,11 @@ export default function ResumeAnalyser() {
       return;
     }
 
+    if (!token) {
+      setError("Authentication required");
+      return;
+    }
+
     try {
       setDeleting(true);
 
@@ -157,6 +186,9 @@ export default function ResumeAnalyser() {
         `http://localhost:5000/api/resume/${selectedResume._id}`,
         {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
       );
 

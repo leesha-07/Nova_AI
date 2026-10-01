@@ -11,7 +11,6 @@ const storage = multer.diskStorage({
 
   filename: (req, file, cb) => {
     const uniqueName = Date.now() + "-" + file.originalname;
-
     cb(null, uniqueName);
   },
 });
@@ -34,13 +33,7 @@ const upload = multer({
 
 const uploadPdf = async (req, res) => {
   try {
-    const { userId } = req.body;
-
-    if (!userId) {
-      return res.status(400).json({
-        message: "User ID is required",
-      });
-    }
+    const userId = req.user.userId;
 
     if (!req.file) {
       return res.status(400).json({
@@ -68,7 +61,6 @@ const uploadPdf = async (req, res) => {
 
     res.status(500).json({
       message: "PDF upload failed",
-      error: error.message,
     });
   }
 };

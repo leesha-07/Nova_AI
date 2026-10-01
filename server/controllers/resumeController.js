@@ -7,8 +7,9 @@ const genai = new GoogleGenAI({
 
 const createResume = async (req, res) => {
   try {
+    const userId = req.user.userId;
+
     const {
-      userId,
       fileName,
       fileSize,
       fileUrl,
@@ -44,14 +45,13 @@ const createResume = async (req, res) => {
 
     res.status(500).json({
       message: "Failed to create resume",
-      error: error.message,
     });
   }
 };
 
 const getResumes = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const userId = req.user.userId;
 
     const resumes = await Resume.find({ userId });
 
@@ -64,7 +64,6 @@ const getResumes = async (req, res) => {
 
     res.status(500).json({
       message: "Failed to get resumes",
-      error: error.message,
     });
   }
 };
@@ -72,8 +71,12 @@ const getResumes = async (req, res) => {
 const getResume = async (req, res) => {
   try {
     const { resumeId } = req.params;
+    const userId = req.user.userId;
 
-    const resume = await Resume.findById(resumeId);
+    const resume = await Resume.findOne({
+      _id: resumeId,
+      userId,
+    });
 
     if (!resume) {
       return res.status(404).json({
@@ -90,7 +93,6 @@ const getResume = async (req, res) => {
 
     res.status(500).json({
       message: "Failed to get resume",
-      error: error.message,
     });
   }
 };
@@ -98,6 +100,7 @@ const getResume = async (req, res) => {
 const updateResume = async (req, res) => {
   try {
     const { resumeId } = req.params;
+    const userId = req.user.userId;
 
     const {
       fileName,
@@ -112,7 +115,10 @@ const updateResume = async (req, res) => {
       suggestions,
     } = req.body;
 
-    const resume = await Resume.findById(resumeId);
+    const resume = await Resume.findOne({
+      _id: resumeId,
+      userId,
+    });
 
     if (!resume) {
       return res.status(404).json({
@@ -142,7 +148,6 @@ const updateResume = async (req, res) => {
 
     res.status(500).json({
       message: "Failed to update resume",
-      error: error.message,
     });
   }
 };
@@ -150,8 +155,12 @@ const updateResume = async (req, res) => {
 const deleteResume = async (req, res) => {
   try {
     const { resumeId } = req.params;
+    const userId = req.user.userId;
 
-    const resume = await Resume.findById(resumeId);
+    const resume = await Resume.findOne({
+      _id: resumeId,
+      userId,
+    });
 
     if (!resume) {
       return res.status(404).json({
@@ -169,7 +178,6 @@ const deleteResume = async (req, res) => {
 
     res.status(500).json({
       message: "Failed to delete resume",
-      error: error.message,
     });
   }
 };
@@ -177,8 +185,12 @@ const deleteResume = async (req, res) => {
 const analyzeResume = async (req, res) => {
   try {
     const { resumeId } = req.params;
+    const userId = req.user.userId;
 
-    const resume = await Resume.findById(resumeId);
+    const resume = await Resume.findOne({
+      _id: resumeId,
+      userId,
+    });
 
     if (!resume) {
       return res.status(404).json({
@@ -281,7 +293,6 @@ Do not include explanations outside the JSON.
 
     res.status(500).json({
       message: "Failed to analyze resume",
-      error: error.message,
     });
   }
 };

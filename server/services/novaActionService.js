@@ -15,6 +15,7 @@ const pdfGenai = new GoogleGenAI({
 const resumeGenai = new GoogleGenAI({
   apiKey: process.env.Resume_GEMINI_API_KEY,
 });
+
 function escapeRegex(text) {
   return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
@@ -626,13 +627,74 @@ async function executeNovaActions(actions, userId, originalMessage) {
           success: true,
           message: `Note deleted: ${deletedTitle}`,
         });
-      } else if (action.type === "GET_PDFS") {
+      } else if (action.type === "GET_NOTE") {
         /*
-        ==============================================
-        GET PDFS
-        ==============================================
+      ==============================================
+      GET NOTE
+      ==============================================
+      */
+        const data = action.data || {};
+
+        let note;
+
+        /*
+        First try Note ID
         */
 
+        if (data.noteId) {
+          note = await Note.findOne({
+            _id: data.noteId,
+            userId,
+          });
+        }
+
+        /*
+        Otherwise try exact Note title
+        */
+
+        if (!note && data.title) {
+          note = await Note.findOne({
+            userId,
+            title: new RegExp(`^${escapeRegex(data.title)}$`, "i"),
+          });
+        }
+
+        /*
+        Note not found
+        */
+
+        if (!note) {
+          actionResults.push({
+            action: "GET_NOTE",
+            success: false,
+            message: "Note was not found.",
+          });
+
+          continue;
+        }
+
+        /*
+        Return the actual note content.
+        No AI call is required here.
+        */
+
+        actionResults.push({
+          action: "GET_NOTE",
+          success: true,
+          message: `Note found: ${note.title}`,
+          data: {
+            noteId: note._id,
+            title: note.title,
+            content: note.content,
+            summary: note.summary || "",
+          },
+        });
+      } else if (action.type === "GET_PDFS") {
+        /*
+      ==============================================
+      GET PDFS
+      ==============================================
+      */
         const pdfs = await Pdf.find({ userId }).sort({
           createdAt: -1,
         });
@@ -645,11 +707,10 @@ async function executeNovaActions(actions, userId, originalMessage) {
         });
       } else if (action.type === "ASK_PDF") {
         /*
-        ==============================================
-        ASK PDF
-        ==============================================
-        */
-
+      ==============================================
+      ASK PDF
+      ==============================================
+      */
         const data = action.data || {};
 
         if (!data.question) {
@@ -658,14 +719,12 @@ async function executeNovaActions(actions, userId, originalMessage) {
             success: false,
             message: "A question is required for the PDF.",
           });
+
           continue;
         }
 
         let pdf;
 
-        /*
-        First try PDF ID
-        */
         if (data.pdfId) {
           pdf = await Pdf.findOne({
             _id: data.pdfId,
@@ -673,10 +732,6 @@ async function executeNovaActions(actions, userId, originalMessage) {
           });
         }
 
-        /*
-        If PDF ID was not provided,
-        try the PDF file name.
-        */
         if (!pdf && data.fileName) {
           pdf = await Pdf.findOne({
             userId,
@@ -684,9 +739,6 @@ async function executeNovaActions(actions, userId, originalMessage) {
           });
         }
 
-        /*
-        If still not found, use the latest PDF.
-        */
         if (!pdf) {
           pdf = await Pdf.findOne({ userId }).sort({
             createdAt: -1,
@@ -699,6 +751,7 @@ async function executeNovaActions(actions, userId, originalMessage) {
             success: false,
             message: "No PDF was found.",
           });
+
           continue;
         }
 
@@ -708,14 +761,9 @@ async function executeNovaActions(actions, userId, originalMessage) {
             success: false,
             message: "The selected PDF has no extracted text.",
           });
+
           continue;
         }
-
-        /*
-        IMPORTANT:
-        This uses the PDF AI API key,
-        NOT the Chat AI key.
-        */
 
         const response = await pdfGenai.interactions.create({
           model: "gemini-3.1-flash-lite",
@@ -725,6 +773,7 @@ async function executeNovaActions(actions, userId, originalMessage) {
 Do not invent information.
 
 If the answer cannot be found in the PDF, say:
+
 "The answer is not available in the uploaded PDF."
 
 Keep the answer clear and concise.
@@ -755,11 +804,10 @@ ${data.question}`,
         });
       } else if (action.type === "SUMMARIZE_PDF") {
         /*
-        ==============================================
-        SUMMARIZE PDF
-        ==============================================
-        */
-
+      ==============================================
+      SUMMARIZE PDF
+      ==============================================
+      */
         const data = action.data || {};
 
         let pdf;
@@ -790,6 +838,7 @@ ${data.question}`,
             success: false,
             message: "No PDF was found.",
           });
+
           continue;
         }
 
@@ -799,12 +848,9 @@ ${data.question}`,
             success: false,
             message: "The selected PDF has no extracted text.",
           });
+
           continue;
         }
-
-        /*
-        PDF-specific AI
-        */
 
         const response = await pdfGenai.interactions.create({
           model: "gemini-3.1-flash-lite",
@@ -812,6 +858,7 @@ ${data.question}`,
           input: `Summarize the following PDF content clearly and concisely.
 
 Focus on:
+
 - Main purpose
 - Important points
 - Key findings
@@ -839,11 +886,10 @@ ${pdf.extractedText}`,
         });
       } else if (action.type === "GET_RESUMES") {
         /*
-        ==============================================
-        GET RESUMES
-        ==============================================
-        */
-
+      ==============================================
+      GET RESUMES
+      ==============================================
+      */
         const resumes = await Resume.find({ userId }).sort({
           createdAt: -1,
         });
@@ -856,18 +902,13 @@ ${pdf.extractedText}`,
         });
       } else if (action.type === "ANALYZE_RESUME") {
         /*
-        ==============================================
-        ANALYZE RESUME
-        ==============================================
-        */
-
+      ==============================================
+      ANALYZE RESUME
+      ==============================================
+      */
         const data = action.data || {};
 
         let resume;
-
-        /*
-        First try Resume ID
-        */
 
         if (data.resumeId) {
           resume = await Resume.findOne({
@@ -876,20 +917,12 @@ ${pdf.extractedText}`,
           });
         }
 
-        /*
-        Otherwise try file name.
-        */
-
         if (!resume && data.fileName) {
           resume = await Resume.findOne({
             userId,
             fileName: new RegExp(`^${escapeRegex(data.fileName)}$`, "i"),
           });
         }
-
-        /*
-        Otherwise use latest saved resume.
-        */
 
         if (!resume) {
           resume = await Resume.findOne({ userId }).sort({
@@ -903,6 +936,7 @@ ${pdf.extractedText}`,
             success: false,
             message: "No resume was found.",
           });
+
           continue;
         }
 
@@ -912,19 +946,14 @@ ${pdf.extractedText}`,
             success: false,
             message: "The selected resume has no extracted text.",
           });
+
           continue;
         }
-
-        /*
-        IMPORTANT:
-        Resume uses its own AI API key.
-        */
 
         const response = await resumeGenai.interactions.create({
           model: "gemini-3.1-flash-lite",
 
-          input: `
-Analyze the following resume.
+          input: `Analyze the following resume.
 
 Resume:
 
@@ -946,29 +975,38 @@ Use exactly this structure:
 Rules:
 
 overallScore:
+
 Give an overall resume score from 0 to 100.
 
 atsScore:
+
 Give an ATS compatibility score from 0 to 100.
 
 grammar:
+
 Give a grammar and writing quality score from 0 to 100.
 
 keywords:
+
 Return important job-related keywords found in the resume.
+
 Return as an array of strings.
 
 skills:
+
 Return technical and professional skills found in the resume.
+
 Return as an array of strings.
 
 suggestions:
+
 Return 4 to 6 useful suggestions for improving the resume.
+
 Return as an array of strings.
 
 Do not include Markdown.
-Do not include explanations outside the JSON.
-`,
+
+Do not include explanations outside the JSON.`,
         });
 
         let result = response.output_text;
@@ -995,9 +1033,7 @@ Do not include explanations outside the JSON.
         }
 
         resume.overallScore = Number(analysis.overallScore) || 0;
-
         resume.atsScore = Number(analysis.atsScore) || 0;
-
         resume.grammar = Number(analysis.grammar) || 0;
 
         resume.keywords = Array.isArray(analysis.keywords)

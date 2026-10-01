@@ -24,13 +24,9 @@ VOICE AI
 
 const askVoiceAI = async (req, res) => {
   try {
-    const { userId, message, interactionID } = req.body;
+    const { message, interactionID } = req.body;
 
-    if (!userId) {
-      return res.status(400).json({
-        message: "User ID is required",
-      });
-    }
+    const userId = req.user.userId;
 
     if (!message || message.trim() === "") {
       return res.status(400).json({
@@ -107,6 +103,7 @@ DELETE_STUDY_PLAN
 CREATE_NOTE
 UPDATE_NOTE
 DELETE_NOTE
+GET_NOTE
 
 GET_EMAILS
 CREATE_EMAIL
@@ -430,7 +427,56 @@ Data:
 
 The user may give the note title instead of ID.
 
+==================================================
+GET NOTE
+==================================================
 
+Use this action when the user asks Nova to:
+
+- find a note
+- show a note
+- retrieve a note
+- read a note
+- show the content of a note
+- find my note titled ...
+- what is inside my note ...
+- show me the complete content of my note
+
+Data:
+
+{
+  "noteId": "existing note id or null",
+  "title": "note title or null"
+}
+
+The user may give the note title instead of MongoDB ID.
+
+If the user gives a note title, put the exact title in "title".
+
+If the user gives a MongoDB ID, put it in "noteId".
+
+Do not invent note content.
+
+The system will retrieve the actual note from the database.
+
+Example:
+
+User:
+Find my note titled "Nova AI Documentation" and show me the complete content.
+
+Return:
+
+{
+  "actions": [
+    {
+      "type": "GET_NOTE",
+      "data": {
+        "noteId": null,
+        "title": "Nova AI Documentation"
+      }
+    }
+  ]
+}
 ==================================================
 GET EMAILS
 ==================================================
@@ -900,8 +946,7 @@ ${failedActions.map((result) => `- ${result.message}`).join("\n")}
       model: "gemini-3.1-flash-lite",
 
       input: `
-You are Nova AI, the user's personal productivity
-assistant.
+You are Nova AI, the user's personal productivity assistant.
 
 The user gave this voice command:
 
@@ -909,21 +954,24 @@ ${message}
 
 Nova executed the requested actions.
 
-${actionSummary}
+Execution results:
 
-Respond naturally and briefly.
+${JSON.stringify(actionResults, null, 2)}
 
-Tell the user what was successfully done.
+Respond naturally and clearly.
 
-If an email was generated, briefly tell the user
-that the email was generated and saved.
+IMPORTANT RULES:
 
-If something failed, explain what could not be done.
+- Use the actual data returned in the execution results.
+- If a GET_NOTE action succeeded, speak the ACTUAL note title and COMPLETE note content.
+- Do not use placeholders such as "[Insert note content here]".
+- Do not invent note content.
+- Do not modify or summarize note content when the user asks for the complete content.
+- If something failed, explain what could not be completed.
+- Do not claim that an action was completed unless it appears in the execution results.
+- Do not invent additional actions.
 
-Do not invent any additional actions.
-
-Do not say that you performed an action unless it
-appears in the execution results above.
+If the user asked to find or show a note, directly provide the retrieved note content.
 
 Keep the response suitable for speaking aloud.
 Do not use Markdown.
@@ -954,7 +1002,9 @@ CREATE VOICE HISTORY
 
 const createVoice = async (req, res) => {
   try {
-    const { userId, command, response } = req.body;
+    const userId = req.user.userId;
+
+    const { command, response } = req.body;
 
     const voice = await Voice.create({
       userId,
@@ -967,9 +1017,10 @@ const createVoice = async (req, res) => {
       voice,
     });
   } catch (error) {
+    console.error("Create voice error:", error);
+
     res.status(500).json({
       message: "Failed to save voice conversation",
-      error: error.message,
     });
   }
 };
@@ -982,7 +1033,7 @@ GET VOICE HISTORY
 
 const getVoices = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const userId = req.user.userId;
 
     const voice = await Voice.find({ userId });
 
@@ -991,9 +1042,10 @@ const getVoices = async (req, res) => {
       voice,
     });
   } catch (error) {
+    console.error("Get voice history error:", error);
+
     res.status(500).json({
       message: "Failed to get voice history",
-      error: error.message,
     });
   }
 };
@@ -1007,8 +1059,12 @@ GET ONE VOICE
 const getVoice = async (req, res) => {
   try {
     const { voiceId } = req.params;
+    const userId = req.user.userId;
 
-    const voice = await Voice.findById(voiceId);
+    const voice = await Voice.findOne({
+      _id: voiceId,
+      userId,
+    });
 
     if (!voice) {
       return res.status(404).json({
@@ -1021,9 +1077,10 @@ const getVoice = async (req, res) => {
       voice,
     });
   } catch (error) {
+    console.error("Get voice error:", error);
+
     res.status(500).json({
       message: "Failed to get voice document",
-      error: error.message,
     });
   }
 };
@@ -1037,8 +1094,12 @@ DELETE VOICE
 const deleteVoice = async (req, res) => {
   try {
     const { voiceId } = req.params;
+    const userId = req.user.userId;
 
-    const voice = await Voice.findById(voiceId);
+    const voice = await Voice.findOne({
+      _id: voiceId,
+      userId,
+    });
 
     if (!voice) {
       return res.status(404).json({
@@ -1052,9 +1113,10 @@ const deleteVoice = async (req, res) => {
       message: "Voice document was deleted successfully",
     });
   } catch (error) {
+    console.error("Delete voice error:", error);
+
     res.status(500).json({
       message: "Failed to delete voice document",
-      error: error.message,
     });
   }
 };

@@ -4,6 +4,7 @@ import ReactMarkdown from "react-markdown";
 
 export default function EmailWriter() {
   const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
 
   const [recipient, setRecipient] = useState("");
   const [subject, setSubject] = useState("");
@@ -23,11 +24,16 @@ export default function EmailWriter() {
 
   useEffect(() => {
     async function getEmails() {
-      if (!userId) return;
+      if (!userId || !token) return;
 
       try {
         const response = await fetch(
           `http://localhost:5000/api/email/user/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
         );
 
         const data = await response.json();
@@ -41,7 +47,7 @@ export default function EmailWriter() {
     }
 
     getEmails();
-  }, [userId]);
+  }, [userId, token]);
 
   function handleNewEmail() {
     setRecipient("");
@@ -84,7 +90,6 @@ export default function EmailWriter() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          userId,
           recipient,
           subject,
           purpose,
@@ -114,6 +119,11 @@ export default function EmailWriter() {
       return;
     }
 
+    if (!token) {
+      setError("Authentication required.");
+      return;
+    }
+
     setError("");
     setStatusMessage("");
 
@@ -124,9 +134,9 @@ export default function EmailWriter() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          userId,
           subject,
           purpose,
           tone,
@@ -186,11 +196,19 @@ export default function EmailWriter() {
     setError("");
     setStatusMessage("");
 
+    if (!token) {
+      setError("Authentication required.");
+      return;
+    }
+
     try {
       const response = await fetch(
         `http://localhost:5000/api/email/${emailId}`,
         {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
       );
 

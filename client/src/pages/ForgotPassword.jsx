@@ -1,21 +1,27 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Button from "../components/Button.jsx";
 import { Link } from "react-router-dom";
 import "../styles/Auth.css";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
-  const [resetToken, setResetToken] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [showResetForm, setShowResetForm] = useState(false);
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function handleForgotPassword() {
-    if (!email) {
-      alert("Please enter your registered email");
+    setMessage("");
+    setMessageType("");
+
+    if (!email.trim()) {
+      setMessage("Please enter your registered email.");
+      setMessageType("error");
       return;
     }
 
     try {
+      setLoading(true);
+
       const response = await fetch(
         "http://localhost:5000/api/auth/forgot-password",
         {
@@ -24,7 +30,7 @@ export default function ForgotPassword() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            email: email,
+            email: email.trim().toLowerCase(),
           }),
         },
       );
@@ -32,62 +38,21 @@ export default function ForgotPassword() {
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.message);
+        setMessage(data.message || "Unable to send reset email.");
+        setMessageType("error");
         return;
       }
 
-      setResetToken(data.resetToken);
-      setShowResetForm(true);
-
-      alert("Reset token generated successfully");
+      setMessage(
+        data.message || "Password reset link has been sent to your email.",
+      );
+      setMessageType("success");
     } catch (error) {
       console.error("Forgot password error:", error);
-      alert("Something went wrong. Please try again.");
-    }
-  }
-
-  async function handleResetPassword() {
-    if (!resetToken) {
-      alert("Reset token is required");
-      return;
-    }
-
-    if (!newPassword) {
-      alert("Please enter your new password");
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        "http://localhost:5000/api/auth/reset-password",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            resetToken: resetToken,
-            newPassword: newPassword,
-          }),
-        },
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        alert(data.message);
-        return;
-      }
-
-      alert("Password reset successfully");
-
-      setEmail("");
-      setResetToken("");
-      setNewPassword("");
-      setShowResetForm(false);
-    } catch (error) {
-      console.error("Reset password error:", error);
-      alert("Something went wrong. Please try again.");
+      setMessage("Unable to connect to the server. Please try again.");
+      setMessageType("error");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -98,88 +63,51 @@ export default function ForgotPassword() {
           <span>✨</span> Nova AI
         </h1>
 
-        {!showResetForm ? (
-          <>
-            <h2 className="auth-title">Forgot Password?</h2>
+        <h2 className="auth-title">Forgot Password?</h2>
 
-            <p className="auth-subtitle">
-              Enter your registered email to reset your password.
-            </p>
+        <p className="auth-subtitle">
+          Enter your registered email and we will send you a password reset
+          link.
+        </p>
 
-            <div className="auth-group">
-              <label className="auth-label">Email</label>
+        <div className="auth-group">
+          <label className="auth-label" htmlFor="reset-email">
+            Email
+          </label>
 
-              <input
-                className="auth-input"
-                type="email"
-                placeholder="Enter your registered email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
+          <input
+            id="reset-email"
+            className="auth-input"
+            type="email"
+            placeholder="Enter your registered email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            autoComplete="email"
+            required
+          />
+        </div>
 
-            <Button
-              className="auth-button"
-              text="Generate Reset Token"
-              onClick={handleForgotPassword}
-            />
+        <Button
+          className="auth-button"
+          text={loading ? "Sending..." : "Send Reset Link"}
+          onClick={handleForgotPassword}
+          disabled={loading}
+        />
 
-            <div className="auth-footer">
-              <p className="auth-account">
-                Remember your password?
-                <Link className="auth-link" to="/">
-                  Login
-                </Link>
-              </p>
-            </div>
-          </>
-        ) : (
-          <>
-            <h2 className="auth-title">Reset Password</h2>
-
-            <p className="auth-subtitle">
-              Enter your reset token and create a new password.
-            </p>
-
-            <div className="auth-group">
-              <label className="auth-label">Reset Token</label>
-
-              <input
-                className="auth-input"
-                type="text"
-                value={resetToken}
-                onChange={(e) => setResetToken(e.target.value)}
-              />
-            </div>
-
-            <div className="auth-group">
-              <label className="auth-label">New Password</label>
-
-              <input
-                className="auth-input"
-                type="password"
-                placeholder="Enter your new password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-              />
-            </div>
-
-            <Button
-              className="auth-button"
-              text="Reset Password"
-              onClick={handleResetPassword}
-            />
-
-            <div className="auth-footer">
-              <p className="auth-account">
-                Remember your password?
-                <Link className="auth-link" to="/">
-                  Login
-                </Link>
-              </p>
-            </div>
-          </>
+        {message && (
+          <p className={`auth-message ${messageType}`} role="status">
+            {message}
+          </p>
         )}
+
+        <div className="auth-footer">
+          <p className="auth-account">
+            Remember your password?
+            <Link className="auth-link" to="/">
+              Login
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

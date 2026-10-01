@@ -16,6 +16,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage,
+
   fileFilter: (req, file, cb) => {
     if (file.mimetype !== "application/pdf") {
       return cb(new Error("Only PDF files are allowed"));
@@ -31,13 +32,7 @@ const upload = multer({
 
 const uploadResume = async (req, res) => {
   try {
-    const { userId } = req.body;
-
-    if (!userId) {
-      return res.status(400).json({
-        message: "User ID is required",
-      });
-    }
+    const userId = req.user.userId;
 
     if (!req.file) {
       return res.status(400).json({
@@ -65,7 +60,6 @@ const uploadResume = async (req, res) => {
 
     res.status(500).json({
       message: "Resume upload failed",
-      error: error.message,
     });
   }
 };

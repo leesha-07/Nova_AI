@@ -267,7 +267,9 @@
   margin: 14px 0 0;
 
   text-align: center;
-
+  margin-top: 15px;
+  text-align: center;
+  font-size: 14px;
   color: #f59e0b;
 
   font-size: 13px;
@@ -326,4 +328,11 @@
   .auth-subtitle {
     margin-bottom: 25px;
   }
+}
+.auth-message.success {
+  color: #22c55e;
+}
+
+.auth-message.error {
+  color: #ef4444;
 }

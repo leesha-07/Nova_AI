@@ -34,6 +34,11 @@ export default function StudyPlanner() {
 
       const response = await fetch(
         `http://localhost:5000/api/study/user/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
       );
 
       const data = await response.json();
@@ -83,6 +88,7 @@ export default function StudyPlanner() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
           userId,
@@ -140,8 +146,10 @@ export default function StudyPlanner() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
+          studyId: selectedStudy._id,
           subject: selectedStudy.subject,
           goal: selectedStudy.goal,
           dailyHours: selectedStudy.dailyHours,
@@ -155,10 +163,27 @@ export default function StudyPlanner() {
       if (response.ok) {
         setGeneratedPlan(data.plan);
 
+        // Update the selected study in local state
+        // so the saved AI plan is immediately reflected.
+        setStudies((previous) =>
+          previous.map((study) =>
+            study._id === selectedStudy._id
+              ? {
+                  ...study,
+                  aiPlan: data.plan,
+                }
+              : study,
+          ),
+        );
+
         setGenerateOpen(false);
         setSelectedStudy(null);
 
-        setStatusMessage("AI study plan generated successfully.");
+        if (data.saved) {
+          setStatusMessage("Saved study plan loaded successfully.");
+        } else {
+          setStatusMessage("AI study plan generated and saved successfully.");
+        }
       } else {
         setError(data.message || "Failed to generate study plan.");
       }
@@ -167,7 +192,6 @@ export default function StudyPlanner() {
       setError("Something went wrong while generating the plan.");
     }
   }
-
   async function handleDeletePlan(studyId) {
     setError("");
     setStatusMessage("");
@@ -177,6 +201,9 @@ export default function StudyPlanner() {
         `http://localhost:5000/api/study/${studyId}`,
         {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         },
       );
 
@@ -213,9 +240,18 @@ export default function StudyPlanner() {
     const newProgress = Number(progress);
 
     if (newProgress < 0 || newProgress > 100) {
-      setError("Progress must be between 0 and 100.");
+      setError("Plan completion must be between 0 and 100%.");
       return;
     }
+
+    const start = new Date(selectedStudy.startDate);
+    const end = new Date(selectedStudy.endDate);
+
+    const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
+
+    const totalHours = days * Number(selectedStudy.dailyHours);
+
+    const completedHours = totalHours * (newProgress / 100);
 
     try {
       const response = await fetch(
@@ -224,6 +260,7 @@ export default function StudyPlanner() {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           body: JSON.stringify({
             title: selectedStudy.title,
@@ -231,7 +268,7 @@ export default function StudyPlanner() {
             subject: selectedStudy.subject,
             endDate: selectedStudy.endDate,
             dailyHours: selectedStudy.dailyHours,
-            completedHours: selectedStudy.dailyHours * (newProgress / 100),
+            completedHours: completedHours,
             progress: newProgress,
             goal: selectedStudy.goal,
           }),
@@ -411,7 +448,7 @@ export default function StudyPlanner() {
           <div className="studyCardHeader">
             <div>
               <h2>AI Suggestions</h2>
-              <p>Let Nova create a study plan for you.</p>
+              <p>Let Nova create a detailed plan for your study goal.</p>
             </div>
 
             <span className="aiStudyTag">AI Powered</span>
@@ -593,14 +630,18 @@ export default function StudyPlanner() {
               ))}
             </select>
 
-            <label>Progress</label>
+            <label>Plan Completion</label>
+
+            <p className="progressHelp">
+              Percentage of this study plan you have completed.
+            </p>
 
             <div className="progressInput">
               <input
                 type="number"
                 min="0"
                 max="100"
-                placeholder="Progress %"
+                placeholder="Enter completion %"
                 value={progress}
                 onChange={(e) => setProgress(e.target.value)}
               />

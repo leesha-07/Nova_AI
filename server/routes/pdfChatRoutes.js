@@ -10,18 +10,20 @@ const {
 
 const { upload, uploadPdf } = require("../controllers/pdfUploadController");
 
+const protect = require("../middleware/authMiddleware");
+
 const router = express.Router();
 
-router.post("/upload", upload.single("pdf"), uploadPdf);
+router.post("/upload", protect, upload.single("pdf"), uploadPdf);
 
-router.post("/", createPdf);
+router.post("/", protect, createPdf);
 
-router.get("/:userId", getPdf);
+router.get("/:userId", protect, getPdf);
 
-router.put("/:pdfId", updatePdf);
+router.put("/:pdfId", protect, updatePdf);
 
-router.post("/ask/:pdfId", askPdfQuestion);
+router.post("/ask/:pdfId", protect, askPdfQuestion);
 
-router.delete("/:pdfId", deletePdf);
+router.delete("/:pdfId", protect, deletePdf);
 
 module.exports = router;

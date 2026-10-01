@@ -7,6 +7,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
 
   const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
 
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
@@ -28,12 +29,21 @@ export default function Dashboard() {
     try {
       const response = await fetch(
         `http://localhost:5000/api/dashboard/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
 
       const data = await response.json();
 
       if (response.ok) {
         setDashboard(data.dashboard);
+      } else if (response.status === 401) {
+        localStorage.removeItem("userId");
+        localStorage.removeItem("token");
+        navigate("/login");
       }
     } catch (error) {
       console.error("Dashboard error:", error);
@@ -43,12 +53,12 @@ export default function Dashboard() {
   }
 
   useEffect(() => {
-    if (userId) {
+    if (userId && token) {
       getDashboard();
     } else {
       navigate("/login");
     }
-  }, [userId, navigate]);
+  }, [userId, token, navigate]);
 
   // =========================
   // SEARCH
@@ -66,6 +76,11 @@ export default function Dashboard() {
         `http://localhost:5000/api/search/${userId}?query=${encodeURIComponent(
           search.trim(),
         )}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
 
       const data = await response.json();
@@ -73,6 +88,10 @@ export default function Dashboard() {
       if (response.ok) {
         setSearchResults(data.results);
         setSearchOpen(true);
+      } else if (response.status === 401) {
+        localStorage.removeItem("userId");
+        localStorage.removeItem("token");
+        navigate("/login");
       } else {
         alert(data.message);
       }
@@ -127,6 +146,11 @@ export default function Dashboard() {
     try {
       const response = await fetch(
         `http://localhost:5000/api/reminder/user/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
 
       const data = await response.json();
@@ -138,6 +162,10 @@ export default function Dashboard() {
 
         setNotifications(pendingNotifications);
         setNotificationsOpen((previous) => !previous);
+      } else if (response.status === 401) {
+        localStorage.removeItem("userId");
+        localStorage.removeItem("token");
+        navigate("/login");
       } else {
         alert(data.message);
       }

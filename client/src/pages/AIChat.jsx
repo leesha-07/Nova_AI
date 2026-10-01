@@ -15,9 +15,15 @@ export default function AIChat() {
     async function getChats() {
       try {
         const userId = localStorage.getItem("userId");
+        const token = localStorage.getItem("token");
 
         const response = await fetch(
           `http://localhost:5000/api/chat-history/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
         );
 
         if (!response.ok) {
@@ -40,7 +46,7 @@ export default function AIChat() {
   async function handleSend() {
     if (!message.trim()) return;
 
-    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
 
     setMessage("");
 
@@ -73,9 +79,9 @@ export default function AIChat() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          userId: userId,
           message: message,
           interactionID: interactionID,
         }),
@@ -105,9 +111,9 @@ export default function AIChat() {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
-              userId,
               title: message,
               messages: newMessage,
               interactionID: data.interactionID,
@@ -131,6 +137,7 @@ export default function AIChat() {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
               messages: newMessage,

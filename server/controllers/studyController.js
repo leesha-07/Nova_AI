@@ -4,81 +4,198 @@ const { GoogleGenAI } = require("@google/genai");
 const genai = new GoogleGenAI({
   apiKey: process.env.Study_GEMINI_API_KEY,
 });
+
 const createStudy = async (req, res) => {
-  const {
-    userId,
-    title,
-    startDate,
-    subject,
-    endDate,
-    dailyHours,
-    goal,
-    status,
-  } = req.body;
-  const study = await Study.create({
-    userId,
-    title,
-    startDate,
-    subject,
-    endDate,
-    dailyHours,
-    goal,
-    status,
-  });
-  res.status(201).json({ message: "Study Plan created successfully", study });
+  try {
+    const userId = req.user.userId;
+
+    const { title, startDate, subject, endDate, dailyHours, goal, status } =
+      req.body;
+
+    const study = await Study.create({
+      userId,
+      title,
+      startDate,
+      subject,
+      endDate,
+      dailyHours,
+      goal,
+      status,
+    });
+
+    res.status(201).json({
+      message: "Study Plan created successfully",
+      study,
+    });
+  } catch (error) {
+    console.error("Create Study Error:", error);
+
+    res.status(500).json({
+      message: "Something went wrong. Please try again later.",
+    });
+  }
 };
+
 const getStudys = async (req, res) => {
-  const { userId } = req.params;
-  const study = await Study.find({ userId });
-  res.status(200).json({ message: "The study Plans found", study });
+  try {
+    const userId = req.user.userId;
+
+    const study = await Study.find({ userId });
+
+    res.status(200).json({
+      message: "The study Plans found",
+      study,
+    });
+  } catch (error) {
+    console.error("Get Studies Error:", error);
+
+    res.status(500).json({
+      message: "Something went wrong. Please try again later.",
+    });
+  }
 };
+
 const getStudy = async (req, res) => {
-  const { studyId } = req.params;
-  const study = await Study.findById(studyId);
-  if (!study) {
-    return res.status(404).json({ message: "Study Plan not found" });
+  try {
+    const { studyId } = req.params;
+    const userId = req.user.userId;
+
+    const study = await Study.findOne({
+      _id: studyId,
+      userId,
+    });
+
+    if (!study) {
+      return res.status(404).json({
+        message: "Study Plan not found",
+      });
+    }
+
+    res.status(200).json({
+      message: "Found Study Plan",
+      study,
+    });
+  } catch (error) {
+    console.error("Get Study Error:", error);
+
+    res.status(500).json({
+      message: "Something went wrong. Please try again later.",
+    });
   }
-  res.status(200).json({ message: "Found Study Pan", study });
 };
+
 const updateStudy = async (req, res) => {
-  const { studyId } = req.params;
-  const {
-    title,
-    startDate,
-    subject,
-    endDate,
-    dailyHours,
-    goal,
-    completedHours,
-    progress,
-  } = req.body;
-  const study = await Study.findById(studyId);
-  if (!study) {
-    return res.status(404).json({ message: "Study Plan not found" });
+  try {
+    const { studyId } = req.params;
+    const userId = req.user.userId;
+
+    const {
+      title,
+      startDate,
+      subject,
+      endDate,
+      dailyHours,
+      goal,
+      completedHours,
+      progress,
+    } = req.body;
+
+    const study = await Study.findOne({
+      _id: studyId,
+      userId,
+    });
+
+    if (!study) {
+      return res.status(404).json({
+        message: "Study Plan not found",
+      });
+    }
+
+    study.title = title;
+    study.startDate = startDate;
+    study.subject = subject;
+    study.endDate = endDate;
+    study.dailyHours = dailyHours;
+    study.completedHours = completedHours;
+    study.progress = progress;
+    study.goal = goal;
+
+    await study.save();
+
+    res.status(200).json({
+      message: "Study Plan updated successfully",
+      study,
+    });
+  } catch (error) {
+    console.error("Update Study Error:", error);
+
+    res.status(500).json({
+      message: "Something went wrong. Please try again later.",
+    });
   }
-  study.title = title;
-  study.startDate = startDate;
-  study.subject = subject;
-  study.endDate = endDate;
-  study.dailyHours = dailyHours;
-  study.completedHours = completedHours;
-  study.progress = progress;
-  study.goal = goal;
-  await study.save();
-  res.status(200).json({ message: "Study Plan updated successfully", study });
 };
+
 const deleteStudy = async (req, res) => {
-  const { studyId } = req.params;
-  const study = await Study.findById(studyId);
-  if (!study) {
-    return res.status(404).json({ message: "Study Plan not found" });
+  try {
+    const { studyId } = req.params;
+    const userId = req.user.userId;
+
+    const study = await Study.findOne({
+      _id: studyId,
+      userId,
+    });
+
+    if (!study) {
+      return res.status(404).json({
+        message: "Study Plan not found",
+      });
+    }
+
+    await study.deleteOne();
+
+    res.status(200).json({
+      message: "Study Plan was deleted successfully",
+    });
+  } catch (error) {
+    console.error("Delete Study Error:", error);
+
+    res.status(500).json({
+      message: "Something went wrong. Please try again later.",
+    });
   }
-  await study.deleteOne();
-  res.status(200).json({ message: "Study Plan was deleted successfully" });
 };
+
 const generateStudyPlan = async (req, res) => {
   try {
-    const { subject, goal, dailyHours, startDate, endDate } = req.body;
+    const userId = req.user.userId;
+
+    const { studyId, subject, goal, dailyHours, startDate, endDate } = req.body;
+
+    if (!studyId) {
+      return res.status(400).json({
+        message: "Study plan selection is required",
+      });
+    }
+
+    const study = await Study.findOne({
+      _id: studyId,
+      userId,
+    });
+
+    if (!study) {
+      return res.status(404).json({
+        message: "Study plan not found",
+      });
+    }
+
+    // If an AI plan was already generated, return the saved plan.
+    if (study.aiPlan) {
+      return res.status(200).json({
+        message: "Saved study plan loaded successfully",
+        plan: study.aiPlan,
+        saved: true,
+      });
+    }
 
     if (!subject || !goal || !dailyHours) {
       return res.status(400).json({
@@ -101,19 +218,26 @@ Keep it clear and concise.
 Do not use Markdown.`,
     });
 
-    res.status(200).json({
+    const generatedPlan = response.output_text;
+
+    // Save the generated plan to this study plan.
+    study.aiPlan = generatedPlan;
+    await study.save();
+
+    return res.status(200).json({
       message: "Study plan generated successfully",
-      plan: response.output_text,
+      plan: generatedPlan,
+      saved: false,
     });
   } catch (error) {
     console.error("Study plan generation error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       message: "Failed to generate study plan",
-      error: error.message,
     });
   }
 };
+
 module.exports = {
   createStudy,
   getStudys,

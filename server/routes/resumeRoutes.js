@@ -1,8 +1,10 @@
 const express = require("express");
+
 const {
   upload,
   uploadResume,
 } = require("../controllers/resumeUploadController");
+
 const {
   createResume,
   getResumes,
@@ -12,18 +14,22 @@ const {
   analyzeResume,
 } = require("../controllers/resumeController");
 
+const protect = require("../middleware/authMiddleware");
+
 const router = express.Router();
 
-router.post("/", createResume);
-router.post("/upload", upload.single("resume"), uploadResume);
-router.get("/user/:userId", getResumes);
+router.post("/", protect, createResume);
 
-router.get("/:resumeId", getResume);
+router.post("/upload", protect, upload.single("resume"), uploadResume);
 
-router.put("/:resumeId", updateResume);
+router.get("/user/:userId", protect, getResumes);
 
-router.delete("/:resumeId", deleteResume);
+router.get("/:resumeId", protect, getResume);
 
-router.put("/:resumeId/analyze", analyzeResume);
-router.post("/upload", upload.single("resume"), uploadResume);
+router.put("/:resumeId", protect, updateResume);
+
+router.delete("/:resumeId", protect, deleteResume);
+
+router.put("/:resumeId/analyze", protect, analyzeResume);
+
 module.exports = router;
