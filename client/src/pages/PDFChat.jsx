@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "../styles/PDFChat.css";
 import ReactMarkdown from "react-markdown";
-
+import API_BASE_URL from "../config/api";
 export default function PDFChat() {
   const [selectedPdf, setSelectedPdf] = useState(null);
   const [selectedPdfRecord, setSelectedPdfRecord] = useState(null);
@@ -21,14 +21,11 @@ export default function PDFChat() {
       }
 
       try {
-        const response = await fetch(
-          `http://localhost:5000/api/pdf/${userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const response = await fetch(`${API_BASE_URL}/api/pdf/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
 
         const data = await response.json();
 
@@ -66,7 +63,7 @@ export default function PDFChat() {
 
       formData.append("pdf", selectedPdf);
 
-      const response = await fetch("http://localhost:5000/api/pdf/upload", {
+      const response = await fetch(`${API_BASE_URL}/api/pdf/upload`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -120,7 +117,7 @@ export default function PDFChat() {
       setAnswer("");
 
       const response = await fetch(
-        `http://localhost:5000/api/pdf/ask/${selectedPdfRecord._id}`,
+        `${API_BASE_URL}/api/pdf/ask/${selectedPdfRecord._id}`,
         {
           method: "POST",
           headers: {
@@ -162,7 +159,7 @@ export default function PDFChat() {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/pdf/${pdfId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/pdf/${pdfId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

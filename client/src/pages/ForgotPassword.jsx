@@ -2,7 +2,7 @@ import { useState } from "react";
 import Button from "../components/Button.jsx";
 import { Link } from "react-router-dom";
 import "../styles/Auth.css";
-
+import API_BASE_URL from "../config/api";
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -22,18 +22,15 @@ export default function ForgotPassword() {
     try {
       setLoading(true);
 
-      const response = await fetch(
-        "http://localhost:5000/api/auth/forgot-password",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email.trim().toLowerCase(),
-          }),
+      const response = await fetch(`${API_BASE_URL}/api/auth/forgot-password`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          email: email.trim().toLowerCase(),
+        }),
+      });
 
       const data = await response.json();
 

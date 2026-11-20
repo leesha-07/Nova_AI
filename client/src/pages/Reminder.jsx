@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "../styles/Reminder.css";
 import { urlBase64ToUint8Array } from "../utils/vapid";
-
+import API_BASE_URL from "../config/api";
 export default function Reminder() {
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
@@ -39,7 +39,7 @@ export default function Reminder() {
       }
 
       const response = await fetch(
-        `http://localhost:5000/api/reminder/user/${userId}`,
+        `${API_BASE_URL}/api/reminder/user/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -102,7 +102,7 @@ export default function Reminder() {
       // UPDATE
       if (selectedReminder) {
         const response = await fetch(
-          `http://localhost:5000/api/reminder/${selectedReminder._id}`,
+          `${API_BASE_URL}/api/reminder/${selectedReminder._id}`,
           {
             method: "PUT",
             headers: {
@@ -134,7 +134,7 @@ export default function Reminder() {
       }
 
       // CREATE
-      const response = await fetch("http://localhost:5000/api/reminder", {
+      const response = await fetch(`${API_BASE_URL}/api/reminder`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -187,7 +187,7 @@ export default function Reminder() {
       }
 
       const response = await fetch(
-        `http://localhost:5000/api/reminder/${selectedReminder._id}`,
+        `${API_BASE_URL}/api/reminder/${selectedReminder._id}`,
         {
           method: "DELETE",
           headers: {
@@ -227,7 +227,7 @@ export default function Reminder() {
       }
 
       const response = await fetch(
-        `http://localhost:5000/api/reminder/${selectedReminder._id}`,
+        `${API_BASE_URL}/api/reminder/${selectedReminder._id}`,
         {
           method: "PUT",
           headers: {
@@ -280,7 +280,7 @@ export default function Reminder() {
 
       const registration = await navigator.serviceWorker.ready;
 
-      const response = await fetch("http://localhost:5000/api/push/public-key");
+      const response = await fetch(`${API_BASE_URL}/api/push/public-key`);
 
       const data = await response.json();
 
@@ -291,23 +291,20 @@ export default function Reminder() {
 
       const subscriptionData = subscription.toJSON();
 
-      const saveResponse = await fetch(
-        "http://localhost:5000/api/push/subscribe",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            endpoint: subscriptionData.endpoint,
-            keys: {
-              p256dh: subscriptionData.keys.p256dh,
-              auth: subscriptionData.keys.auth,
-            },
-          }),
+      const saveResponse = await fetch(`${API_BASE_URL}/api/push/subscribe`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-      );
+        body: JSON.stringify({
+          endpoint: subscriptionData.endpoint,
+          keys: {
+            p256dh: subscriptionData.keys.p256dh,
+            auth: subscriptionData.keys.auth,
+          },
+        }),
+      });
 
       const saveData = await saveResponse.json();
 

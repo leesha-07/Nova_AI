@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "../styles/EmailWriter.css";
 import ReactMarkdown from "react-markdown";
-
+import API_BASE_URL from "../config/api";
 export default function EmailWriter() {
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
@@ -28,7 +28,7 @@ export default function EmailWriter() {
 
       try {
         const response = await fetch(
-          `http://localhost:5000/api/email/user/${userId}`,
+          `${API_BASE_URL}/api/email/user/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -84,7 +84,7 @@ export default function EmailWriter() {
       setLoading(true);
       setGeneratedEmail("");
 
-      const response = await fetch("http://localhost:5000/api/email/generate", {
+      const response = await fetch(`${API_BASE_URL}/api/email/generate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -130,7 +130,7 @@ export default function EmailWriter() {
     try {
       setSaving(true);
 
-      const response = await fetch("http://localhost:5000/api/email", {
+      const response = await fetch(`${API_BASE_URL}/api/email`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -202,15 +202,12 @@ export default function EmailWriter() {
     }
 
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/email/${emailId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await fetch(`${API_BASE_URL}/api/email/${emailId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
 
       const data = await response.json();
 

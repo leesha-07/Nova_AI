@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import API_BASE_URL from "./config/api";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
@@ -20,7 +21,7 @@ function Home() {
   const [message, setMessage] = useState("Loading...");
 
   useEffect(() => {
-    fetch("http://localhost:5000/")
+    fetch(`${API_BASE_URL}/`)
       .then((res) => res.text())
       .then((data) => setMessage(data))
       .catch(() => setMessage("Failed to connect backend"));

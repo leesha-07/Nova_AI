@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "../styles/Search.css";
-
+import API_BASE_URL from "../config/api";
 export default function Search() {
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
@@ -18,7 +18,7 @@ export default function Search() {
       setLoading(true);
 
       const response = await fetch(
-        `http://localhost:5000/api/search/${userId}?query=${encodeURIComponent(
+        `${API_BASE_URL}/api/search/${userId}?query=${encodeURIComponent(
           query,
         )}`,
         {

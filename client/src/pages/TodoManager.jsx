@@ -1,6 +1,6 @@
 import "../styles/TodoManager.css";
 import { useState, useEffect } from "react";
-
+import API_BASE_URL from "../config/api";
 export default function TodoManager() {
   const [todos, setTodos] = useState([]);
   const [selectedTodo, setSelectedTodo] = useState(null);
@@ -17,14 +17,11 @@ export default function TodoManager() {
           throw new Error("Authentication information not found");
         }
 
-        const response = await fetch(
-          `http://localhost:5000/api/todo/${userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const response = await fetch(`${API_BASE_URL}/api/todo/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
 
         if (!response.ok) {
           throw new Error("Failed to fetch todos");
@@ -58,7 +55,7 @@ export default function TodoManager() {
       }
 
       const response = await fetch(
-        `http://localhost:5000/api/todo/${selectedTodo._id}`,
+        `${API_BASE_URL}/api/todo/${selectedTodo._id}`,
         {
           method: "PUT",
           headers: {
@@ -106,7 +103,7 @@ export default function TodoManager() {
         content: "Start writing...",
       };
 
-      const response = await fetch("http://localhost:5000/api/todo", {
+      const response = await fetch(`${API_BASE_URL}"/api/todo`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -141,7 +138,7 @@ export default function TodoManager() {
       }
 
       const response = await fetch(
-        `http://localhost:5000/api/todo/${selectedTodo._id}`,
+        `${API_BASE_URL}/api/todo/${selectedTodo._id}`,
         {
           method: "DELETE",
           headers: {

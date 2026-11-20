@@ -1,7 +1,7 @@
 import "../styles/VoiceAssistant.css";
 import { useState, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
-
+import API_BASE_URL from "../config/api";
 export default function VoiceAssistant() {
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
@@ -23,7 +23,7 @@ export default function VoiceAssistant() {
 
       try {
         const response = await fetch(
-          `http://localhost:5000/api/voice/user/${userId}`,
+          `${API_BASE_URL}/api/voice/user/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -53,7 +53,7 @@ export default function VoiceAssistant() {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/voice", {
+      const response = await fetch(`${API_BASE_URL}/api/voice`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -84,15 +84,12 @@ export default function VoiceAssistant() {
     }
 
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/voice/${voiceId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await fetch(`${API_BASE_URL}/api/voice/${voiceId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
 
       const data = await response.json();
 
@@ -199,7 +196,7 @@ export default function VoiceAssistant() {
       setThinking(true);
       setResponse("");
 
-      const response = await fetch("http://localhost:5000/api/voice/ask", {
+      const response = await fetch(`${API_BASE_URL}/api/voice/ask`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

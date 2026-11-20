@@ -1,7 +1,7 @@
 import "../styles/AIChat.css";
 import ReactMarkdown from "react-markdown";
 import { useState, useEffect } from "react";
-
+import API_BASE_URL from "../config/api";
 export default function AIChat() {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -18,7 +18,7 @@ export default function AIChat() {
         const token = localStorage.getItem("token");
 
         const response = await fetch(
-          `http://localhost:5000/api/chat-history/${userId}`,
+          `${API_BASE_URL}/api/chat-history/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -75,7 +75,7 @@ export default function AIChat() {
         interactionID = null;
       }
 
-      const response = await fetch("http://localhost:5000/api/chat", {
+      const response = await fetch(`${API_BASE_URL}/api/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -106,7 +106,7 @@ export default function AIChat() {
 
       if (sendingChatId === null) {
         const chatHistoryResponse = await fetch(
-          "http://localhost:5000/api/chat-history",
+          `${API_BASE_URL}/api/chat-history`,
           {
             method: "POST",
             headers: {
@@ -132,7 +132,7 @@ export default function AIChat() {
         }
       } else {
         const updateResponse = await fetch(
-          "http://localhost:5000/api/chat-history/" + sendingChatId,
+          `${API_BASE_URL}"/api/chat-history/` + sendingChatId,
           {
             method: "PUT",
             headers: {

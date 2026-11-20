@@ -1,6 +1,6 @@
 import "../styles/Profile.css";
 import { useState, useEffect } from "react";
-
+import API_BASE_URL from "../config/api";
 import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
@@ -27,7 +27,7 @@ export default function Profile() {
   useEffect(() => {
     async function getProfile() {
       try {
-        const response = await fetch("http://localhost:5000/api/profile", {
+        const response = await fetch(`${API_BASE_URL}/api/profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -63,7 +63,7 @@ export default function Profile() {
   }
 
   async function handleSaveProfile() {
-    const response = await fetch("http://localhost:5000/api/profile", {
+    const response = await fetch(`${API_BASE_URL}/api/profile`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -109,21 +109,18 @@ export default function Profile() {
     }
 
     try {
-      const response = await fetch(
-        "http://localhost:5000/api/auth/change-password",
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            currentPassword: currentPassword,
-            newPassword: newPassword,
-            confirmPassword: confirmPassword,
-          }),
+      const response = await fetch(`${API_BASE_URL}/api/auth/change-password`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-      );
+        body: JSON.stringify({
+          currentPassword: currentPassword,
+          newPassword: newPassword,
+          confirmPassword: confirmPassword,
+        }),
+      });
 
       const data = await response.json();
 

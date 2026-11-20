@@ -1,6 +1,6 @@
 import "../styles/StudyPlanner.css";
 import { useEffect, useState } from "react";
-
+import API_BASE_URL from "../config/api";
 export default function StudyPlanner() {
   const userId = localStorage.getItem("userId");
 
@@ -32,14 +32,11 @@ export default function StudyPlanner() {
     try {
       if (!userId) return;
 
-      const response = await fetch(
-        `http://localhost:5000/api/study/user/${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+      const response = await fetch(`${API_BASE_URL}/api/study/user/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-      );
+      });
 
       const data = await response.json();
 
@@ -84,7 +81,7 @@ export default function StudyPlanner() {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/study", {
+      const response = await fetch(`${API_BASE_URL}/api/study`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -142,7 +139,7 @@ export default function StudyPlanner() {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/study/generate", {
+      const response = await fetch(`${API_BASE_URL}/api/study/generate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -197,15 +194,12 @@ export default function StudyPlanner() {
     setStatusMessage("");
 
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/study/${studyId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+      const response = await fetch(`${API_BASE_URL}/api/study/${studyId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-      );
+      });
 
       const data = await response.json();
 
@@ -255,7 +249,7 @@ export default function StudyPlanner() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/study/${selectedStudy._id}`,
+        `${API_BASE_URL}/api/study/${selectedStudy._id}`,
         {
           method: "PUT",
           headers: {

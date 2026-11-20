@@ -2,7 +2,7 @@ import "../styles/Dashboard.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Profile from "./Profile";
-
+import API_BASE_URL from "../config/api";
 export default function Dashboard() {
   const navigate = useNavigate();
 
@@ -27,14 +27,11 @@ export default function Dashboard() {
 
   async function getDashboard() {
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/dashboard/${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await fetch(`${API_BASE_URL}/api/dashboard/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
 
       const data = await response.json();
 
@@ -73,7 +70,7 @@ export default function Dashboard() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/search/${userId}?query=${encodeURIComponent(
+        `${API_BASE_URL}/api/search/${userId}?query=${encodeURIComponent(
           search.trim(),
         )}`,
         {
@@ -145,7 +142,7 @@ export default function Dashboard() {
   async function handleNotification() {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/reminder/user/${userId}`,
+        `${API_BASE_URL}/api/reminder/user/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

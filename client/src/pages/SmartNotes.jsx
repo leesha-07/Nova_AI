@@ -1,7 +1,7 @@
 import "../styles/SmartNotes.css";
 import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
-
+import API_BASE_URL from "../config/api";
 export default function SmartNotes() {
   const [notes, setNotes] = useState([]);
   const [selectedNote, setSelectedNote] = useState(null);
@@ -20,14 +20,11 @@ export default function SmartNotes() {
           throw new Error("Authentication information not found");
         }
 
-        const response = await fetch(
-          `http://localhost:5000/api/notes/${userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const response = await fetch(`${API_BASE_URL}/api/notes/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
 
         if (!response.ok) {
           throw new Error("Failed to fetch notes");
@@ -57,7 +54,7 @@ export default function SmartNotes() {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        `http://localhost:5000/api/notes/${selectedNote._id}`,
+        `${API_BASE_URL}/api/notes/${selectedNote._id}`,
         {
           method: "PUT",
           headers: {
@@ -102,7 +99,7 @@ export default function SmartNotes() {
         content: "Start writing...",
       };
 
-      const response = await fetch("http://localhost:5000/api/notes", {
+      const response = await fetch(`${API_BASE_URL}/api/notes`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -139,7 +136,7 @@ export default function SmartNotes() {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        `http://localhost:5000/api/notes/${selectedNote._id}`,
+        `${API_BASE_URL}/api/notes/${selectedNote._id}`,
         {
           method: "DELETE",
           headers: {
@@ -188,7 +185,7 @@ export default function SmartNotes() {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        `http://localhost:5000/api/notes/${selectedNote._id}/summarize`,
+        `${API_BASE_URL}/api/notes/${selectedNote._id}/summarize`,
         {
           method: "POST",
           headers: {

@@ -1,6 +1,6 @@
 import "../styles/ResumeAnalyzer.css";
 import { useEffect, useState } from "react";
-
+import API_BASE_URL from "../config/api";
 export default function ResumeAnalyser() {
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
@@ -27,7 +27,7 @@ export default function ResumeAnalyser() {
       }
 
       const response = await fetch(
-        `http://localhost:5000/api/resume/user/${userId}`,
+        `${API_BASE_URL}/api/resume/user/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -87,7 +87,7 @@ export default function ResumeAnalyser() {
 
       formData.append("resume", file);
 
-      const response = await fetch("http://localhost:5000/api/resume/upload", {
+      const response = await fetch(`${API_BASE_URL}/api/resume/upload`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -133,7 +133,7 @@ export default function ResumeAnalyser() {
       setAnalyzing(true);
 
       const response = await fetch(
-        `http://localhost:5000/api/resume/${selectedResume._id}/analyze`,
+        `${API_BASE_URL}/api/resume/${selectedResume._id}/analyze`,
         {
           method: "PUT",
           headers: {
@@ -183,7 +183,7 @@ export default function ResumeAnalyser() {
       setDeleting(true);
 
       const response = await fetch(
-        `http://localhost:5000/api/resume/${selectedResume._id}`,
+        `${API_BASE_URL}/api/resume/${selectedResume._id}`,
         {
           method: "DELETE",
           headers: {
