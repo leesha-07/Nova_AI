@@ -1,4 +1,4 @@
-const Todo = require("../models/Todo");
+const Todo = require("../models/todo");
 const Note = require("../models/Note");
 const Pdf = require("../models/pdfChat");
 const Email = require("../models/Email");

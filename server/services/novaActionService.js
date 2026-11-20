@@ -1,4 +1,4 @@
-const Todo = require("../models/Todo");
+const Todo = require("../models/todo");
 const Reminder = require("../models/Reminder");
 const Study = require("../models/Study");
 const Note = require("../models/Note");
